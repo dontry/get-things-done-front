@@ -6,7 +6,7 @@ import * as serviceWorker from "./serviceWorker";
 
 const rootEl = document.getElementById("root");
 
-ReactDOM.render(<App />, rootEl);
+ReactDOM.render(<App message="hello world" />, rootEl);
 
 if (module.hot) {
   module.hot.accept("./App", () => {
