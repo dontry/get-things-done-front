@@ -1,14 +1,18 @@
-import React, { Component } from "react";
+import React from "react";
 import logo from "./logo.svg";
+import Counter from "./components/counter";
 import "./App.css";
+import { setConfig } from "react-hot-loader";
 
-type Props = { message?: string };
+setConfig({ ignoreSFC: true });
 
-const App: React.FunctionComponent<Props> = ({ message }) => (
+type Props = { message: string };
+
+const App: React.FC<Props> = ({ message }) => (
   <div className="App">
     <header className="App-header">
       <img src={logo} className="App-logo" alt="logo" />
-      <p>{message}</p>
+      <h3>{message}</h3>
       <a
         className="App-link"
         href="https://reactjs.org"
@@ -18,6 +22,9 @@ const App: React.FunctionComponent<Props> = ({ message }) => (
         Learn React
       </a>
     </header>
+    <main>
+      <Counter />
+    </main>
   </div>
 );
 
