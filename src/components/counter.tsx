@@ -9,10 +9,19 @@ function Counter() {
     document.title = `You clicked ${count} times`;
   });
 
+  const increment = (count: number): void => {
+    setCount(count + 1);
+  };
+
+  const decrement = (count: number): void => {
+    setCount(count - 1);
+  };
+
   return (
     <div>
       <p>You clicked {count} times</p>
-      <button onClick={() => setCount(count + 1)}>Click me</button>
+      <button onClick={() => increment(count)}>+ 1</button>
+      <button onClick={() => decrement(count)}>- 1</button>
     </div>
   );
 }
