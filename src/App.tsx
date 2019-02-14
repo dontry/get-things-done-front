@@ -3,6 +3,10 @@ import logo from "./logo.svg";
 import Counter from "./components/counter";
 import "./App.css";
 import { setConfig } from "react-hot-loader";
+import MobxReactDevtools from "mobx-react-devtools";
+import { FieldInput, FieldState } from "./components/FieldInput";
+import { appState } from "./AppState";
+import { observer } from "mobx-react";
 
 setConfig({ ignoreSFC: true });
 
@@ -24,8 +28,17 @@ const App: React.FC<Props> = ({ message }) => (
     </header>
     <main>
       <Counter />
+      <br />
+      <FieldInput fieldState={appState.currentItem} />
+      <button onClick={appState.addCurrentItem}>Add Item</button>
+      <ul>
+        {appState.items.map((item: string) => (
+          <li>{item}</li>
+        ))}
+      </ul>
+      <MobxReactDevtools />
     </main>
   </div>
 );
 
-export default App;
+export default observer(App);

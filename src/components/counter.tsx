@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { observable, action } from "mobx";
+import { observable, action, configure } from "mobx";
 import { observer } from "mobx-react";
+
+configure({
+  enforceActions: "always"
+});
 
 class CounterData {
   @observable clickedCount: number = 0;
@@ -19,11 +23,11 @@ class CounterData {
 const data = new CounterData();
 const Counter = observer(({}) => {
   return (
-    <div>
+    <>
       <p>You clicked {data.clickedCount} times</p>
       <button onClick={() => data.increment()}>+ 1</button>
       <button onClick={() => data.decrement()}>- 1</button>
-    </div>
+    </>
   );
 });
 
