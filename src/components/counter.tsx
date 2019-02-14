@@ -1,29 +1,30 @@
 import React, { useState, useEffect } from "react";
+import { observable, action } from "mobx";
+import { observer } from "mobx-react";
 
-function Counter() {
-  const [count, setCount] = useState(0);
+class CounterData {
+  @observable clickedCount: number = 0;
 
-  // Similar to componentDidMount and componentDidUpdate:
-  useEffect(() => {
-    // Update the document title using the browser API
-    document.title = `You clicked ${count} times`;
-  });
+  @action
+  increment(): void {
+    this.clickedCount++;
+  }
 
-  const increment = (count: number): void => {
-    setCount(count + 1);
-  };
+  @action
+  decrement(): void {
+    this.clickedCount--;
+  }
+}
 
-  const decrement = (count: number): void => {
-    setCount(count - 1);
-  };
-
+const data = new CounterData();
+const Counter = observer(({}) => {
   return (
     <div>
-      <p>You clicked {count} times</p>
-      <button onClick={() => increment(count)}>+ 1</button>
-      <button onClick={() => decrement(count)}>- 1</button>
+      <p>You clicked {data.clickedCount} times</p>
+      <button onClick={() => data.increment()}>+ 1</button>
+      <button onClick={() => data.decrement()}>- 1</button>
     </div>
   );
-}
+});
 
 export default Counter;
