@@ -10,30 +10,42 @@ import Login from "./view/Login";
 import Register from "./view/Register";
 import NotFound from "./view/NotFound";
 import { setConfig } from "react-hot-loader";
-import * as stores from "./stores";
+import appStore from "./stores";
 import * as serviceWorker from "./serviceWorker";
+import { create, persist } from "mobx-persist";
 
 import "./index.css";
 
 const rootEl = document.getElementById("root");
 setConfig({ ignoreSFC: true });
+const hydrate = create({ jasonify: false });
+const initialStore =
+  (window as any).__INITIAL_STATE__ && (window as any).__INITIAL_STATE__.app;
+let stores = {};
 
-ReactDOM.render(
-  <Provider {...stores}>
-    <>
-      <Router>
-        <Switch>
-          {/* <ProtectedRoute path="/" component={App} /> */}
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/register" component={Register} />
-          <Route path="*" component={NotFound} />
-        </Switch>
-      </Router>
-      {process.env.NODE_ENV !== "production" && <DevTools />}
-    </>
-  </Provider>,
-  rootEl
-);
+(async () => {
+  await hydrate("appState", appStore, initialStore).then(() => {
+    console.log("rehydrate");
+    console.log(appStore.authStore.authenticated);
+  });
+
+  ReactDOM.render(
+    <Provider {...appStore.getAllState()}>
+      <>
+        <Router>
+          <Switch>
+            <ProtectedRoute path="/counter" component={Counter} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/register" component={Register} />
+            <Route path="*" component={NotFound} />
+          </Switch>
+        </Router>
+        {process.env.NODE_ENV !== "production" && <DevTools />}
+      </>
+    </Provider>,
+    rootEl
+  );
+})();
 
 if (module.hot) {
   module.hot.accept();

@@ -2,12 +2,14 @@ import React from "react";
 import { FormComponentProps } from "antd/lib/form/Form";
 import { Link } from "react-router-dom";
 import { Form, Icon, Input, Button, Checkbox } from "antd";
+import { AuthStore } from "../stores/authStore";
+import { inject, observer } from "mobx-react";
 
 interface FormProps {
-  name: string;
+  onSubmit(): void;
 }
 
-class NormalLoginForm extends React.Component<FormComponentProps> {
+class NormalLoginForm extends React.Component<FormProps & FormComponentProps> {
   handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
     // this.props.form.validateFields((err: Error, values: Array<>) => {
@@ -15,6 +17,7 @@ class NormalLoginForm extends React.Component<FormComponentProps> {
     //     console.log("Received values of form: ", values);
     //   }
     // });
+    this.props.onSubmit();
   };
 
   render() {

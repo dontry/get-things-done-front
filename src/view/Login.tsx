@@ -9,7 +9,9 @@ interface Props {
   verify(): void;
 }
 
-const Login: React.FC<Props> = ({ verify, authenticated }) => <LoginForm />;
+const Login: React.FC<Props> = ({ verify, authenticated }) => (
+  <LoginForm onSubmit={verify} />
+);
 
 export default inject("authStore")(
   observer(({ authStore }) => (
