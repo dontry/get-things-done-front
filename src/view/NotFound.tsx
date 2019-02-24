@@ -1,8 +1,8 @@
 import React from "react";
-import PropTypes from "prop-types";
+import { observer, inject } from "mobx-react";
 
-const NotFound: React.FC = () => {
-  return <div>404 Page Not Found</div>;
+const NotFound = ({ auth }: any) => {
+  return <div>404 Page Not Found. {auth}</div>;
 };
 
 export default NotFound;

@@ -35,10 +35,7 @@ ReactDOM.render(
 );
 
 if (module.hot) {
-  module.hot.accept("./App", () => {
-    const NextApp = require("./App").default;
-    ReactDOM.render(<NextApp />, rootEl);
-  });
+  module.hot.accept();
 }
 
 // If you want your app to work offline and load faster, you can change

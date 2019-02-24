@@ -6,7 +6,6 @@ class AuthStore {
   constructor() {}
 
   @action verify(): void {
-    console.log(this.authenticated);
     this.authenticated = true;
   }
 }

@@ -5,20 +5,19 @@ import { AuthStore } from "../stores/authStore";
 import { LOGIN } from "../constants/pathname";
 
 interface Props {
-  authState: AuthStore;
+  authenticated: boolean;
 }
 
-// FIXIT: prop-types
 const ProtectedRoute: React.SFC<Props> = ({
   component: Component,
-  authState,
+  authenticated,
   ...rest
 }: any) => {
   return (
     <Route
       {...rest}
       render={props =>
-        authState.authenticated ? (
+        authenticated ? (
           <Component {...props} />
         ) : (
           <Redirect to={{ pathname: LOGIN, state: { from: props.location } }} />
@@ -29,5 +28,8 @@ const ProtectedRoute: React.SFC<Props> = ({
 };
 
 export default inject("authStore")(
-  observer(({ authStore }) => <ProtectedRoute authState={authStore} />)
+  observer(({ authStore, ...rest }) => {
+    console.log(authStore.authenticated);
+    return <ProtectedRoute authenticated={authStore.authenticated} {...rest} />;
+  })
 );
