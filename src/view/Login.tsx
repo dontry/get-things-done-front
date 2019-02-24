@@ -2,19 +2,14 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { observer, inject } from "mobx-react";
 import { AuthStore } from "../stores/authStore";
+import LoginForm from "../components/LoginForm";
 
 interface Props {
   authenticated: boolean;
   verify(): void;
 }
 
-const Login: React.FC<Props> = ({ verify, authenticated }) => (
-  <div>
-    <button onClick={verify}>Login</button>
-    {authenticated ? <span>Logged in</span> : "log out"}
-    <Link to="/counter">Counter</Link>
-  </div>
-);
+const Login: React.FC<Props> = ({ verify, authenticated }) => <LoginForm />;
 
 export default inject("authStore")(
   observer(({ authStore }) => (

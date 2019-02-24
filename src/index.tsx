@@ -5,6 +5,7 @@ import { observer, Provider } from "mobx-react";
 import DevTools from "mobx-react-devtools";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Counter from "./components/_Counter";
+import App from "./App";
 import Login from "./view/Login";
 import Register from "./view/Register";
 import NotFound from "./view/NotFound";
@@ -22,9 +23,9 @@ ReactDOM.render(
     <>
       <Router>
         <Switch>
-          <ProtectedRoute path="/counter" component={Counter} />
-          <Route path="/login" component={Login} />
-          <Route path="/register" component={Register} />
+          {/* <ProtectedRoute path="/" component={App} /> */}
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/register" component={Register} />
           <Route path="*" component={NotFound} />
         </Switch>
       </Router>
