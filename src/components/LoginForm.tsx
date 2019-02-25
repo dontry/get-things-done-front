@@ -2,21 +2,19 @@ import React from "react";
 import { FormComponentProps } from "antd/lib/form/Form";
 import { Link } from "react-router-dom";
 import { Form, Icon, Input, Button, Checkbox } from "antd";
-import { AuthStore } from "../stores/authStore";
-import { inject, observer } from "mobx-react";
 
 interface FormProps {
   onSubmit(): void;
 }
 
-class NormalLoginForm extends React.Component<FormProps & FormComponentProps> {
+class RawLoginForm extends React.Component<FormProps & FormComponentProps> {
   handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    // this.props.form.validateFields((err: Error, values: Array<>) => {
-    //   if (!err) {
-    //     console.log("Received values of form: ", values);
-    //   }
-    // });
+    this.props.form.validateFields((err: Error, values: []) => {
+      if (!err) {
+        console.log("Received values of form: ", values);
+      }
+    });
     this.props.onSubmit();
   };
 
@@ -67,6 +65,6 @@ class NormalLoginForm extends React.Component<FormProps & FormComponentProps> {
   }
 }
 
-const WrappedNormalLoginForm = Form.create()(NormalLoginForm);
+const LoginForm = Form.create()(RawLoginForm);
 
-export default WrappedNormalLoginForm;
+export default LoginForm;
