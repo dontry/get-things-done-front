@@ -33,9 +33,7 @@ const footerFormItemLayout = {
 };
 
 //https://ant.design/components/form/?locale=en-US#components-form-demo-register
-const RawRegistrationForm: React.SFC<
-  FormProps & FormComponentProps
-> = props => {
+const RawRegistrationForm: React.FC<FormProps & FormComponentProps> = props => {
   const { getFieldDecorator } = props.form;
   const [confirmDirty, setConfirmDirty] = useState(false);
 
