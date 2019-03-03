@@ -1,7 +1,17 @@
-import React, { useState } from "react";
-import { Form, Input } from "antd";
+import React, { useState, PureComponent, createRef } from "react";
+import {
+  Form,
+  Input,
+  Menu,
+  Dropdown,
+  Icon,
+  Select,
+  DatePicker,
+  Calendar
+} from "antd";
 import { FormComponentProps } from "antd/lib/form";
 import { formItemLayout } from "../../constants/layout";
+
 import {
   Editor,
   EditorState,
@@ -12,20 +22,107 @@ import {
   DraftInlineStyleType,
   DraftHandleValue
 } from "draft-js";
-import { EditorWrapper, EditorControlWrapper, EditorTitle } from "./style";
+import {
+  EditorWrapper,
+  EditorControlWrapper,
+  EditorTitle,
+  CategorySelectWrapper,
+  CalendarWrapper
+} from "./style";
 import { BlockStyleControls, InlinStyleControls } from "./StyleControls";
+import { Task } from "../../types";
+import { SIDEBAR_OPTIONS } from "../../constants/misc";
+import { captialize } from "../../lib/capitalize";
+import moment from "moment";
 
-const { Item } = Form;
 const MAX_DEPTH = 4;
 
-interface EditorProps {
-  title: string;
+interface CategorySelectProps {
+  value?: string;
+  onChange(value: string): void;
 }
 
-const TaskEditor: React.FC<EditorProps & FormComponentProps> = ({ title }) => {
+interface CategorySelectState {
+  open: boolean;
+}
+
+class CategorySelect extends PureComponent<
+  CategorySelectProps,
+  CategorySelectState
+> {
+  static defaultProps = {
+    value: SIDEBAR_OPTIONS[0]
+  };
+
+  state = {
+    open: false
+  };
+
+  private select: Select<string> | null = null;
+
+  _handleChange = (value: string): void => {
+    this.props.onChange(value);
+    if (value !== "scheduled") {
+      this.setState({ open: false });
+      this.select!.blur();
+    }
+  };
+
+  _handleFocus = () => {
+    this.setState({ open: true });
+  };
+
+  _handleBlur = () => {
+    this.setState({ open: false });
+  };
+
+  _handleCalendarChange = (date?: moment.Moment) => {
+    if (date) {
+      const timestamp: number = date.unix();
+      console.log("timestamp:", timestamp);
+    }
+  };
+
+  render() {
+    const { value } = this.props;
+    const { open } = this.state;
+    console.log("value:", value);
+    return (
+      <CategorySelectWrapper>
+        <Select
+          ref={dom => {
+            this.select = dom;
+          }}
+          defaultValue="inbox"
+          open={open}
+          style={{ width: 120 }}
+          onFocus={this._handleFocus}
+          onBlur={this._handleBlur}
+          onChange={this._handleChange}
+        >
+          {SIDEBAR_OPTIONS.map(option => (
+            <Select.Option value={option}>{captialize(option)}</Select.Option>
+          ))}
+        </Select>
+        {value === "scheduled" && (
+          <CalendarWrapper>
+            <Calendar
+              fullscreen={false}
+              onChange={this._handleCalendarChange}
+            />
+          </CalendarWrapper>
+        )}
+      </CategorySelectWrapper>
+    );
+  }
+}
+
+const TaskEditor: React.FC<Task & FormComponentProps> = ({ title }) => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
-  const _onChange = (editorState: EditorState): void => {
+  const [taskCategory, setTaskCategory] = useState("inbox");
+
+  const _onEditorStateChange = (editorState: EditorState): void => {
     setEditorState(editorState);
   };
 
@@ -35,7 +132,7 @@ const TaskEditor: React.FC<EditorProps & FormComponentProps> = ({ title }) => {
   ): DraftHandleValue => {
     const newState = RichUtils.handleKeyCommand(editorState, command);
     if (newState) {
-      _onChange(editorState);
+      _onEditorStateChange(editorState);
       return "handled";
     } else {
       return "not-handled";
@@ -50,24 +147,28 @@ const TaskEditor: React.FC<EditorProps & FormComponentProps> = ({ title }) => {
         MAX_DEPTH
       );
       if (newEditorState !== editorState) {
-        _onChange(newEditorState);
+        _onEditorStateChange(newEditorState);
       }
     }
   };
 
   const _toggleBlockType = (blockType: DraftBlockType) => {
-    _onChange(RichUtils.toggleBlockType(editorState, blockType));
+    _onEditorStateChange(RichUtils.toggleBlockType(editorState, blockType));
   };
 
   const _toggleInlinStyle = (inlineStyle: DraftInlineStyleType) => {
-    _onChange(RichUtils.toggleInlineStyle(editorState, inlineStyle));
+    _onEditorStateChange(RichUtils.toggleInlineStyle(editorState, inlineStyle));
+  };
+
+  const _onInputChange = (value: string) => {
+    setTaskCategory(value);
   };
 
   return (
     <Form>
-      <Item>
+      <Form.Item>
         <EditorTitle value={title} />
-      </Item>
+      </Form.Item>
       <EditorWrapper>
         <EditorControlWrapper>
           <BlockStyleControls
@@ -85,6 +186,9 @@ const TaskEditor: React.FC<EditorProps & FormComponentProps> = ({ title }) => {
           onChange={setEditorState}
         />
       </EditorWrapper>
+      <Form.Item>
+        <CategorySelect value={taskCategory} onChange={_onInputChange} />
+      </Form.Item>
     </Form>
   );
 };
