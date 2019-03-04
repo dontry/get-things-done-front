@@ -168,33 +168,39 @@ const TaskEditor: React.FC<Task & FormComponentProps> = ({ title }) => {
 
   return (
     <Form>
-      <Layout style={{ margin: "0 10px 10px " }}>
-        <Header style={{ background: "#f0f2f5", height: "48px" }}>
-          <Form.Item>
+      <Layout>
+        <Header
+          style={{ background: "#f0f2f5", height: "48px", marginTop: "10px" }}
+        >
+          <Form.Item style={{ margin: "0 auto" }}>
             <EditorTitle value={title} />
           </Form.Item>
         </Header>
-        <Layout>
+        <Layout style={{ marginTop: 0 }}>
           <Content style={{ padding: "0 10px", marginTop: "8px" }}>
-            <EditorWrapper>
-              <EditorControlWrapper>
-                <BlockStyleControls
+            <Form.Item label="Note">
+              <EditorWrapper>
+                <EditorControlWrapper>
+                  <BlockStyleControls
+                    editorState={editorState}
+                    onToggle={_toggleBlockType}
+                  />
+                  <InlinStyleControls
+                    editorState={editorState}
+                    onToggle={_toggleInlinStyle}
+                  />
+                </EditorControlWrapper>
+                <Editor
+                  handleKeyCommand={_handleKeyCommand}
                   editorState={editorState}
-                  onToggle={_toggleBlockType}
+                  onChange={setEditorState}
                 />
-                <InlinStyleControls
-                  editorState={editorState}
-                  onToggle={_toggleInlinStyle}
-                />
-              </EditorControlWrapper>
-              <Editor
-                handleKeyCommand={_handleKeyCommand}
-                editorState={editorState}
-                onChange={setEditorState}
-              />
-            </EditorWrapper>
+              </EditorWrapper>
+            </Form.Item>
           </Content>
-          <EditorSider style={{ background: "#f0f2f5" }}>
+          <EditorSider
+            style={{ background: "#f0f2f5", margin: "34px 10px 0 5px" }}
+          >
             <Form.Item
               label={
                 <span>

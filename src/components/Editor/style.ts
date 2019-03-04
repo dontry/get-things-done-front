@@ -25,6 +25,10 @@ const Title = Editable("h2");
 export const EditorTitle = styled(Title)`
   width: 100%;
   text-align: center;
+  margin: 0 auto;
+  &:focus {
+    background: #fff;
+  }
 `;
 
 export const SelectWrapper = styled.div`
