@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Editable from "../EditableComponent";
-import { Select } from "antd";
-import Sider from "antd/lib/layout/Sider";
+import { Select, Form, Layout } from "antd";
+import { Editor } from "draft-js";
 
 export const EditorWrapper = styled.div`
   border: 1px solid #ccc;
@@ -48,8 +48,19 @@ export const CalendarWrapper = styled.div`
   }
 `;
 
-export const EditorSider = styled(Sider)`
+export const EditorContentWrapper = styled.div`
+  padding: 0px 15px;
+`;
+
+export const EditorSider = styled(Layout.Sider)`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   .ant-form-item {
     margin-bottom: 8px;
   }
+`;
+
+export const SiderFormItem = styled(Form.Item)`
+  margin-bottom: 0;
 `;

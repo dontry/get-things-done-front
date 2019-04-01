@@ -29,7 +29,8 @@ import {
   EditorTitle,
   SelectWrapper,
   CalendarWrapper,
-  EditorSider
+  EditorSider,
+  EditorContentWrapper
 } from "./style";
 import { BlockStyleControls, InlinStyleControls } from "./StyleControls";
 import { Task, Priority } from "../../types";
@@ -190,11 +191,13 @@ const TaskEditor: React.FC<Task & FormComponentProps> = ({ title }) => {
                     onToggle={_toggleInlinStyle}
                   />
                 </EditorControlWrapper>
-                <Editor
-                  handleKeyCommand={_handleKeyCommand}
-                  editorState={editorState}
-                  onChange={setEditorState}
-                />
+                <EditorContentWrapper>
+                  <Editor
+                    handleKeyCommand={_handleKeyCommand}
+                    editorState={editorState}
+                    onChange={setEditorState}
+                  />
+                </EditorContentWrapper>
               </EditorWrapper>
             </Form.Item>
           </Content>
@@ -250,6 +253,15 @@ const TaskEditor: React.FC<Task & FormComponentProps> = ({ title }) => {
                   <Select.Option value={tag}>{tag}</Select.Option>
                 ))}
               </Select>
+            </Form.Item>
+            <Form.Item
+              label={
+                <span>
+                  <Icon type="bell" /> Reminders
+                </span>
+              }
+            >
+              <Input />
             </Form.Item>
           </EditorSider>
         </Layout>
