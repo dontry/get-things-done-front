@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FieldInput should render 1`] = `
+<div>
+  <input
+    type="text"
+    value=""
+  />
+</div>
+`;
