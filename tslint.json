@@ -4,13 +4,21 @@
   "jsRules": {},
   "rules": {
     "quotemark": [true, "double"],
+    "no-console": { "severity": "warn" },
     "no-var-requires": true,
+    "no-empty": { "severity": "warn" },
     "trailing-comma": false,
     "arrow-parens": false,
     "ordered-imports": false,
     "object-literal-sort-keys": false,
     "max-classes-per-file": false,
-    "variable-name": [true, "allow-leading-underscore"],
+    "variable-name": [
+      true,
+      "allow-leading-underscore",
+      "allow-pascal-case",
+      "allow-snake-case",
+      "ban-keywords"
+    ],
     "member-ordering": [
       true,
       {

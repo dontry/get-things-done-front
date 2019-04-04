@@ -19,9 +19,8 @@ import "./index.css";
 const rootEl = document.getElementById("root");
 setConfig({ ignoreSFC: true });
 const hydrate = create({ jasonify: false });
-const initialStore =
-  (window as any).__INITIAL_STATE__ && (window as any).__INITIAL_STATE__.app;
-let stores = {};
+const initialStore = (window as any).__INITIAL_STATE__ && (window as any).__INITIAL_STATE__.app;
+const stores = {};
 
 (async () => {
   await hydrate("appState", appStore, initialStore).then(() => {

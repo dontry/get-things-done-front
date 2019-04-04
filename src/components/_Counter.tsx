@@ -1,4 +1,4 @@
-import React  from "react";
+import React from "react";
 import { observable, action, configure } from "mobx";
 import { observer } from "mobx-react";
 
@@ -7,15 +7,15 @@ configure({
 });
 
 class CounterData {
-  @observable clickedCount: number = 0;
+  @observable public clickedCount: number = 0;
 
   @action
-  increment(): void {
+  public increment(): void {
     this.clickedCount++;
   }
 
   @action
-  decrement(): void {
+  public decrement(): void {
     this.clickedCount--;
   }
 }

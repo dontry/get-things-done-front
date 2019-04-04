@@ -3,25 +3,15 @@ import { FormComponentProps } from "antd/lib/form/Form";
 import { Link } from "react-router-dom";
 import { Form, Icon, Input, Button, Checkbox } from "antd";
 
-interface FormProps {
+interface IFormProps {
   onSubmit(): void;
 }
 
-class RawLoginForm extends React.Component<FormProps & FormComponentProps> {
-  handleSubmit = (e: React.SyntheticEvent) => {
-    e.preventDefault();
-    this.props.form.validateFields((err: Error, values: []) => {
-      if (!err) {
-        console.log("Received values of form: ", values);
-      }
-    });
-    this.props.onSubmit();
-  };
-
-  render() {
+class RawLoginForm extends React.Component<IFormProps & FormComponentProps> {
+  public render() {
     const { getFieldDecorator } = this.props.form;
     return (
-      <Form onSubmit={this.handleSubmit} className="login-form">
+      <Form onSubmit={this._handleSubmit} className="login-form">
         <Form.Item>
           {getFieldDecorator("userName", {
             rules: [{ required: true, message: "Please input your username!" }]
@@ -51,11 +41,7 @@ class RawLoginForm extends React.Component<FormProps & FormComponentProps> {
           <a className="login-form-forgot" href="">
             Forgot password
           </a>
-          <Button
-            type="primary"
-            htmlType="submit"
-            className="login-form-button"
-          >
+          <Button type="primary" htmlType="submit" className="login-form-button">
             Log in
           </Button>
           Or <Link to="/register">Register now!</Link>
@@ -63,6 +49,15 @@ class RawLoginForm extends React.Component<FormProps & FormComponentProps> {
       </Form>
     );
   }
+  public _handleSubmit = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    this.props.form.validateFields((err: Error, values: []) => {
+      if (!err) {
+        console.log("Received values of form: ", values);
+      }
+    });
+    this.props.onSubmit();
+  };
 }
 
 const LoginForm = Form.create()(RawLoginForm);

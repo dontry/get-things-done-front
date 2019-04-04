@@ -4,11 +4,11 @@ import { observer, inject } from "mobx-react";
 import { AuthStore } from "../stores/authStore";
 import { LOGIN } from "../constants/pathname";
 
-interface Props {
+interface IProtectedRouteProps {
   authenticated: boolean;
 }
 
-const ProtectedRoute: React.SFC<Props> = ({
+const ProtectedRoute: React.SFC<IProtectedRouteProps> = ({
   component: Component,
   authenticated,
   ...rest

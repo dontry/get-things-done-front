@@ -1,14 +1,26 @@
 import React from "react";
-import { render } from "react-testing-library";
+import { render, fireEvent, cleanup } from "react-testing-library";
 import FieldInput, { FieldState } from "./FieldInput";
 
-describe("FieldInput", () => {
-  const fieldState: FieldState = {
-    value: "",
-    onChange: jest.fn()
+const setup = () => {
+  const fieldState = new FieldState();
+  const utils = render(<FieldInput fieldState={fieldState} />);
+  const input = utils.getByLabelText("field-input") as HTMLInputElement;
+  return {
+    fieldState,
+    input,
+    ...utils
   };
+};
+
+afterEach(cleanup);
+
+describe("FieldInput", () => {
   it("should render", () => {
-    const { container } = render(<FieldInput fieldState={fieldState} />);
+    const { container, input, fieldState } = setup();
+    fireEvent.change(input, { target: { value: "23" } });
     expect(container).toMatchSnapshot();
+    expect(input.value).toBe("23");
+    expect(fieldState.value).toBe("23");
   });
 });

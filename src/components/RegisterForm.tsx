@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Form, Icon, Input, Button, Select } from "antd";
 const { Option } = Select;
 
-interface FormProps {
+interface IFormProps {
   onSubmit(): void;
 }
 
@@ -32,8 +32,8 @@ const footerFormItemLayout = {
   }
 };
 
-//https://ant.design/components/form/?locale=en-US#components-form-demo-register
-const RawRegistrationForm: React.FC<FormProps & FormComponentProps> = props => {
+// https://ant.design/components/form/?locale=en-US#components-form-demo-register
+const RawRegistrationForm: React.FC<IFormProps & FormComponentProps> = props => {
   const { getFieldDecorator } = props.form;
   const [confirmDirty, setConfirmDirty] = useState(false);
 
@@ -52,11 +52,7 @@ const RawRegistrationForm: React.FC<FormProps & FormComponentProps> = props => {
     setConfirmDirty(confirmDirty || !!value);
   };
 
-  const _compareToFirstPassword = (
-    rule: any,
-    value: string,
-    callback: Function
-  ) => {
+  const _compareToFirstPassword = (rule: any, value: string, callback: (s?: string) => void) => {
     if (value && value !== props.form.getFieldValue("password")) {
       callback("The password you entered is not the same.");
     } else {
@@ -64,7 +60,7 @@ const RawRegistrationForm: React.FC<FormProps & FormComponentProps> = props => {
     }
   };
 
-  const _validateAge = (rule: any, value: number, callback: Function) => {
+  const _validateAge = (rule: any, value: number, callback: (s?: string) => void) => {
     if (value < 0) {
       callback("Age value should be positive.");
     } else {
@@ -72,11 +68,7 @@ const RawRegistrationForm: React.FC<FormProps & FormComponentProps> = props => {
     }
   };
 
-  const _validateToNextPassword = (
-    rule: any,
-    value: string,
-    callback: Function
-  ) => {
+  const _validateToNextPassword = (rule: any, value: string, callback: (s?: string) => void) => {
     if (value && confirmDirty) {
       props.form.validateFields(["confirm"], { force: true });
     }
