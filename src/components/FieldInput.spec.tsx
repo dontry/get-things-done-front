@@ -16,7 +16,13 @@ const setup = () => {
 afterEach(cleanup);
 
 describe("FieldInput", () => {
-  it("should render", () => {
+  it("should render ''", () => {
+    const { container, input, fieldState } = setup();
+    expect(container).toMatchSnapshot();
+    expect(input.value).toBe("");
+    expect(fieldState.value).toBe("");
+  });
+  it("should render '23'", () => {
     const { container, input, fieldState } = setup();
     fireEvent.change(input, { target: { value: "23" } });
     expect(container).toMatchSnapshot();
