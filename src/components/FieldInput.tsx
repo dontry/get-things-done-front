@@ -19,6 +19,7 @@ export class FieldInput extends Component<{ fieldState: FieldState }> {
     return (
       <input
         type="text"
+        aria-label="field-input"
         value={fieldState.value}
         onChange={e => fieldState.onChange(e.target.value)}
       />

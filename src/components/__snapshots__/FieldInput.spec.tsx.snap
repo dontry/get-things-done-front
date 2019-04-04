@@ -3,8 +3,9 @@
 exports[`FieldInput should render 1`] = `
 <div>
   <input
+    aria-label="field-input"
     type="text"
-    value=""
+    value="23"
   />
 </div>
 `;
