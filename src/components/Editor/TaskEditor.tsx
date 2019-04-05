@@ -23,7 +23,7 @@ import {
   EditorContentWrapper
 } from "./style";
 import { BlockStyleControls, InlinStyleControls } from "./StyleControls";
-import { Task, Priority } from "../../types";
+import { ITask, Priority } from "../../types";
 import { SIDEBAR_OPTIONS, CONTEXT, TAGS } from "../../constants/misc";
 import { captialize } from "../../lib/capitalize";
 import moment from "moment";
@@ -104,7 +104,7 @@ class CategorySelect extends PureComponent<ICategorySelectProps, ICategorySelect
   }
 }
 
-const TaskEditor: React.FC<Task & FormComponentProps> = ({ title }) => {
+const TaskEditor: React.FC<ITask & FormComponentProps> = ({ title }) => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
   const [taskCategory, setTaskCategory] = useState("inbox");

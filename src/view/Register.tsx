@@ -4,7 +4,7 @@ import RegistrationForm from "../components/RegisterForm";
 const Register: React.FC = () => {
   return (
     <div>
-      <RegistrationForm onSubmit={() => void} />
+      <RegistrationForm onSubmit={() => {}} />
     </div>
   );
 };
