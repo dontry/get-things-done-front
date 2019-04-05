@@ -5,8 +5,8 @@ const { Item, SubMenu } = Menu;
 
 const Sidebar: React.FC<any> = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const _handleCollapse = (collapsed: boolean): void => {
-    setCollapsed(collapsed);
+  const _handleCollapse = (_collapsed: boolean): void => {
+    setCollapsed(_collapsed);
   };
 
   return (

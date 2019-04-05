@@ -1,15 +1,5 @@
 import React, { useState, PureComponent, createRef } from "react";
-import {
-  Form,
-  Input,
-  Menu,
-  Dropdown,
-  Icon,
-  Select,
-  DatePicker,
-  Calendar,
-  Layout
-} from "antd";
+import { Form, Input, Menu, Dropdown, Icon, Select, DatePicker, Calendar, Layout } from "antd";
 import { FormComponentProps } from "antd/lib/form";
 import { formItemLayout } from "../../constants/layout";
 
@@ -29,10 +19,11 @@ import {
   EditorTitle,
   SelectWrapper,
   CalendarWrapper,
-  EditorSider
+  EditorSider,
+  EditorContentWrapper
 } from "./style";
 import { BlockStyleControls, InlinStyleControls } from "./StyleControls";
-import { Task, Priority } from "../../types";
+import { ITask, Priority } from "../../types";
 import { SIDEBAR_OPTIONS, CONTEXT, TAGS } from "../../constants/misc";
 import { captialize } from "../../lib/capitalize";
 import moment from "moment";
@@ -40,30 +31,27 @@ import moment from "moment";
 const MAX_DEPTH = 4;
 const { Content, Header } = Layout;
 
-interface CategorySelectProps {
+interface ICategorySelectProps {
   value?: string;
   onChange(value: string): void;
 }
 
-interface CategorySelectState {
+interface ICategorySelectState {
   open: boolean;
 }
 
-class CategorySelect extends PureComponent<
-  CategorySelectProps,
-  CategorySelectState
-> {
-  static defaultProps = {
+class CategorySelect extends PureComponent<ICategorySelectProps, ICategorySelectState> {
+  private static defaultProps = {
     value: SIDEBAR_OPTIONS[0]
   };
 
-  state = {
+  public state = {
     open: false
   };
 
   private select: Select<string> | null = null;
 
-  _handleChange = (value: string): void => {
+  public _handleChange = (value: string): void => {
     this.props.onChange(value);
     if (value !== "scheduled") {
       this.setState({ open: false });
@@ -71,22 +59,22 @@ class CategorySelect extends PureComponent<
     }
   };
 
-  _handleFocus = () => {
+  public _handleFocus = () => {
     this.setState({ open: true });
   };
 
-  _handleBlur = () => {
+  public _handleBlur = () => {
     this.setState({ open: false });
   };
 
-  _handleCalendarChange = (date?: moment.Moment) => {
+  public _handleCalendarChange = (date?: moment.Moment) => {
     if (date) {
       const timestamp: number = date.unix();
       console.log("timestamp:", timestamp);
     }
   };
 
-  render() {
+  public render() {
     const { value } = this.props;
     const { open } = this.state;
     console.log("value:", value);
@@ -108,10 +96,7 @@ class CategorySelect extends PureComponent<
         </Select>
         {value === "scheduled" && (
           <CalendarWrapper>
-            <Calendar
-              fullscreen={false}
-              onChange={this._handleCalendarChange}
-            />
+            <Calendar fullscreen={false} onChange={this._handleCalendarChange} />
           </CalendarWrapper>
         )}
       </SelectWrapper>
@@ -119,22 +104,22 @@ class CategorySelect extends PureComponent<
   }
 }
 
-const TaskEditor: React.FC<Task & FormComponentProps> = ({ title }) => {
+const TaskEditor: React.FC<ITask & FormComponentProps> = ({ title }) => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
   const [taskCategory, setTaskCategory] = useState("inbox");
 
-  const _onEditorStateChange = (editorState: EditorState): void => {
-    setEditorState(editorState);
+  const _onEditorStateChange = (_editorState: EditorState): void => {
+    setEditorState(_editorState);
   };
 
   const _handleKeyCommand = (
     command: DraftEditorCommand | string,
-    editorState: EditorState
+    _editorState: EditorState
   ): DraftHandleValue => {
-    const newState = RichUtils.handleKeyCommand(editorState, command);
+    const newState = RichUtils.handleKeyCommand(_editorState, command);
     if (newState) {
-      _onEditorStateChange(editorState);
+      _onEditorStateChange(_editorState);
       return "handled";
     } else {
       return "not-handled";
@@ -142,12 +127,8 @@ const TaskEditor: React.FC<Task & FormComponentProps> = ({ title }) => {
   };
 
   const _mapKeyToEditorCommand = (e: React.KeyboardEvent<{}>) => {
-    if (e.keyCode == 9) {
-      const newEditorState: EditorState = RichUtils.onTab(
-        e,
-        editorState,
-        MAX_DEPTH
-      );
+    if (e.keyCode === 9) {
+      const newEditorState: EditorState = RichUtils.onTab(e, editorState, MAX_DEPTH);
       if (newEditorState !== editorState) {
         _onEditorStateChange(newEditorState);
       }
@@ -169,9 +150,7 @@ const TaskEditor: React.FC<Task & FormComponentProps> = ({ title }) => {
   return (
     <Form>
       <Layout>
-        <Header
-          style={{ background: "#f0f2f5", height: "48px", marginTop: "10px" }}
-        >
+        <Header style={{ background: "#f0f2f5", height: "48px", marginTop: "10px" }}>
           <Form.Item style={{ margin: "0 auto" }}>
             <EditorTitle value={title} />
           </Form.Item>
@@ -181,26 +160,20 @@ const TaskEditor: React.FC<Task & FormComponentProps> = ({ title }) => {
             <Form.Item label="Note">
               <EditorWrapper>
                 <EditorControlWrapper>
-                  <BlockStyleControls
-                    editorState={editorState}
-                    onToggle={_toggleBlockType}
-                  />
-                  <InlinStyleControls
-                    editorState={editorState}
-                    onToggle={_toggleInlinStyle}
-                  />
+                  <BlockStyleControls editorState={editorState} onToggle={_toggleBlockType} />
+                  <InlinStyleControls editorState={editorState} onToggle={_toggleInlinStyle} />
                 </EditorControlWrapper>
-                <Editor
-                  handleKeyCommand={_handleKeyCommand}
-                  editorState={editorState}
-                  onChange={setEditorState}
-                />
+                <EditorContentWrapper>
+                  <Editor
+                    handleKeyCommand={_handleKeyCommand}
+                    editorState={editorState}
+                    onChange={setEditorState}
+                  />
+                </EditorContentWrapper>
               </EditorWrapper>
             </Form.Item>
           </Content>
-          <EditorSider
-            style={{ background: "#f0f2f5", margin: "34px 10px 0 5px" }}
-          >
+          <EditorSider style={{ background: "#f0f2f5", margin: "34px 10px 0 5px" }}>
             <Form.Item
               label={
                 <span>
@@ -250,6 +223,15 @@ const TaskEditor: React.FC<Task & FormComponentProps> = ({ title }) => {
                   <Select.Option value={tag}>{tag}</Select.Option>
                 ))}
               </Select>
+            </Form.Item>
+            <Form.Item
+              label={
+                <span>
+                  <Icon type="bell" /> Reminders
+                </span>
+              }
+            >
+              <Input />
             </Form.Item>
           </EditorSider>
         </Layout>

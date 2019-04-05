@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+// https://reacttraining.com/react-router/web/api/Router
+import { Router, Switch, Route, Link } from "react-router-dom";
 import { observer, Provider } from "mobx-react";
 import DevTools from "mobx-react-devtools";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -13,26 +14,29 @@ import { setConfig } from "react-hot-loader";
 import appStore from "./stores";
 import * as serviceWorker from "./serviceWorker";
 import { create, persist } from "mobx-persist";
-
+import { createBrowserHistory } from "history";
+import { syncHistoryWithStore } from "mobx-react-router";
 import "./index.css";
 
 const rootEl = document.getElementById("root");
 setConfig({ ignoreSFC: true });
 const hydrate = create({ jasonify: false });
-const initialStore =
-  (window as any).__INITIAL_STATE__ && (window as any).__INITIAL_STATE__.app;
-let stores = {};
+const initialStore = (window as any).__INITIAL_STATE__ && (window as any).__INITIAL_STATE__.app;
+
+const browserHistory = createBrowserHistory();
 
 (async () => {
   await hydrate("appState", appStore, initialStore).then(() => {
     console.log("rehydrate");
-    console.log(appStore.authStore.authenticated);
+    console.log(appStore.auth.authenticated);
   });
+
+  const history = syncHistoryWithStore(browserHistory, appStore.router);
 
   ReactDOM.render(
     <Provider {...appStore.getAllState()}>
       <>
-        <Router>
+        <Router history={history}>
           <Switch>
             <ProtectedRoute path="/counter" component={Counter} />
             <Route exact path="/login" component={Login} />

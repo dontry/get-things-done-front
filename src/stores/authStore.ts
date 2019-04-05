@@ -1,11 +1,12 @@
 import { observable, action } from "mobx";
 
 class AuthStore {
-  @observable authenticated: boolean = false;
+  @observable public authenticated: boolean = false;
 
+  // tslint:disable-next-line:no-empty
   constructor() {}
 
-  @action verify(): void {
+  @action public verify(): void {
     this.authenticated = true;
   }
 }

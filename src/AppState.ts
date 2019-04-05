@@ -3,21 +3,21 @@ import { FieldState } from "./components/FieldInput";
 
 class AppSate {
   @observable
-  items: string[] = [];
+  public items: string[] = [];
 
   @observable
-  currentItem: FieldState = new FieldState();
+  public currentItem: FieldState = new FieldState();
 
   @action
-  addCurrentItem = () => {
+  public addCurrentItem = () => {
     this.items = [...this.items, this.currentItem.value];
     this.currentItem.value = "";
   };
 
   @action
-  reset = () => {
+  public reset = () => {
     this.items = [];
-    this.currentItem.onchange("");
+    this.currentItem.onChange("");
   };
 }
 

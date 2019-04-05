@@ -1,4 +1,4 @@
-//Task types
+// Task types
 export type Attribute = "plan" | "next" | "inbox";
 
 export enum Priority {
@@ -9,7 +9,7 @@ export enum Priority {
   HIGHEST
 }
 
-export interface Task {
+export interface ITask {
   title: string;
   attribute: Attribute;
   priority: Priority;
@@ -23,9 +23,9 @@ export interface Task {
   deleted: boolean;
   archived: boolean;
   tags: string[];
-  note: Note;
+  note: INote;
 }
 
-export interface Note {
+export interface INote {
   content: string;
 }

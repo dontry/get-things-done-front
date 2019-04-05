@@ -1,31 +1,26 @@
-import React, {
-  Component,
-  SyntheticEvent,
-  createRef,
-  ComponentClass
-} from "react";
+import React, { Component, SyntheticEvent, createRef, ComponentClass } from "react";
 
-interface EditableProps {
+interface IEditableProps {
   value: string;
   isAllowedEmpty?: boolean;
-  onChange?(value: string): void;
   editOnClick?: boolean;
+  onChange?(value: string): void;
 }
 
-interface EditableState {
+interface IEditableState {
   editing: boolean;
 }
 
-//https://stackoverflow.com/questions/31815633/what-does-the-error-jsx-element-type-does-not-have-any-construct-or-call
+// https://stackoverflow.com/questions/31815633/what-does-the-error-jsx-element-type-does-not-have-any-construct-or-call
 const Editable = (WrappedComponent: ComponentClass<any> | string) => {
-  return class E extends Component<EditableProps, EditableState> {
-    //https://medium.com/@martin_hotell/react-refs-with-typescript-a32d56c4d315
-    private editableRef = createRef<HTMLElement>();
-    state = {
+  return class E extends Component<IEditableProps, IEditableState> {
+    public state = {
       editing: false
     };
+    // https://medium.com/@martin_hotell/react-refs-with-typescript-a32d56c4d315
+    private editableRef = createRef<HTMLElement>();
 
-    edit = (e: SyntheticEvent) => {
+    public edit = (e: SyntheticEvent) => {
       e.stopPropagation();
       this.setState({ editing: true }, () => {
         const node = this.editableRef.current!;
@@ -33,7 +28,7 @@ const Editable = (WrappedComponent: ComponentClass<any> | string) => {
       });
     };
 
-    save = () => {
+    public save = () => {
       this.setState({ editing: false }, () => {
         const { onChange, value, isAllowedEmpty } = this.props;
         const node = this.editableRef.current!;
@@ -50,16 +45,16 @@ const Editable = (WrappedComponent: ComponentClass<any> | string) => {
       });
     };
 
-    cancel = (): void => {
+    public cancel = (): void => {
       this.setState({ editing: false });
     };
 
-    isValueChanged = (): boolean => {
+    public isValueChanged = (): boolean => {
       const node = this.editableRef.current!;
       return this.props.value !== node.textContent;
     };
 
-    handleKeyDown = (e: KeyboardEvent) => {
+    public handleKeyDown = (e: KeyboardEvent) => {
       switch (e.key) {
         case "Enter":
         case "Escape":
@@ -70,7 +65,7 @@ const Editable = (WrappedComponent: ComponentClass<any> | string) => {
       }
     };
 
-    render() {
+    public render() {
       let editOnClick = true;
       const { editing } = this.state;
       const { isAllowedEmpty, ...componentProps } = this.props;

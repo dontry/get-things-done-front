@@ -4,24 +4,27 @@ import { observer } from "mobx-react";
 
 export class FieldState {
   @observable
-  value = "";
+  public value = "";
 
   @action
-  onchange(value: string) {
+  public onChange(value: string): void {
     this.value = value;
   }
 }
 
 @observer
 export class FieldInput extends Component<{ fieldState: FieldState }> {
-  render() {
+  public render() {
     const { fieldState } = this.props;
     return (
       <input
         type="text"
+        aria-label="field-input"
         value={fieldState.value}
-        onChange={e => fieldState.onchange(e.target.value)}
+        onChange={e => fieldState.onChange(e.target.value)}
       />
     );
   }
 }
+
+export default FieldInput;
