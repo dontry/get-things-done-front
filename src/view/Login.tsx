@@ -4,15 +4,20 @@ import { observer, inject } from "mobx-react";
 import { AuthStore } from "../stores/authStore";
 import LoginForm from "../components/LoginForm";
 
-interface ILoginProps {
+interface Props {
   authenticated: boolean;
   verify(): void;
 }
 
-const Login: React.FC<ILoginProps> = ({ verify, authenticated }) => <LoginForm onSubmit={verify} />;
+const Login: React.FC<Props> = ({ verify, authenticated }) => (
+  <LoginForm onSubmit={verify} />
+);
 
 export default inject("authStore")(
   observer(({ authStore }) => (
-    <Login authenticated={authStore.authenticated} verify={() => authStore.verify()} />
+    <Login
+      authenticated={authStore.authenticated}
+      verify={() => authStore.verify()}
+    />
   ))
 );
