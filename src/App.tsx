@@ -18,8 +18,8 @@ const App: React.FC<any> = props => {
       <Layout>
         <Content>
           <Switch>
-            <Route path={`${match.url}taskboard`} component={TaskBoard} />
-            <Route path={`${match.url}task`} component={TaskEditor} />
+            <Route path={`${match.url}/board`} component={TaskBoard} />
+            <Route path={`${match.url}/task`} component={TaskEditor} />
           </Switch>
         </Content>
         <Footer

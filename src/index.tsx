@@ -41,7 +41,8 @@ const browserHistory = createBrowserHistory();
             <ProtectedRoute path="/counter" component={Counter} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
-            <Route path="/" component={App} />
+            <Route path="/404" component={NotFound} />
+            <Route path="/home" component={App} />
             <Route path="*" component={NotFound} />
           </Switch>
         </Router>
