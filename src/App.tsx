@@ -6,6 +6,7 @@ import Sidebar from "./components/Sidebar";
 import { Route, Switch } from "react-router-dom";
 import "./App.css";
 import TaskEditor from "./components/Editor/TaskEditor";
+import TaskBoard from "./view/TaskBoard";
 
 const { Header, Content, Footer } = Layout;
 
@@ -17,6 +18,7 @@ const App: React.FC<any> = props => {
       <Layout>
         <Content>
           <Switch>
+            <Route path={`${match.url}taskboard`} component={TaskBoard} />
             <Route path={`${match.url}task`} component={TaskEditor} />
           </Switch>
         </Content>

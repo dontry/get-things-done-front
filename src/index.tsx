@@ -31,12 +31,12 @@ const browserHistory = createBrowserHistory();
     console.log(appStore.auth.authenticated);
   });
 
-  const history = syncHistoryWithStore(browserHistory, appStore.router);
+  // const history = syncHistoryWithStore(browserHistory, appStore.router);
 
   ReactDOM.render(
     <Provider {...appStore.getAllState()}>
       <>
-        <Router history={history}>
+        <Router history={browserHistory}>
           <Switch>
             <ProtectedRoute path="/counter" component={Counter} />
             <Route exact path="/login" component={Login} />

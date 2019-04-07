@@ -10,6 +10,7 @@ export enum Priority {
 }
 
 export interface ITask {
+  id: string;
   title: string;
   attribute: Attribute;
   priority: Priority;
