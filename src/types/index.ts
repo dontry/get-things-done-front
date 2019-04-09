@@ -14,17 +14,20 @@ export interface ITask {
   title: string;
   attribute: Attribute;
   priority: Priority;
-  now: number;
+  createdAt: number;
   startAt: number;
+  created: number;
   endAt: number;
   estimatedTime: number;
-  context: string | null;
-  spentTime: number;
+  context?: string | null;
+  spentTime?: number;
   allDay: boolean;
   deleted: boolean;
+  completed: boolean;
   archived: boolean;
   tags: string[];
   note: INote;
+  project?: string;
 }
 
 export interface INote {

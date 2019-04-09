@@ -1,5 +1,5 @@
 import axios, { Canceler, AxiosResponse } from "axios";
-import appStore from "../stores";
+import { routerStore } from "../stores";
 
 let cancel: Canceler;
 const promiseArray: any = {};
@@ -54,11 +54,11 @@ httpClient.interceptors.response.use(
           break;
         case 404:
           // TODO: Page not found
-          appStore.router.push("/404");
+          routerStore.push("/404");
         case 500:
         default:
           // TODO: Server error
-          appStore.router.push("/500");
+          routerStore.push("/500");
       }
       return Promise.reject(error.response);
     }

@@ -1,6 +1,8 @@
 import { observable, action } from "mobx";
+import { persist } from "mobx-persist";
 
 class UserStore {
+  @persist("object") @observable public user = {};
   constructor() {}
 }
 
