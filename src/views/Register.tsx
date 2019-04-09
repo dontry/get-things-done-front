@@ -1,11 +1,9 @@
 import React from "react";
 import RegistrationForm from "../components/RegisterForm";
 
-const Register: React.FC = () => {
+const Register = () => {
   return (
-    <div>
-      <RegistrationForm onSubmit={() => {}} />
-    </div>
+    <RegistrationForm onSubmit={() => {}} />
   );
 };
 

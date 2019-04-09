@@ -17,7 +17,14 @@
     "jsx": "react",
     "forceConsistentCasingInFileNames": true,
     "strictNullChecks": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "paths": {
+      "@actions/*": ["src/actions/*"],
+      "@constants/*": ["src/constants/*"],
+      "@stores/*": ["src/stores/*"],
+      "@views/*": ["src/views/*"],
+      "@types/*": ["src/types/*"]
+    }
   },
   "include": ["src"]
 }

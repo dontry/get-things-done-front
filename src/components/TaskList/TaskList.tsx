@@ -7,16 +7,15 @@ import { ITask } from "src/types";
 
 interface ITaskListProps {
   id: string;
-  list: string[];
+  tasks: ITask[];
   index?: number;
   type: string;
 }
 
-const TaskList = ({ id, list,  index = 0 }: ITaskListProps) => {
-  const tasks: ITask[] = list.map(_id => mockData.tasks[_id]);
-
+const TaskList = ({ id, tasks,  index = 0, type }: ITaskListProps) => {
+  debugger;
   return (
-    <Droppable droppableId={id} type="TASK_LIST">
+    <Droppable droppableId={id} type={type}>
       {provided => (
         <TaskListContainer {...provided.droppableProps} ref={provided.innerRef}>
           <InnerList tasks={tasks} />

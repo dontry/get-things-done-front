@@ -7,32 +7,28 @@ import DevTools from "mobx-react-devtools";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Counter from "./components/_Counter";
 import App from "./App";
-import Login from "./view/Login";
-import Register from "./view/Register";
-import NotFound from "./view/NotFound";
+import Login from "./views/Login";
+import Register from "./views/Register";
+import NotFound from "./views/NotFound";
 import { setConfig } from "react-hot-loader";
 import * as stores from "./stores";
 import * as serviceWorker from "./serviceWorker";
-import { create, persist } from "mobx-persist";
 import { createBrowserHistory } from "history";
 import { syncHistoryWithStore } from "mobx-react-router";
 import "./index.css";
 
 const rootEl = document.getElementById("root");
 setConfig({ ignoreSFC: true });
-const hydrate = create({ jasonify: false });
-const initialStore = (window as any).__INITIAL_STATE__ && (window as any).__INITIAL_STATE__.app;
-
 const browserHistory = createBrowserHistory();
+const history = syncHistoryWithStore(browserHistory, stores.routerStore);
 
 (async () => {
 
-  // const history = syncHistoryWithStore(browserHistory, appStore.router);
 
   ReactDOM.render(
     <Provider {...stores}>
       <>
-        <Router history={browserHistory}>
+        <Router history={history}>
           <Switch>
             <ProtectedRoute path="/counter" component={Counter} />
             <Route exact path="/login" component={Login} />

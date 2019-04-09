@@ -1,12 +1,11 @@
 import React from "react";
 import { Layout } from "antd";
-import Counter from "./components/_Counter";
 import { observer } from "mobx-react";
 import Sidebar from "./components/Sidebar";
 import { Route, Switch } from "react-router-dom";
 import "./App.css";
 import TaskEditor from "./components/Editor/TaskEditor";
-import TaskBoard from "./view/TaskBoard";
+import TaskBoard from "./views/TaskBoard";
 
 const { Header, Content, Footer } = Layout;
 
