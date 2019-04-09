@@ -9,7 +9,7 @@ interface ITaskItemProps {
   task: ITask;
 }
 
-const TaskItem: React.FC<ITaskItemProps> = React.memo(({ task, index }) => {
+const TaskItem = React.memo(({ task, index }: ITaskItemProps) => {
   const { title, id } = task;
 
   return (

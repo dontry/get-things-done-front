@@ -6,27 +6,20 @@ import { mockData } from "./mockData";
 import { ITask } from "src/types";
 
 interface ITaskListProps {
-  list?: ITaskList;
+  id: string;
+  list: string[];
   index?: number;
   type: string;
 }
 
-interface ITaskList {
-  id: string;
-  title: string;
-  taskIds: string[];
-}
-
-const TaskList: React.FC<ITaskListProps> = ({ index = 0 }) => {
-  const list: ITaskList = mockData.columns["column-1"];
-  const { id, taskIds, title } = list;
-  const _tasks: any = taskIds.map(_id => mockData.tasks[_id]);
+const TaskList = ({ id, list,  index = 0 }: ITaskListProps) => {
+  const tasks: ITask[] = list.map(_id => mockData.tasks[_id]);
 
   return (
     <Droppable droppableId={id} type="TASK_LIST">
       {provided => (
         <TaskListContainer {...provided.droppableProps} ref={provided.innerRef}>
-          <InnerList tasks={_tasks} />
+          <InnerList tasks={tasks} />
         </TaskListContainer>
       )}
     </Droppable>
@@ -37,7 +30,7 @@ interface IInnerListProps {
   tasks: ITask[];
 }
 
-const InnerList: React.FC<IInnerListProps> = React.memo(({ tasks }) => {
+const InnerList = React.memo(({ tasks }: IInnerListProps) => {
   return (
     <TaskListBody>
       {tasks.map((task, index) => (
