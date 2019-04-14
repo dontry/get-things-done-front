@@ -12,7 +12,7 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "isolatedModules": true,
+    // "isolatedModules": false,
     "noEmit": true,
     "jsx": "react",
     "forceConsistentCasingInFileNames": true,
@@ -24,7 +24,7 @@
       "@stores/*": ["src/stores/*"],
       "@views/*": ["src/views/*"],
       "@types/*": ["src/types/*"]
-    }
-  },
-  "include": ["src"]
+    },
+    "downlevelIteration": true
+  }
 }

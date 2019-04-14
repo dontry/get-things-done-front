@@ -13,7 +13,6 @@ interface ITaskListProps {
 }
 
 const TaskList = ({ id, tasks,  index = 0, type }: ITaskListProps) => {
-  debugger;
   return (
     <Droppable droppableId={id} type={type}>
       {provided => (

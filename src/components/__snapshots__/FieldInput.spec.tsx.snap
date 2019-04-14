@@ -5,22 +5,12 @@ exports[`FieldInput should render '' 1`] = `
   <input
     aria-label="field-input"
     type="text"
-    value="23"
+    value=""
   />
 </div>
 `;
 
 exports[`FieldInput should render '23' 1`] = `
-<div>
-  <input
-    aria-label="field-input"
-    type="text"
-    value="23"
-  />
-</div>
-`;
-
-exports[`FieldInput should render 1`] = `
 <div>
   <input
     aria-label="field-input"
