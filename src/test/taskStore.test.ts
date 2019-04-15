@@ -30,6 +30,18 @@ describe("taskStore", () => {
     expect(res).toBeUndefined();
   });
 
+  it("should update a task by Id", () => {
+    taskStore.addTaskList(taskList);
+    const firstTask: ITask = taskList[0];
+    const updatedFirstTask: ITask = {
+      ...firstTask,
+      title: "new title"
+    };
+    taskStore.updateTaskById(firstTask.id, updatedFirstTask);
+    const res = taskStore.getTaskById(firstTask.id);
+    expect(res!.title).toBe("new title");
+  });
+
   it("should get tasks in inbox", () => {
     taskStore.addTaskList(taskList);
     const res = (taskStore as any).inboxTasks;
