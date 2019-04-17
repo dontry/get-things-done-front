@@ -15,9 +15,9 @@ describe("taskStore", () => {
     expect(taskStore.tasks.size).toBeGreaterThan(2);
   });
 
-  it("should add a task by Id", () => {
+  it("should add a task", () => {
     const task = taskList[0];
-    taskStore.addTaskById(task.id, task);
+    taskStore.addTask(task);
     const res = taskStore.getTaskById(task.id);
     expect(res!.id).toBe(task.id);
   });

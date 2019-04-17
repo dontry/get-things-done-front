@@ -67,10 +67,8 @@ export class TaskStore implements ITaskStore {
   /**
    * addTaskById
    */
-  public addTaskById(id: string, task: ITask): void {
-    if (!this.tasks.get(id)) {
-      this.tasks.set(id, task);
-    }
+  public addTask(task: ITask): void {
+    this.tasks.set(task.id, task);
   }
 
   @action

@@ -25,7 +25,10 @@ httpClient.interceptors.request.use(
 
     // TODO: add token
     // const token = store.state.token;
-    // token && (config.headers.Authorization = token);
+    const token = window.localStorage.getItem("token");
+    if (token) {
+      config.headers.Authorization = token;
+    }
     return config;
   },
   error => {
@@ -50,7 +53,7 @@ httpClient.interceptors.response.use(
           break;
         case 403:
           // TODO: Forbidden token expires
-          // localStorage.removeItem("token");
+          localStorage.removeItem("token");
           break;
         case 404:
           // TODO: Page not found
@@ -66,7 +69,7 @@ httpClient.interceptors.response.use(
 );
 
 export default {
-  get(url: string, params: any): Promise<AxiosResponse> {
+  get(url: string, params?: any): Promise<AxiosResponse> {
     return new Promise((resolve, reject) => {
       httpClient({
         method: "get",
@@ -86,6 +89,20 @@ export default {
         method: "post",
         url,
         data: payload,
+        cancelToken: new CancelToken(c => {
+          cancel = c;
+        })
+      }).then(response => {
+        resolve(response);
+      });
+    });
+  },
+  delete(url: string, params?: any): Promise<AxiosResponse> {
+    return new Promise((resolve, reject) => {
+      httpClient({
+        method: "delete",
+        url,
+        params,
         cancelToken: new CancelToken(c => {
           cancel = c;
         })
