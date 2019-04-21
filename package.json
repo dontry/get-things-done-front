@@ -78,11 +78,12 @@
   },
   "scripts": {
     "start": "PORT=3006 node scripts/start.js",
-    "build": "node scripts/build.js",
-    "test": "is-ci \"test:coverage\" \"test:watch\"",
-    "test:watch": "jest --watch",
-    "test:debug": "node --inspect-brk jest --runInBand --watch",
-    "test:coverage": "jest --notify --coverage",
+    "build": "NODE_ENV=production node scripts/build.js",
+    "prod": "NODE_ENV=production PORT=3006 node scripts/start.js",
+    "test": "NODE_ENV=test is-ci \"test:coverage\" \"test:watch\"",
+    "test:watch": "NODE_ENV=test jest --watch",
+    "test:debug": "NODE_ENV=test node --inspect-brk jest --runInBand --watch",
+    "test:coverage": "NODE_ENV=test jest --notify --coverage",
     "lint": "tslint src/**/*.ts{,?}"
   },
   "eslintConfig": {

@@ -7,7 +7,10 @@ configure({
 });
 
 class CounterData {
-  @observable public clickedCount: number = 0;
+  @observable public clickedCount: number;
+  constructor() {
+    this.clickedCount = 0;
+  }
 
   @action
   public increment(): void {

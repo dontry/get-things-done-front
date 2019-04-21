@@ -1,5 +1,5 @@
 import { observable, action } from "mobx";
-import { RequestType } from "src/types";
+import { RequestType } from "../types";
 
 class RequestStore {
   @observable public requests = observable.map({});

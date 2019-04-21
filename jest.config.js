@@ -10,6 +10,11 @@ module.exports = {
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
   // Setup Enzyme
   //   snapshotSerializers: ["enzyme-to-json/serializer"],
+  moduleNameMapper: {
+    "@stores": "<rootDir>/src/stores",
+    "@actions": "<rootDir>/src/actions",
+    src: "<rootDir>/src"
+  },
   setupTestFrameworkScriptFile: "<rootDir>/src/setupEnzyme.ts",
   watchPlugins: ["jest-watch-typeahead/filename", "jest-watch-typeahead/testname"]
 };

@@ -1,12 +1,12 @@
 import axios, { Canceler, AxiosResponse } from "axios";
-import { routerStore } from "../stores";
+import routerStore from "@stores/routerStore";
 
 let cancel: Canceler;
 const promiseArray: any = {};
 const CancelToken = axios.CancelToken;
 
 const options = {
-  baseURL: "/api",
+  baseURL: `${process.env.BASE_URL}`,
   headers: { "X-Requested-With": "XMLHttpRequest" },
   timeout: 10000
 };
@@ -27,7 +27,7 @@ httpClient.interceptors.request.use(
     // const token = store.state.token;
     const token = window.localStorage.getItem("token");
     if (token) {
-      config.headers.Authorization = token;
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
@@ -50,10 +50,12 @@ httpClient.interceptors.response.use(
         // Unauthorized
         case 401:
           // TODO: redirect to login
+          routerStore.push("/login");
           break;
         case 403:
           // TODO: Forbidden token expires
           localStorage.removeItem("token");
+          routerStore.push("/login");
           break;
         case 404:
           // TODO: Page not found
@@ -80,6 +82,7 @@ export default {
         })
       }).then(response => {
         resolve(response);
+        console.debug("response:", response);
       });
     });
   },

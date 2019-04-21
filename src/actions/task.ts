@@ -1,8 +1,8 @@
 import requestStore from "@stores/requestStore";
 import taskStore from "@stores/taskStore";
-import api from "src/api";
-import { ITask, INewTask } from "src/types";
-import { RequestType } from "src/types";
+import api from "../api";
+import { ITask, INewTask } from "../types";
+import { RequestType } from "../types";
 
 const requestType = RequestType.TASK;
 

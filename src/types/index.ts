@@ -52,13 +52,12 @@ export interface IUser {
 }
 
 export interface ITask {
-  id: string;
+  id?: string;
   title: string;
   attribute: Attribute;
   priority: Priority;
   createdAt: number;
   startAt: number;
-  created: number;
   endAt: number;
   estimatedTime: number;
   context?: string | null;
@@ -69,7 +68,8 @@ export interface ITask {
   archived: boolean;
   tags: string[];
   note: INote;
-  project?: string;
+  project?: string | undefined;
+  userId?: string | undefined;
 }
 
 export interface INewTask {
@@ -78,7 +78,6 @@ export interface INewTask {
   priority: Priority;
   createdAt: number;
   startAt: number;
-  created: number;
   endAt: number;
   estimatedTime: number;
   context?: string | null;
@@ -89,7 +88,8 @@ export interface INewTask {
   archived: boolean;
   tags: string[];
   note: INote;
-  project?: string;
+  project?: string | undefined;
+  userId: string;
 }
 
 export interface INote {
