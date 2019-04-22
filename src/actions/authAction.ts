@@ -8,7 +8,7 @@ const requestType = RequestType.USER;
 
 export function login(credential: ILoginCredential) {
   requestStore.setRequestInProgress(requestType, true);
-  api.post("/auth/login", credential).then(res => {
+  return api.post("/auth/login", credential).then(res => {
     const { data } = res;
     const { user, token } = data;
     userStore.mergeUser(user);
@@ -19,7 +19,7 @@ export function login(credential: ILoginCredential) {
 
 export function register(profile: IRegisterProfile) {
   requestStore.setRequestInProgress(requestType, true);
-  api.post("/auth/register", profile).then(res => {
+  return api.post("/auth/register", profile).then(res => {
     routerStore.push("/login");
   });
 }
