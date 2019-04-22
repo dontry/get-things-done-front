@@ -5,7 +5,6 @@ import { Router, Switch, Route, Link } from "react-router-dom";
 import { observer, Provider } from "mobx-react";
 import DevTools from "mobx-react-devtools";
 import ProtectedRoute from "./components/ProtectedRoute";
-import Counter from "./components/_Counter";
 import App from "./App";
 import Login from "./views/Login";
 import Register from "./views/Register";
@@ -30,7 +29,6 @@ const history = syncHistoryWithStore(browserHistory, stores.routerStore);
       <>
         <Router history={history}>
           <Switch>
-            <ProtectedRoute path="/counter" component={Counter} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
             <Route path="/404" component={NotFound} />
