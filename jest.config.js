@@ -13,7 +13,8 @@ module.exports = {
   moduleNameMapper: {
     "@stores": "<rootDir>/src/stores",
     "@actions": "<rootDir>/src/actions",
-    src: "<rootDir>/src"
+    src: "<rootDir>/src",
+    "\\.css$": "<rootDir>/src/test/fixture/styleMock.ts"
   },
   setupTestFrameworkScriptFile: "<rootDir>/src/setupEnzyme.ts",
   watchPlugins: ["jest-watch-typeahead/filename", "jest-watch-typeahead/testname"]
