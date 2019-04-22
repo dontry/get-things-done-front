@@ -1,6 +1,5 @@
 import { configure } from "enzyme";
 import EnzymeAdapter from "enzyme-adapter-react-16";
-import console = require("console");
 configure({ adapter: new EnzymeAdapter() });
 
 if (process.env.NODE_ENV === "test") {

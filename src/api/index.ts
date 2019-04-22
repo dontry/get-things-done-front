@@ -1,5 +1,6 @@
 import axios, { Canceler, AxiosResponse } from "axios";
-import routerStore from "@stores/routerStore";
+import routerStore from "../stores/routerStore";
+import console = require("console");
 
 let cancel: Canceler;
 const promiseArray: any = {};
@@ -7,8 +8,13 @@ const CancelToken = axios.CancelToken;
 
 const options = {
   baseURL: `${process.env.BASE_URL}`,
-  headers: { "X-Requested-With": "XMLHttpRequest" },
+  // headers: { "X-Requested-With": "XMLHttpRequest" },
   timeout: 10000
+  // withCredentials: true,
+  // proxy: {
+  //   host: "yapi.demo.qunar.com",
+  //   port: 80
+  // }
 };
 
 const httpClient = axios.create(options);
@@ -45,27 +51,32 @@ httpClient.interceptors.response.use(
     }
   },
   error => {
-    if (error.response.status) {
-      switch (error.response.status) {
-        // Unauthorized
-        case 401:
-          // TODO: redirect to login
-          routerStore.push("/login");
-          break;
-        case 403:
-          // TODO: Forbidden token expires
-          localStorage.removeItem("token");
-          routerStore.push("/login");
-          break;
-        case 404:
-          // TODO: Page not found
-          routerStore.push("/404");
-        case 500:
-        default:
-          // TODO: Server error
-          routerStore.push("/500");
+    try {
+      if (error.response.status) {
+        switch (error.response.status) {
+          // Unauthorized
+          case 401:
+            // TODO: redirect to login
+            routerStore.push("/login");
+            break;
+          case 403:
+            // TODO: Forbidden token expires
+            localStorage.removeItem("token");
+            routerStore.push("/login");
+            break;
+          case 404:
+            // TODO: Page not found
+            routerStore.push("/404");
+          case 500:
+          default:
+            // TODO: Server error
+            routerStore.push("/500");
+        }
+        return Promise.reject(error.response);
       }
-      return Promise.reject(error.response);
+    } catch (e) {
+      console.error("response error:", error);
+      return Promise.reject(error);
     }
   }
 );
@@ -82,7 +93,6 @@ export default {
         })
       }).then(response => {
         resolve(response);
-        console.debug("response:", response);
       });
     });
   },

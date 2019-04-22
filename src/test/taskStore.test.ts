@@ -18,16 +18,20 @@ describe("taskStore", () => {
   it("should add a task", () => {
     const task = taskList[0];
     taskStore.addTask(task);
-    const res = taskStore.getTaskById(task.id);
-    expect(res!.id).toBe(task.id);
+    if (task.id) {
+      const res = taskStore.getTaskById(task.id);
+      expect(res!.id).toBe(task.id);
+    }
   });
 
   it("should delete a task by Id", () => {
     taskStore.addTaskList(taskList);
     const firstTask = taskList[0];
-    taskStore.deleteTaskById(firstTask.id);
-    const res = taskStore.getTaskById(firstTask.id);
-    expect(res).toBeUndefined();
+    if (firstTask.id) {
+      taskStore.deleteTaskById(firstTask.id);
+      const res = taskStore.getTaskById(firstTask.id);
+      expect(res).toBeUndefined();
+    }
   });
 
   it("should update a task by Id", () => {
@@ -37,9 +41,11 @@ describe("taskStore", () => {
       ...firstTask,
       title: "new title"
     };
-    taskStore.updateTaskById(firstTask.id, updatedFirstTask);
-    const res = taskStore.getTaskById(firstTask.id);
-    expect(res!.title).toBe("new title");
+    if (firstTask.id) {
+      taskStore.updateTaskById(firstTask.id, updatedFirstTask);
+      const res = taskStore.getTaskById(firstTask.id);
+      expect(res!.title).toBe("new title");
+    }
   });
 
   it("should get tasks in inbox", () => {

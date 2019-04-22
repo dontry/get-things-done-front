@@ -60,7 +60,7 @@ export interface ITask {
   startAt: number;
   endAt: number;
   estimatedTime: number;
-  context?: string | null;
+  context?: string;
   spentTime?: number;
   allDay: boolean;
   deleted: boolean;
@@ -68,8 +68,8 @@ export interface ITask {
   archived: boolean;
   tags: string[];
   note: INote;
-  project?: string | undefined;
-  userId?: string | undefined;
+  project?: string;
+  userId?: string;
 }
 
 export interface INewTask {
@@ -80,7 +80,7 @@ export interface INewTask {
   startAt: number;
   endAt: number;
   estimatedTime: number;
-  context?: string | null;
+  context?: string;
   spentTime?: number;
   allDay: boolean;
   deleted: boolean;
@@ -88,7 +88,7 @@ export interface INewTask {
   archived: boolean;
   tags: string[];
   note: INote;
-  project?: string | undefined;
+  project?: string;
   userId: string;
 }
 
