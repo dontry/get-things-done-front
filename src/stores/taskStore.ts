@@ -59,8 +59,12 @@ export class TaskStore implements ITaskStore {
   }
 
   @action
-  public getTaskById(id: string): ITask | undefined {
-    return this.tasks.get(id);
+  public getTaskById(id: string | undefined): ITask | undefined {
+    if (id) {
+      return this.tasks.get(id);
+    } else {
+      return undefined;
+    }
   }
 
   @action
