@@ -6,6 +6,13 @@ import { routerStore } from "src/stores";
 
 const requestType = RequestType.USER;
 
+export function register(profile: IRegisterProfile) {
+  requestStore.setRequestInProgress(requestType, true);
+  return api.post("/auth/register", profile).then(res => {
+    routerStore.push("/login");
+  });
+}
+
 export function login(credential: ILoginCredential) {
   requestStore.setRequestInProgress(requestType, true);
   return api.post("/auth/login", credential).then(res => {
@@ -14,12 +21,12 @@ export function login(credential: ILoginCredential) {
     userStore.mergeUser(user);
     window.localStorage.setItem("token", token);
     requestStore.setRequestInProgress(requestType, false);
+    routerStore.push("/home/board");
   });
 }
 
-export function register(profile: IRegisterProfile) {
-  requestStore.setRequestInProgress(requestType, true);
-  return api.post("/auth/register", profile).then(res => {
-    routerStore.push("/login");
-  });
+export function logout() {
+  userStore.clearUser();
+  window.localStorage.removeItem("token");
+  routerStore.push("/login");
 }

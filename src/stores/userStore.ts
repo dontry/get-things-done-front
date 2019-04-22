@@ -9,6 +9,11 @@ class UserStore {
   public mergeUser(user: IUser): void {
     this.user = user;
   }
+
+  @action
+  public clearUser():void {
+    this.user = {};
+  }
 }
 
 const userStore = new UserStore();
