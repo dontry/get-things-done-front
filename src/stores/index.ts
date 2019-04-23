@@ -1,5 +1,5 @@
 import userStore from "./userStore";
-import authStore from "./authStore";
+import taskStore from "./taskStore";
 import routerStore from "./routerStore";
 
-export { userStore, authStore, routerStore };
+export { userStore, taskStore, routerStore };

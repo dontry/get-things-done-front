@@ -1,13 +1,12 @@
 import axios, { Canceler, AxiosResponse } from "axios";
 import routerStore from "../stores/routerStore";
-import console = require("console");
 
 let cancel: Canceler;
 const promiseArray: any = {};
 const CancelToken = axios.CancelToken;
 
 const options = {
-  baseURL: `${process.env.BASE_URL}`,
+  baseURL: `${process.env.BASE_URL}/v1`,
   // headers: { "X-Requested-With": "XMLHttpRequest" },
   timeout: 10000
   // withCredentials: true,

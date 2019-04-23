@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Form, Icon, Input, Button, Checkbox } from "antd";
 
 interface IFormProps {
-  onSubmit(): void;
+  onSubmit(credential: any): Promise<void>;
 }
 
 class RawLoginForm extends React.Component<IFormProps & FormComponentProps> {
@@ -13,7 +13,7 @@ class RawLoginForm extends React.Component<IFormProps & FormComponentProps> {
     return (
       <Form onSubmit={this._handleSubmit} className="login-form">
         <Form.Item>
-          {getFieldDecorator("userName", {
+          {getFieldDecorator("username", {
             rules: [{ required: true, message: "Please input your username!" }]
           })(
             <Input
@@ -51,12 +51,13 @@ class RawLoginForm extends React.Component<IFormProps & FormComponentProps> {
   }
   public _handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    this.props.form.validateFields((err: Error, values: []) => {
+    this.props.form.validateFields((err: Error, values: any) => {
       if (!err) {
         console.log("Received values of form: ", values);
+    const {username, password} = values;
+    this.props.onSubmit({ username, password });
       }
     });
-    this.props.onSubmit();
   };
 }
 

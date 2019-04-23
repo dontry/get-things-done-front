@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react"
+import {inject, observer } from "mobx-react";
 import { RouteComponentProps } from "react-router";
 import { Layout, Form, Input } from "antd";
 import { DragDropContext } from "react-beautiful-dnd";
 import TaskList from "../components/TaskList/TaskList";
 import TaskInput from "../components/TaskInput"
-import { mockData } from "../components/TaskList/mockData";
 import styled from "styled-components";
 import { Priority, ITask } from "../types"
 
@@ -45,15 +45,17 @@ const useNewTaskTitle = () => {
 //   return {match, setMatch};
 // };
 
-let TASKS = mockData.tasks
+interface ITaskBoardProps {
+  type: string;
+  tasks: ITask[];
+}
 
-const TaskBoard = ({ location }: RouteComponentProps) => {
-  const params = new URLSearchParams(location.search);
-  const taskList: ITaskList = mockData.columns["column-1"];
-  const { id, taskIds} = taskList;
-  const { list, setList } = useTaskList(taskIds);
+
+const TaskBoard = ({type, tasks}: ITaskBoardProps) => {
   const { newTaskTitle, setTaskTitle } = useNewTaskTitle();
-  const tasks: ITask[] = list.map(_id => TASKS[_id]);
+  const taskIds = tasks.map(task => task.id);
+  const { list, setList } = useTaskList(taskIds);
+
 
   return (
     <Container>
@@ -61,7 +63,7 @@ const TaskBoard = ({ location }: RouteComponentProps) => {
         <TaskInput onSubmit={_handleSubmit} onChange={_handleChange} value={newTaskTitle} />
       </Form>
       <DragDropContext onDragEnd={onDragEnd}>
-        <TaskList id={id} type="today" tasks={tasks} />
+        <TaskList id={type} type={type} tasks={tasks} />
       </DragDropContext>
     </Container>
   );
@@ -82,7 +84,7 @@ const TaskBoard = ({ location }: RouteComponentProps) => {
     const newTask = {
       id: "xxx",
       title: newTaskTitle,
-      attribute: "x",
+      attribute: "inbox",
       priority: Priority.MEDIUM,
       createdAt: Date.now(),
       startAt: 0,
@@ -98,10 +100,10 @@ const TaskBoard = ({ location }: RouteComponentProps) => {
       note: { content: "" }
     }
 
-   TASKS = {
-     [newTask.id]: newTask,
-     ...TASKS,
-   }
+  //  tasks = {
+  //    [newTask.id]: newTask,
+  //    ...tasks,
+  //  }
     setList([newTask.id, ...list]);
     setTaskTitle("")
   }
@@ -111,4 +113,23 @@ const TaskBoard = ({ location }: RouteComponentProps) => {
   }
 };
 
-export default TaskBoard;
+// { location }: RouteComponentProps
+export default inject("taskStore")(
+  observer(({taskStore, match, ...rest}) => {
+  const {type} = match.params;
+  let tasks = []
+  switch(type) {
+    case "inbox":
+      tasks = taskStore.inboxTasks;
+      break;
+    case "plan":
+      tasks = taskStore.planTasks;
+      break;
+    case "next":
+      tasks = taskStore.nextTasks;
+      break;
+     default: 
+      break; 
+  }
+  return <TaskBoard type={type} tasks={tasks} />
+}))

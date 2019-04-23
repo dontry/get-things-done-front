@@ -11,6 +11,7 @@ interface ITaskItemProps {
 
 const TaskItem = React.memo(({ task, index }: ITaskItemProps) => {
   const { title, id } = task;
+  if (!id) { return null; }
 
   return (
     <Draggable draggableId={id} index={index}>

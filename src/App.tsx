@@ -6,6 +6,7 @@ import { Route, Switch } from "react-router-dom";
 import "./App.css";
 import TaskEditor from "./components/Editor/TaskEditor";
 import TaskBoard from "./views/TaskBoard";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const { Header, Content, Footer } = Layout;
 
@@ -17,8 +18,8 @@ const App: React.FC<any> = props => {
       <Layout>
         <Content>
           <Switch>
-            <Route path={`${match.url}/board`} component={TaskBoard} />
-            <Route path={`${match.url}/task`} component={TaskEditor} />
+            <ProtectedRoute path={`${match.url}/:type/board`} component={TaskBoard} />
+            <ProtectedRoute path={`${match.url}/:type/task`} component={TaskEditor} />
           </Switch>
         </Content>
         <Footer

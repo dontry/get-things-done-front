@@ -2,12 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { observer, inject } from "mobx-react";
 import LoginForm from "../components/LoginForm";
-import { AuthStore } from "@stores/authStore";
+import {login} from "../actions/authAction";
 
-interface ILoginProps {
-  authStore: AuthStore
-}
 
-const Login = inject("authStore")(observer(({ authStore }: ILoginProps) => <LoginForm onSubmit={authStore.verify} />))
+const Login = () => <LoginForm onSubmit={login} />
 
 export default Login;

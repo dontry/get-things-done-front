@@ -1,5 +1,6 @@
 import api from "../../api";
 import { ILoginCredential } from "src/types";
+import userStore from "@stores/userStore";
 
 describe("user", () => {
   afterEach(() => {
@@ -14,6 +15,7 @@ describe("user", () => {
       const { user, token } = res.data;
       expect(user.username).toBe("crystal");
       expect(token).toBeTruthy();
+      expect(userStore.authenticated).toBeTruthy();
       done();
     });
   });

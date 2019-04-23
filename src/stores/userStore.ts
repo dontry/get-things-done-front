@@ -1,9 +1,15 @@
-import { observable, action } from "mobx";
+import { observable, action, computed } from "mobx";
 import { persist } from "mobx-persist";
 import { IUser } from "src/types";
+import _ from "lodash";
 
 class UserStore {
   @persist("object") @observable public user = {};
+
+  @computed
+  public get authenticated(): boolean {
+    return !_.isEmpty(this.user);
+  }
 
   @action
   public mergeUser(user: IUser): void {
@@ -11,7 +17,7 @@ class UserStore {
   }
 
   @action
-  public clearUser():void {
+  public clearUser(): void {
     this.user = {};
   }
 }

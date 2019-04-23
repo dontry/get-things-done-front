@@ -31,7 +31,7 @@ const history = syncHistoryWithStore(browserHistory, stores.routerStore);
           <Switch>
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
-            <Route path="/home" component={App} />
+            <ProtectedRoute path="/home" component={App} />
             <Route path="/404" component={NotFound} />
             <Route path="*" component={NotFound} />
           </Switch>
