@@ -11,9 +11,9 @@ class Task {
   private context: string;
   private spentTime: number;
   private allDay: boolean;
-  private deleted: boolean;
-  private completed: boolean;
-  private archived: boolean;
+  private deleted: number;
+  private completed: number;
+  private archived: number;
   private tags: string[];
   private note: INote;
   private project: string | undefined;
@@ -45,9 +45,9 @@ class Task {
     this.context = context || "";
     this.spentTime = spentTime || 0;
     this.allDay = allDay === undefined ? true : allDay;
-    this.deleted = deleted || false;
-    this.completed = completed || false;
-    this.archived = archived || false;
+    this.deleted = deleted || 0;
+    this.completed = completed || 0;
+    this.archived = archived || 0;
     this.tags = tags || [];
     this.note = note;
     this.project = project;

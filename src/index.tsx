@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 // https://reacttraining.com/react-router/web/api/Router
-import { Router, Switch, Route, Link } from "react-router-dom";
+import { Router, Switch, Route, Link, Redirect } from "react-router-dom";
 import { observer, Provider } from "mobx-react";
 import DevTools from "mobx-react-devtools";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -29,6 +29,7 @@ const history = syncHistoryWithStore(browserHistory, stores.routerStore);
       <>
         <Router history={history}>
           <Switch>
+            <Redirect exact path="/" to="/home" />
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
             <ProtectedRoute path="/home" component={App} />

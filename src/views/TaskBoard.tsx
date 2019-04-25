@@ -6,7 +6,7 @@ import { DragDropContext } from "react-beautiful-dnd";
 import TaskList from "../components/TaskList/TaskList";
 import TaskInput from "../components/TaskInput"
 import styled from "styled-components";
-import { Priority, ITask } from "../types"
+import {  ITask, INewTask } from "../types"
 
 
 const Container = styled.div`
@@ -81,30 +81,24 @@ const TaskBoard = ({type, tasks}: ITaskBoardProps) => {
 
   function _handleSubmit(e: React.SyntheticEvent) {
     e.preventDefault();
-    const newTask = {
-      id: "xxx",
-      title: newTaskTitle,
-      attribute: "inbox",
-      priority: Priority.MEDIUM,
-      createdAt: Date.now(),
-      startAt: 0,
-      endAt: 0,
-      estimatedtime: 0,
-      context: null,
-      spentTime: 0,
-      allDay: true,
-      deleted: false,
-      completed: false,
-      archived: false,
-      tags: [],
-      note: { content: "" }
-    }
+    // const newTask: INewTask = {
+    //   title: newTaskTitle,
+    //   attribute: "inbox",
+    //   priority: Priority.MEDIUM,
+    //   createdAt: Date.now(),
+    //   startAt: 0,
+    //   endAt: 0,
+    //   estimatedTime: 0,
+    //   context: "",
+    //   spentTime: 0,
+    //   allDay: true,
+    //   deleted: 0,
+    //   completed: 0,
+    //   archived: 0,
+    //   tags: [],
+    //   note: { content: "" }
+    // }
 
-  //  tasks = {
-  //    [newTask.id]: newTask,
-  //    ...tasks,
-  //  }
-    setList([newTask.id, ...list]);
     setTaskTitle("")
   }
 

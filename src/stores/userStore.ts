@@ -8,6 +8,7 @@ class UserStore {
 
   @computed
   public get authenticated(): boolean {
+    console.log(`authenticated:`, this.user);
     return !_.isEmpty(this.user);
   }
 

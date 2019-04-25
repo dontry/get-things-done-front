@@ -16,6 +16,10 @@ export enum RequestType {
   REFERENCE = "REFERENCE"
 }
 
+export enum ErrorType {
+  NETWORK = "NETWORK"
+}
+
 export interface ILoginCredential {
   username: string;
   password: string;
@@ -63,9 +67,9 @@ export interface ITask {
   context?: string;
   spentTime?: number;
   allDay: boolean;
-  deleted: boolean;
-  completed: boolean;
-  archived: boolean;
+  deleted: number;
+  completed: number;
+  archived: number;
   tags: string[];
   note: INote;
   project?: string;
@@ -83,9 +87,9 @@ export interface INewTask {
   context?: string;
   spentTime?: number;
   allDay: boolean;
-  deleted: boolean;
-  completed: boolean;
-  archived: boolean;
+  deleted: number;
+  completed: number;
+  archived: number;
   tags: string[];
   note: INote;
   project?: string;

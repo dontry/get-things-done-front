@@ -5,15 +5,12 @@ let cancel: Canceler;
 const promiseArray: any = {};
 const CancelToken = axios.CancelToken;
 
+console.log(`BASE_URL: ${process.env.BASE_URL}`);
+
 const options = {
-  baseURL: `${process.env.BASE_URL}/v1`,
-  // headers: { "X-Requested-With": "XMLHttpRequest" },
+  baseURL: `${process.env.BASE_URL}`,
+  headers: { "X-Requested-With": "XMLHttpRequest" },
   timeout: 10000
-  // withCredentials: true,
-  // proxy: {
-  //   host: "yapi.demo.qunar.com",
-  //   port: 80
-  // }
 };
 
 const httpClient = axios.create(options);
@@ -104,9 +101,11 @@ export default {
         cancelToken: new CancelToken(c => {
           cancel = c;
         })
-      }).then(response => {
-        resolve(response);
-      });
+      })
+        .then(response => {
+          resolve(response);
+        })
+        .catch(err => reject(err));
     });
   },
   delete(url: string, params?: any): Promise<AxiosResponse> {
@@ -118,9 +117,11 @@ export default {
         cancelToken: new CancelToken(c => {
           cancel = c;
         })
-      }).then(response => {
-        resolve(response);
-      });
+      })
+        .then(response => {
+          resolve(response);
+        })
+        .catch(err => reject(err));
     });
   },
   put(url: string, payload: any): Promise<AxiosResponse> {
@@ -132,9 +133,11 @@ export default {
         cancelToken: new CancelToken(c => {
           cancel = c;
         })
-      }).then(response => {
-        resolve(response);
-      });
+      })
+        .then(response => {
+          resolve(response);
+        })
+        .catch(err => reject(err));
     });
   }
 };
