@@ -1,11 +1,10 @@
 import React, { FormEvent, useState } from "react";
 import { FormComponentProps } from "antd/lib/form/Form";
-import { Link } from "react-router-dom";
 import { Form, Icon, Input, Button, Select } from "antd";
 const { Option } = Select;
 
 interface IFormProps {
-  onSubmit(): void;
+  onSubmit(user: any): Promise<void>;
 }
 
 const formItemLayout = {
@@ -15,7 +14,7 @@ const formItemLayout = {
   },
   wrapperCol: {
     xs: { span: 24 },
-    sm: { span: 6 }
+    sm: { span: 16 }
   }
 };
 
@@ -27,13 +26,13 @@ const footerFormItemLayout = {
     },
     sm: {
       span: 16,
-      offset: 8
+      offset: 16
     }
   }
 };
 
 // https://ant.design/components/form/?locale=en-US#components-form-demo-register
-const RawRegistrationForm: React.FC<IFormProps & FormComponentProps> = props => {
+const RawRegisterForm: React.FC<IFormProps & FormComponentProps> = props => {
   const { getFieldDecorator } = props.form;
   const [confirmDirty, setConfirmDirty] = useState(false);
 
@@ -43,8 +42,8 @@ const RawRegistrationForm: React.FC<IFormProps & FormComponentProps> = props => 
       if (!err) {
         console.log("Received values of form: ", values);
       }
+      props.onSubmit(values);
     });
-    props.onSubmit();
   };
 
   const _handleConfirmBlur = (e: React.SyntheticEvent<HTMLInputElement>) => {
@@ -152,13 +151,8 @@ const RawRegistrationForm: React.FC<IFormProps & FormComponentProps> = props => 
           </Select>
         )}
       </Form.Item>
-      <Form.Item>
-        <Button
-          {...footerFormItemLayout}
-          type="primary"
-          htmlType="submit"
-          className="login-form-button"
-        >
+      <Form.Item {...footerFormItemLayout}>
+        <Button type="primary" htmlType="submit" className="login-form-button">
           Register
         </Button>
       </Form.Item>
@@ -166,6 +160,6 @@ const RawRegistrationForm: React.FC<IFormProps & FormComponentProps> = props => 
   );
 };
 
-const RegistrationForm = Form.create()(RawRegistrationForm);
+const RegisterForm = Form.create()(RawRegisterForm);
 
-export default RegistrationForm;
+export default RegisterForm;
