@@ -1,29 +1,21 @@
 import React from "react";
-import styled from "styled-components";
-import { Link } from "react-router-dom";
 import { observer, inject } from "mobx-react";
-import { ErrorStore } from "../stores/errorStore";
+import { MessageStore } from "../stores/messageStore";
 import LoginForm from "../components/LoginForm";
-import {login} from "../actions/authAction";
+import { login } from "../actions/authAction";
+import WithMessagePopup from "../components/WithMessagePopup";
+import { MessageType } from "../types";
+import { CenterContainer, CenterWrapper } from "./style";
 
+const Login = () => {
+  const LoginFormWithMessage = WithMessagePopup(LoginForm, MessageType.NETWORK);
+  return (
+    <CenterContainer>
+      <CenterWrapper>
+        <LoginFormWithMessage onSubmit={login} />
+      </CenterWrapper>
+    </CenterContainer>
+  );
+};
 
-const Container = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-`
-
-const Wrapper = styled.div`
-   min-width: 300px;
-    max-width: 500px;
-    width: 50vh;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 16px 32px;
-`
-
-
-const Login = ({errorStore}: {errorStore: ErrorStore}) =>  <Container><Wrapper><LoginForm errorStore={errorStore} onSubmit={login} /></Wrapper></Container>
-
-export default inject("errorStore")(observer(({errorStore}) => <Login errorStore={errorStore} />));
+export default Login;

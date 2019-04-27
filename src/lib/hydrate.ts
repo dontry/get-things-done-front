@@ -5,7 +5,6 @@ const _hydrate = create({
   jsonify: false
 });
 
-
 const hydrate = (store: any): Promise<void> =>
   _hydrate("router", store).then(() => console.log(`store has been hydrated`));
 

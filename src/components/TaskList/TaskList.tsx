@@ -2,7 +2,6 @@ import React from "react";
 import { Droppable } from "react-beautiful-dnd";
 import TaskItem from "./TaskItem";
 import { TaskListContainer, TaskListBody } from "./style";
-import { mockData } from "./mockData";
 import { ITask } from "src/types";
 
 interface ITaskListProps {
@@ -12,7 +11,7 @@ interface ITaskListProps {
   type: string;
 }
 
-const TaskList = ({ id, tasks,  index = 0, type }: ITaskListProps) => {
+const TaskList = ({ id, tasks, index = 0, type }: ITaskListProps) => {
   return (
     <Droppable droppableId={id} type={type}>
       {provided => (

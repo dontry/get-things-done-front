@@ -22,8 +22,6 @@ const browserHistory = createBrowserHistory();
 const history = syncHistoryWithStore(browserHistory, stores.routerStore);
 
 (async () => {
-
-
   ReactDOM.render(
     <Provider {...stores}>
       <>

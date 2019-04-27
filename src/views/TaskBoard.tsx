@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from "react"
-import {inject, observer } from "mobx-react";
+import React, { useState, useEffect } from "react";
+import { inject, observer } from "mobx-react";
 import { RouteComponentProps } from "react-router";
 import { Layout, Form, Input } from "antd";
 import { DragDropContext } from "react-beautiful-dnd";
 import TaskList from "../components/TaskList/TaskList";
-import TaskInput from "../components/TaskInput"
+import TaskInput from "../components/TaskInput";
 import styled from "styled-components";
-import {  ITask, INewTask } from "../types"
-
+import { ITask, INewTask } from "../types";
 
 const Container = styled.div`
   background-color: #fff;
@@ -20,16 +19,15 @@ interface ITaskList {
   taskIds: string[];
 }
 
-
 const useTaskList = (initialList: any[]) => {
   const [list, setList] = useState(initialList);
-  return { list, setList }
-}
+  return { list, setList };
+};
 
 const useNewTaskTitle = () => {
   const [newTaskTitle, setTaskTitle] = useState("");
-  return { newTaskTitle, setTaskTitle }
-}
+  return { newTaskTitle, setTaskTitle };
+};
 
 // const useKeyDown = (map, defaultValue) => {
 //   const [match, setMatch] = useState(defaultValue);
@@ -50,12 +48,10 @@ interface ITaskBoardProps {
   tasks: ITask[];
 }
 
-
-const TaskBoard = ({type, tasks}: ITaskBoardProps) => {
+const TaskBoard = ({ type, tasks }: ITaskBoardProps) => {
   const { newTaskTitle, setTaskTitle } = useNewTaskTitle();
   const taskIds = tasks.map(task => task.id);
   const { list, setList } = useTaskList(taskIds);
-
 
   return (
     <Container>
@@ -71,9 +67,13 @@ const TaskBoard = ({type, tasks}: ITaskBoardProps) => {
   function onDragEnd(result: object): void {
     const { destination, source, draggableId, type }: any = result;
     // If destination is not a droppable area
-    if (!destination) { return; }
+    if (!destination) {
+      return;
+    }
     // If the draggable object not move
-    if (destination.droppableId === source.droppableId && destination.index === source.index) { return; }
+    if (destination.droppableId === source.droppableId && destination.index === source.index) {
+      return;
+    }
     list.splice(source.index, 1);
     list.splice(destination.index, 0, draggableId);
     setList(list);
@@ -99,31 +99,32 @@ const TaskBoard = ({type, tasks}: ITaskBoardProps) => {
     //   note: { content: "" }
     // }
 
-    setTaskTitle("")
+    setTaskTitle("");
   }
 
   function _handleChange(e: React.SyntheticEvent<HTMLInputElement>) {
-    setTaskTitle(e.currentTarget.value)
+    setTaskTitle(e.currentTarget.value);
   }
 };
 
 // { location }: RouteComponentProps
 export default inject("taskStore")(
-  observer(({taskStore, match, ...rest}) => {
-  const {type} = match.params;
-  let tasks = []
-  switch(type) {
-    case "inbox":
-      tasks = taskStore.inboxTasks;
-      break;
-    case "plan":
-      tasks = taskStore.planTasks;
-      break;
-    case "next":
-      tasks = taskStore.nextTasks;
-      break;
-     default: 
-      break; 
-  }
-  return <TaskBoard type={type} tasks={tasks} />
-}))
+  observer(({ taskStore, match, ...rest }) => {
+    const { type } = match.params;
+    let tasks = [];
+    switch (type) {
+      case "inbox":
+        tasks = taskStore.inboxTasks;
+        break;
+      case "plan":
+        tasks = taskStore.planTasks;
+        break;
+      case "next":
+        tasks = taskStore.nextTasks;
+        break;
+      default:
+        break;
+    }
+    return <TaskBoard type={type} tasks={tasks} />;
+  })
+);

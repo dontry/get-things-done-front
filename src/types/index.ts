@@ -16,8 +16,8 @@ export enum RequestType {
   REFERENCE = "REFERENCE"
 }
 
-export enum ErrorType {
-  NETWORK = "NETWORK"
+export enum MessageType {
+  NETWORK = "@error/NETWORK"
 }
 
 export interface ILoginCredential {

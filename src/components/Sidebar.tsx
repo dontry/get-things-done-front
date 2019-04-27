@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Layout, Menu, Icon } from "antd";
 const { Sider } = Layout;
 const { Item, SubMenu } = Menu;
@@ -19,44 +19,44 @@ const Sidebar: React.FC<any> = () => {
     >
       <Menu mode="inline" defaultSelectedKeys={["inbox"]}>
         <Item key="inbox">
-      <Link to="/home/inbox">
-          <Icon type="inbox" />
-          <span>Inbox</span>
-        </Link>
+          <Link to="/home/inbox">
+            <Icon type="inbox" />
+            <span>Inbox</span>
+          </Link>
         </Item>
         <Item key="today">
-        <Link to="/home/today">
-          <Icon type="star" />
-          <span>Today</span>
-</Link>
+          <Link to="/home/today">
+            <Icon type="star" />
+            <span>Today</span>
+          </Link>
         </Item>
         <Item key="next">
-<Link to="/home/next">
-          <Icon type="select" />
-          <span>Next</span>
-        </Link>
+          <Link to="/home/next">
+            <Icon type="select" />
+            <span>Next</span>
+          </Link>
         </Item>
         {/* <Item key="tomorrow">
           <Icon type="" />
           Tomorrow
         </Item> */}
         <Item key="scheduled">
-        <Link to="/home/scheduled">
-          <Icon type="schedule" />
-          <span>Scheduled</span>
-        </Link>
+          <Link to="/home/scheduled">
+            <Icon type="schedule" />
+            <span>Scheduled</span>
+          </Link>
         </Item>
         <Item key="someday">
-        <Link to="/home/someday">
-          <Icon type="calendar" />
-          <span>Someday</span>
-        </Link>
+          <Link to="/home/someday">
+            <Icon type="calendar" />
+            <span>Someday</span>
+          </Link>
         </Item>
         <Item key="references">
-        <Link to="/home/references">
-          <Icon type="database" />
-          <span> References</span>
-        </Link>
+          <Link to="/home/references">
+            <Icon type="database" />
+            <span> References</span>
+          </Link>
         </Item>
         <SubMenu
           key="projects"
@@ -93,16 +93,16 @@ const Sidebar: React.FC<any> = () => {
           <Item>context1</Item>
         </SubMenu>
         <Item key="completed">
-        <Link to="/home/completed">
-          <Icon type="check-square" />
-          <span>Completed</span>
-        </Link>
+          <Link to="/home/completed">
+            <Icon type="check-square" />
+            <span>Completed</span>
+          </Link>
         </Item>
         <Item key="Trash">
-        <Link to="/home/deleted">
-          <Icon type="delete" />
-          <span>Trash</span>
-        </Link>
+          <Link to="/home/deleted">
+            <Icon type="delete" />
+            <span>Trash</span>
+          </Link>
         </Item>
       </Menu>
     </Sider>

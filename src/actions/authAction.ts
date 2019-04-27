@@ -1,5 +1,5 @@
-import { requestStore, userStore, routerStore, errorStore } from "../stores";
-import { ILoginCredential, RequestType, IRegisterProfile, ErrorType } from "../types";
+import { requestStore, userStore, routerStore, messageStore } from "../stores";
+import { ILoginCredential, RequestType, IRegisterProfile, MessageType } from "../types";
 import api from "../api";
 
 const requestType = RequestType.USER;
@@ -24,7 +24,11 @@ export function login(credential: ILoginCredential) {
       routerStore.push("/home/inbox");
     })
     .catch(error => {
-      errorStore.setError(ErrorType.NETWORK, error.data.message);
+      if (error.data) {
+        messageStore.setError(MessageType.NETWORK, error.data.message);
+      } else {
+        messageStore.setError(MessageType.NETWORK, error.message);
+      }
     });
 }
 
