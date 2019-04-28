@@ -9,6 +9,7 @@ import App from "./App";
 import Login from "./views/Login";
 import Register from "./views/Register";
 import NotFound from "./views/NotFound";
+import Profile from "./views/Profile";
 import { setConfig } from "react-hot-loader";
 import * as stores from "./stores";
 import * as serviceWorker from "./serviceWorker";
@@ -31,6 +32,7 @@ const history = syncHistoryWithStore(browserHistory, stores.routerStore);
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
             <ProtectedRoute path="/home" component={App} />
+            <ProtectedRoute path="/profile" component={Profile} />
             <Route path="/404" component={NotFound} />
             <Route path="*" component={NotFound} />
           </Switch>

@@ -2,7 +2,7 @@ import React from "react";
 import { message } from "antd";
 import { observer, inject } from "mobx-react";
 import RegisterForm from "../components/RegisterForm";
-import { login } from "../actions/authAction";
+import { register } from "../actions/authAction";
 import { MessageType } from "../types";
 import { CenterContainer, CenterWrapper } from "./style";
 import WithMessagePopup from "../components/WithMessagePopup";
@@ -12,7 +12,7 @@ const Register = () => {
   return (
     <CenterContainer>
       <CenterWrapper>
-        <RegisterFormWithErrorMessage onSubmit={login} />
+        <RegisterFormWithErrorMessage onSubmit={register} />
       </CenterWrapper>
     </CenterContainer>
   );

@@ -12,7 +12,7 @@ const Sidebar: React.FC<any> = () => {
 
   return (
     <Sider
-      style={{ height: "100vh", background: "#fff", overflow: "auto" }}
+      style={{ height: "100%", background: "#fff", overflow: "auto" }}
       collapsible
       collapsed={collapsed}
       onCollapse={_handleCollapse}

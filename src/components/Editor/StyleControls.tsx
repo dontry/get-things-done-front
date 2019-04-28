@@ -29,12 +29,12 @@ const ControlWrapper = styled.div`
   user-select: none;
 `;
 
-interface StyleButtonProps {
+interface IStyleButtonProps {
   active: boolean;
 }
 
 const ControlButton = styled.button`
-  color: ${(props: StyleButtonProps) => (props.active ? "#5890ff" : "#999")};
+  color: ${(props: IStyleButtonProps) => (props.active ? "#5890ff" : "#999")};
   cursor: pointer;
   margin-right: 16px;
   padding: 2px 0;

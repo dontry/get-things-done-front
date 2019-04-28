@@ -1,35 +1,12 @@
 import React, { FormEvent, useState } from "react";
 import { FormComponentProps } from "antd/lib/form/Form";
 import { Form, Icon, Input, Button, Select } from "antd";
+import { formItemLayout, footerFormItemLayout } from "../constants/layout";
 const { Option } = Select;
 
 interface IFormProps {
   onSubmit(user: any): Promise<void>;
 }
-
-const formItemLayout = {
-  labelCol: {
-    xs: { span: 24 },
-    sm: { span: 8 }
-  },
-  wrapperCol: {
-    xs: { span: 24 },
-    sm: { span: 16 }
-  }
-};
-
-const footerFormItemLayout = {
-  wrapperCol: {
-    xs: {
-      span: 24,
-      offset: 0
-    },
-    sm: {
-      span: 16,
-      offset: 16
-    }
-  }
-};
 
 // https://ant.design/components/form/?locale=en-US#components-form-demo-register
 const RawRegisterForm: React.FC<IFormProps & FormComponentProps> = props => {
