@@ -1,0 +1,12 @@
+{
+  "linters": {
+    "**/*.+(js|jsx|json|yml|yaml|css|less|scss|ts|tsx|md|graphql|mdx)": [
+      "tslint",
+      "prettier --write --list-different",
+      "jest --findRelatedTests",
+      "git add"
+    ]
+  },
+  "ignore": ["**/dist/*.min.js", "**/cypress/**/*.js"]
+}
+ 
