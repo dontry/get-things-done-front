@@ -2,10 +2,10 @@ import { create } from "mobx-persist";
 
 const _hydrate = create({
   storage: localStorage,
-  jsonify: false
+  jsonify: true
 });
 
-const hydrate = (store: any): Promise<void> =>
-  _hydrate("router", store).then(() => console.log(`store has been hydrated`));
+const hydrate = (name: string, store: any): Promise<void> =>
+  _hydrate(name, store).then(() => console.log(`Store ${name} has been hydrated`));
 
 export default hydrate;

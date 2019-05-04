@@ -1,4 +1,5 @@
 import { observable, action, computed } from "mobx";
+import hydrate from "../lib/hydrate";
 import { persist } from "mobx-persist";
 import { IUser } from "src/types";
 import _ from "lodash";
@@ -24,6 +25,7 @@ class UserStore {
 }
 
 const userStore = new UserStore();
+hydrate("user", userStore);
 
 export default userStore;
 export { UserStore };
