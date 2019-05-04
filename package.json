@@ -87,7 +87,8 @@
     "test:coverage": "NODE_ENV=test jest --notify --coverage",
     "lint": "tslint src/**/*.ts{,?}",
     "prettier": "prettier  \"**/*.+(js|jsx|json|yml|yaml|css|less|scss|ts|tsx|md|mdx|graphql|vue)\"",
-    "format": "npm run prettier -- --write"
+    "format": "npm run prettier -- --write",
+    "validate-staged": "lint-staged"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -169,6 +170,11 @@
       "jsx",
       "node"
     ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run validate-staged"
+    }
   },
   "babel": {
     "presets": [

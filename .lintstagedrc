@@ -1,7 +1,9 @@
 {
   "linters": {
+    "**/*.+(js|jsx|ts|tsx)": [
+      "tslint"
+    ],
     "**/*.+(js|jsx|json|yml|yaml|css|less|scss|ts|tsx|md|graphql|mdx)": [
-      "tslint",
       "prettier --write --list-different",
       "jest --findRelatedTests",
       "git add"
