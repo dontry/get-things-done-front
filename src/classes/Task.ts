@@ -3,6 +3,7 @@ import { Attribute, Priority, INewTask, INote } from "../types/index";
 class Task {
   private title: string;
   private attribute: Attribute;
+  private userId: string;
   private priority: Priority;
   private createdAt: number;
   private startAt: number;
@@ -15,40 +16,42 @@ class Task {
   private completed: number;
   private archived: number;
   private tags: string[];
-  private note: INote;
+  private note: INote | undefined;
   private project: string | undefined;
+  private pos: string | undefined;
 
   constructor({
     title,
-    attribute,
-    priority,
-    startAt,
-    endAt,
-    estimatedTime,
-    context,
-    spentTime,
-    allDay,
-    deleted,
-    completed,
-    archived,
-    tags,
+    attribute = "inbox",
+    userId,
+    priority = Priority.MEDIUM,
+    startAt = 0,
+    endAt = 0,
+    estimatedTime = 0,
+    context = "",
+    spentTime = 0,
+    allDay = true,
+    deleted = 0,
+    completed = 0,
+    archived = 0,
+    tags = [],
     note,
     project
   }: INewTask) {
     this.title = title;
-    this.attribute = attribute || "inbox";
-    this.priority = priority || Priority.MEDIUM;
+    this.attribute = attribute;
+    this.userId = userId;
+    this.priority = priority;
     this.createdAt = Date.now();
-    this.startAt = startAt || 0;
-    this.endAt = endAt || 0;
-    this.estimatedTime = estimatedTime || 0;
-    this.context = context || "";
-    this.spentTime = spentTime || 0;
-    this.allDay = allDay === undefined ? true : allDay;
-    this.deleted = deleted || 0;
-    this.completed = completed || 0;
-    this.archived = archived || 0;
-    this.tags = tags || [];
+    this.startAt = startAt;
+    this.endAt = endAt;
+    this.estimatedTime = estimatedTime;
+    this.context = context;
+    this.spentTime = spentTime;
+    (this.allDay = allDay), (this.deleted = deleted);
+    this.completed = completed;
+    this.archived = archived;
+    this.tags = tags;
     this.note = note;
     this.project = project;
   }

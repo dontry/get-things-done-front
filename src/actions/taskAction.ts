@@ -2,6 +2,7 @@ import requestStore from "../stores/requestStore";
 import taskStore from "../stores/taskStore";
 import api from "../api";
 import { ITask, INewTask } from "../types";
+import Task from "../classes/Task";
 import { RequestType } from "../types";
 
 const requestType = RequestType.TASK;
@@ -24,10 +25,11 @@ export function updateTaskById(id: string, payload: ITask) {
   });
 }
 
-export function createTask(payload: INewTask) {
+export function createTask(payload: Task): Promise<void> {
   requestStore.setRequestInProgress(requestType, true);
-  return api.post(`/tasks`, { task: payload }).then(res => {
-    const task: ITask = res.data;
+  return api.post(`/tasks`, payload).then(res => {
+    const task = res.data;
+    console.log("new task:", task);
     taskStore.addTask(task);
     requestStore.setRequestInProgress(requestType, false);
   });

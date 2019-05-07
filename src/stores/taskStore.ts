@@ -94,9 +94,18 @@ export class TaskStore implements ITaskStore {
   public deleteTaskById(id: string): void {
     this.tasks.delete(id);
   }
+
+  public getSize(): number {
+    return this.tasks.size;
+  }
+
+  public getSizeByAttribute(attribute: Attribute): number {
+    const tasks: ITask[] = getTasksByAttribute(this.tasks, attribute);
+    return tasks.length;
+  }
 }
 
-function getTasksByAttribute(tasks: Map<string, ITask>, attribute: Attribute) {
+function getTasksByAttribute(tasks: Map<string, ITask>, attribute: Attribute): ITask[] {
   const selectedTasks: ITask[] = [];
   tasks.forEach((task: ITask) => {
     if (task.attribute === attribute) {

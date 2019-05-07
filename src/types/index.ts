@@ -59,6 +59,7 @@ export interface ITask {
   id?: string;
   title: string;
   attribute: Attribute;
+  userId: string;
   priority: Priority;
   createdAt: number;
   startAt: number;
@@ -71,29 +72,28 @@ export interface ITask {
   completed: number;
   archived: number;
   tags: string[];
-  note: INote;
+  note?: INote;
   project?: string;
-  userId?: string;
 }
 
 export interface INewTask {
   title: string;
   attribute: Attribute;
-  priority: Priority;
-  createdAt: number;
-  startAt: number;
-  endAt: number;
-  estimatedTime: number;
+  userId: string;
+  priority?: Priority;
+  createdAt?: number;
+  startAt?: number;
+  endAt?: number;
+  estimatedTime?: number;
   context?: string;
   spentTime?: number;
-  allDay: boolean;
-  deleted: number;
-  completed: number;
-  archived: number;
-  tags: string[];
-  note: INote;
+  allDay?: boolean;
+  deleted?: number;
+  completed?: number;
+  archived?: number;
+  tags?: string[];
+  note?: INote;
   project?: string;
-  userId: string;
 }
 
 export interface INote {

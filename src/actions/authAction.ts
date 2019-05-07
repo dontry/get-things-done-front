@@ -35,5 +35,5 @@ export function login(credential: ILoginCredential) {
 export function logout() {
   userStore.clearUser();
   window.localStorage.removeItem("token");
-  routerStore.push("/login");
+  // routerStore.push("/login");
 }

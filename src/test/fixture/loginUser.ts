@@ -1,10 +1,13 @@
 import api from "../../api";
-import user from "./user";
+import { ILoginCredential } from "../../types";
+import userStore from "../../stores/userStore";
 
-function loginUser(credential = user) {
+function loginUser(credential: ILoginCredential) {
   return api.post("/auth/login", credential).then(res => {
-    const { token } = res.data;
+    const { user, token } = res.data;
+    userStore.mergeUser(user);
     window.localStorage.setItem("token", token);
+    return;
   });
 }
 

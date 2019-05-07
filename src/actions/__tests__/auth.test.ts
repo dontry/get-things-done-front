@@ -1,22 +1,72 @@
-import api from "../../api";
-import { ILoginCredential } from "src/types";
-import userStore from "@stores/userStore";
+import { ILoginCredential } from "../../types";
+import userStub from "../../test/fixture/user";
+import userStore from "../../stores/userStore";
+import requestStore from "../../stores/requestStore";
+import { login, logout } from "../authAction";
+import loginUser from "../../test/fixture/loginUser";
 
-describe("user", () => {
-  afterEach(() => {
-    window.localStorage.removeItem("token");
+const credential: ILoginCredential = userStub;
+
+describe("login", () => {
+  beforeAll(() => {
+    window.localStorage.clear();
+    userStore.clearUser();
+    jest.clearAllMocks();
   });
-  it("should login successfully", done => {
-    const credential: ILoginCredential = {
-      username: "crystal",
-      password: "11d%#@as22d"
-    };
-    api.post("/auth/login", credential).then(res => {
-      const { user, token } = res.data;
-      expect(user.username).toBe("crystal");
-      expect(token).toBeTruthy();
+  afterEach(() => {
+    window.localStorage.clear();
+    userStore.clearUser();
+    jest.clearAllMocks();
+  });
+
+  it("should set authenticated of userStore to true", done => {
+    login(credential).then(() => {
       expect(userStore.authenticated).toBeTruthy();
       done();
     });
+  });
+
+  it("should call setRequestInProgress twice", done => {
+    const spy = jest.spyOn(requestStore, "setRequestInProgress");
+    login(credential).then(() => {
+      expect(spy).toHaveBeenCalledTimes(2);
+      expect(spy).toHaveBeenNthCalledWith(1, "USER", true);
+      expect(spy).toHaveBeenNthCalledWith(2, "USER", false);
+      done();
+    });
+  });
+
+  it("should call window setItem and create a token", done => {
+    const spy = jest.spyOn(window.localStorage.__proto__, "setItem");
+    login(credential).then(() => {
+      expect(spy).toHaveBeenCalledTimes(2); /// TOFIX: why is this called twice?????
+      expect(window.localStorage.getItem("token")).toBeTruthy();
+      done();
+    });
+  });
+});
+
+describe("logout", () => {
+  beforeEach(done => {
+    loginUser(credential);
+    done();
+  });
+  afterEach(() => {
+    window.localStorage.clear();
+    userStore.clearUser();
+    jest.clearAllMocks();
+  });
+  it("should call localStorage.removeItem('token')", done => {
+    const spy = jest.spyOn(window.localStorage.__proto__, "removeItem");
+    logout();
+    expect(spy).toHaveBeenCalledTimes(1);
+    done();
+  });
+
+  it("should call userStore.clearUser()", done => {
+    const spy = jest.spyOn(userStore, "clearUser");
+    logout();
+    expect(spy).toHaveBeenCalledTimes(1);
+    done();
   });
 });

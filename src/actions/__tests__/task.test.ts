@@ -2,28 +2,29 @@ import api from "../../api";
 import * as taskAction from "../taskAction";
 import taskStore from "../../stores/taskStore";
 import requestStore from "../../stores/requestStore";
-import { ITask } from "../../types";
+import userStore from "../../stores/userStore";
+import { ITask, IUser } from "../../types";
+import Task from "../../classes/Task";
 import loginUser from "../../test/fixture/loginUser";
+import user from "../../test/fixture/user";
 import initializeRouter from "../../test/fixture/initializeRouter";
+import faker from "faker";
 
 describe("fetch all tasks", () => {
   beforeAll(done => {
-    if ((process.env.NODE_ENV as string) === "local") {
-      initializeRouter();
-      loginUser().then(() => {
-        done();
-      });
-    } else {
+    initializeRouter();
+    loginUser(user).then(() => {
       done();
-    }
+    });
   });
+
   afterAll(() => {
+    userStore.clearUser();
     window.localStorage.removeItem("token");
   });
   it("should return tasks", done => {
-    api.get("/tasks").then(res => {
-      const tasks: ITask[] = res.data;
-      expect(tasks.length).toBeGreaterThan(0);
+    taskAction.fetchAllTasks().then(() => {
+      expect(taskStore.tasks.size).toBeGreaterThan(0);
       done();
     });
   });
@@ -39,6 +40,28 @@ describe("fetch all tasks", () => {
       expect(spy).toHaveBeenCalledTimes(2);
       expect(spy).toHaveBeenNthCalledWith(1, "TASK", true);
       expect(spy).toHaveBeenNthCalledWith(2, "TASK", false);
+      done();
+    });
+  });
+
+  it("should create a new task in inbox", done => {
+    const user: IUser = userStore.user as IUser;
+    if (!user.id) {
+      throw new Error("userId is undefined");
+    }
+
+    const task = new Task({
+      title: faker.lorem.words(5),
+      attribute: "inbox",
+      userId: user.id
+    });
+
+    const prevTaskSize = taskStore.tasks.size;
+    const prevInboxTaskSize = taskStore.getSizeByAttribute("inbox");
+
+    taskAction.createTask(task).then(() => {
+      expect(taskStore.tasks.size).toBe(prevTaskSize + 1);
+      expect(taskStore.inboxTasks.length).toBe(prevInboxTaskSize + 1);
       done();
     });
   });

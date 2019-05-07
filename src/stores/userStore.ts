@@ -5,11 +5,10 @@ import { IUser } from "src/types";
 import _ from "lodash";
 
 class UserStore {
-  @persist("object") @observable public user = {};
+  @persist("object") @observable public user: IUser | undefined;
 
   @computed
   public get authenticated(): boolean {
-    console.log(`authenticated:`, this.user);
     return !_.isEmpty(this.user);
   }
 
@@ -20,7 +19,7 @@ class UserStore {
 
   @action
   public clearUser(): void {
-    this.user = {};
+    this.user = undefined;
   }
 }
 
