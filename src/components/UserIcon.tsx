@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { logout } from "../actions/authAction";
+import routerStore from "../stores/routerStore";
 import { Avatar, Menu, Dropdown, Icon } from "antd";
 
 const UserIcon = () => {
@@ -12,6 +13,10 @@ const UserIcon = () => {
 };
 
 const menu = (() => {
+  const handleLogout = () => {
+    logout();
+    routerStore.push("/login");
+  };
   return (
     <Menu>
       <Menu.Item>
@@ -20,7 +25,7 @@ const menu = (() => {
       <Menu.Item>
         <Link to="/profile">Profile</Link>
       </Menu.Item>
-      <Menu.Item onClick={logout}>
+      <Menu.Item onClick={handleLogout}>
         <span>Logout</span>
       </Menu.Item>
     </Menu>

@@ -13,13 +13,13 @@ interface IProfileProps {
   user: IUser;
 }
 
-const FormWrapper  = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding-top: 150px;
-    width: 100vw;
-`
+const FormWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 50px;
+  width: 100vw;
+`;
 
 const Profile = ({ user }: IProfileProps) => {
   return (
@@ -28,9 +28,9 @@ const Profile = ({ user }: IProfileProps) => {
         <UserIcon />
       </Header>
       <Content>
-          <FormWrapper>
-        <ProfileForm onSubmit={register} user={user} />;
-</FormWrapper>
+        <FormWrapper>
+          <ProfileForm onSubmit={register} user={user} />;
+        </FormWrapper>
       </Content>
       <Footer
         style={{ textAlign: "center" }}

@@ -9,8 +9,10 @@ import TaskInput from "../components/TaskInput";
 import * as taskAction from "../actions/taskAction";
 import { RequestType } from "../types";
 import { ITask, INewTask } from "../types";
+import Mask from "../components/Mask";
 
 const Container = styled.div`
+  position: relative;
   background-color: #fff;
   height: 100%;
   overflow: auto;
@@ -73,7 +75,13 @@ const TaskBoard = ({ type, tasks, fetching }: ITaskBoardProps) => {
         <TaskInput onSubmit={_handleSubmit} onChange={_handleChange} value={newTaskTitle} />
       </Form>
       <DragDropContext onDragEnd={onDragEnd}>
-        {fetching ? <Spin size="large" /> : <TaskList id={type} type={type} tasks={tasks} />}
+        {fetching ? (
+          <Mask>
+            <Spin size="large" />
+          </Mask>
+        ) : (
+          <TaskList id={type} type={type} tasks={tasks} />
+        )}
       </DragDropContext>
     </Container>
   );
