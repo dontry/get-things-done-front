@@ -28,7 +28,7 @@ const App: React.FC<any> = props => {
             </Switch>
           </Content>
           <Footer
-            style={{ textAlign: "center" }}
+            style={{ textAlign: "center", height: "48px", padding: "14px 50px" }}
           >{`GTD © ${new Date().getFullYear()} Created by Dontry`}</Footer>
         </Layout>
       </Layout>

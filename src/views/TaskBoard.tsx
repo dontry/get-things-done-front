@@ -1,16 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { inject, observer } from "mobx-react";
 import { RouteComponentProps } from "react-router";
-import { Layout, Form, Input } from "antd";
+import { Layout, Form, Input, Spin } from "antd";
+import styled from "styled-components";
 import { DragDropContext } from "react-beautiful-dnd";
 import TaskList from "../components/TaskList/TaskList";
 import TaskInput from "../components/TaskInput";
-import styled from "styled-components";
+import * as taskAction from "../actions/taskAction";
+import { RequestType } from "../types";
 import { ITask, INewTask } from "../types";
 
 const Container = styled.div`
   background-color: #fff;
   height: 100%;
+  overflow: auto;
 `;
 
 interface ITaskList {
@@ -46,12 +49,23 @@ const useNewTaskTitle = () => {
 interface ITaskBoardProps {
   type: string;
   tasks: ITask[];
+  fetching: boolean;
 }
 
-const TaskBoard = ({ type, tasks }: ITaskBoardProps) => {
+const TaskBoard = ({ type, tasks, fetching }: ITaskBoardProps) => {
   const { newTaskTitle, setTaskTitle } = useNewTaskTitle();
-  const taskIds = tasks.map(task => task.id);
-  const { list, setList } = useTaskList(taskIds);
+  const isMounted = useRef(true);
+  // const taskIds = tasks.map(task => task.id);
+  // const { list, setList } = useTaskList(taskIds);
+
+  useEffect(() => {
+    if (isMounted.current) {
+      taskAction.fetchAllTasks();
+    }
+    return () => {
+      isMounted.current = false;
+    };
+  }, [tasks]);
 
   return (
     <Container>
@@ -59,7 +73,7 @@ const TaskBoard = ({ type, tasks }: ITaskBoardProps) => {
         <TaskInput onSubmit={_handleSubmit} onChange={_handleChange} value={newTaskTitle} />
       </Form>
       <DragDropContext onDragEnd={onDragEnd}>
-        <TaskList id={type} type={type} tasks={tasks} />
+        {fetching ? <Spin size="large" /> : <TaskList id={type} type={type} tasks={tasks} />}
       </DragDropContext>
     </Container>
   );
@@ -74,9 +88,10 @@ const TaskBoard = ({ type, tasks }: ITaskBoardProps) => {
     if (destination.droppableId === source.droppableId && destination.index === source.index) {
       return;
     }
-    list.splice(source.index, 1);
-    list.splice(destination.index, 0, draggableId);
-    setList(list);
+    // TODO: reorder list
+    // list.splice(source.index, 1);
+    // list.splice(destination.index, 0, draggableId);
+    // setList(list);
   }
 
   function _handleSubmit(e: React.SyntheticEvent) {
@@ -108,8 +123,8 @@ const TaskBoard = ({ type, tasks }: ITaskBoardProps) => {
 };
 
 // { location }: RouteComponentProps
-export default inject("taskStore")(
-  observer(({ taskStore, match, ...rest }) => {
+export default inject("taskStore", "requestStore")(
+  observer(({ taskStore, requestStore, match, ...rest }) => {
     const { type } = match.params;
     let tasks = [];
     switch (type) {
@@ -125,6 +140,12 @@ export default inject("taskStore")(
       default:
         break;
     }
-    return <TaskBoard type={type} tasks={tasks} />;
+    return (
+      <TaskBoard
+        type={type}
+        tasks={tasks}
+        fetching={requestStore.getRequestByType(RequestType.TASK)}
+      />
+    );
   })
 );
