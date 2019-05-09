@@ -4,6 +4,7 @@ import api from "../api";
 import { ITask, INewTask } from "../types";
 import Task from "../classes/Task";
 import { RequestType } from "../types";
+import _ from "lodash";
 
 const requestType = RequestType.TASK;
 
@@ -38,7 +39,10 @@ export function createTask(payload: Task): Promise<void> {
 export function deleteTask(id: string) {
   requestStore.setRequestInProgress(requestType, true);
   return api.delete(`/tasks/${id}`).then(res => {
-    taskStore.deleteTaskById(id);
-    requestStore.setRequestInProgress(requestType, false);
+    console.log(`deletTask: ${JSON.stringify(res.data)}`);
+    if (!_.isEmpty(res.data)) {
+      taskStore.deleteTaskById(id);
+      requestStore.setRequestInProgress(requestType, false);
+    }
   });
 }

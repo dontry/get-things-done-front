@@ -65,4 +65,19 @@ describe("fetch all tasks", () => {
       done();
     });
   });
+
+  it("should delete a task in inbox", async done => {
+    await taskAction.fetchAllTasks();
+    const tasks: ITask[] = taskStore.list;
+    const lastTask: ITask = tasks[tasks.length - 1];
+    const prevTaskSize = taskStore.tasks.size;
+
+    if (!lastTask.id) {
+      throw new Error("lastTask id is undefined");
+    }
+
+    await taskAction.deleteTask(lastTask.id);
+    expect(taskStore.tasks.size).toBe(prevTaskSize - 1);
+    done();
+  });
 });

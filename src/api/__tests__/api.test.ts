@@ -6,9 +6,13 @@ import userStub from "../../test/fixture/user";
 import userStore from "../../stores/userStore";
 
 describe("login", () => {
+  beforeAll(() => {
+    userStore.clearUser();
+    window.localStorage.clear();
+  });
+
   it("should login successfully", done => {
     const credential: ILoginCredential = userStub;
-
     api.post("/auth/login", credential).then(res => {
       const { user, token } = res.data;
       expect(user.username).toBe(userStub.username);

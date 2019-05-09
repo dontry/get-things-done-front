@@ -8,6 +8,8 @@ export interface ITaskStore {
   inboxTasks: ITask[];
   planTasks: ITask[];
   nextTasks: ITask[];
+  json: object;
+  list: ITask[];
 }
 
 export class TaskStore implements ITaskStore {
@@ -45,8 +47,17 @@ export class TaskStore implements ITaskStore {
   }
 
   @computed
-  public get toJson(): object {
+  public get json(): object {
     return mapToObject<ITask>(this.tasks);
+  }
+
+  @computed
+  public get list(): ITask[] {
+    const list: ITask[] = [];
+    for (const [key, task] of this.tasks) {
+      list.push(task);
+    }
+    return list;
   }
 
   @action

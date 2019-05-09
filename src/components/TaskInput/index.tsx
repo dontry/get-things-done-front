@@ -1,5 +1,19 @@
 import React from "react";
-import { Layout, Form, Input } from "antd";
+import styled from "styled-components";
+import { Layout, Form, Input, Button } from "antd";
+
+const AddButton = styled(Button)`
+  font-size: 14px;
+  width: 100%;
+  height: calc(100% - 1px) !important;
+  border: none !important;
+  background-color: transparent !important;
+`;
+const StyledInput = styled(Input)`
+  .ant-input-group-addon {
+    padding: 0;
+  }
+`;
 
 interface ITaskInputProps {
   value: string;
@@ -12,7 +26,12 @@ const TaskInput = ({ onSubmit, onChange, value }: ITaskInputProps) => {
     <Form onSubmit={onSubmit}>
       <Layout style={{ backgroundColor: "#fff" }}>
         <Form.Item style={{ margin: "16px 8px" }}>
-          <Input value={value} placeholder="Add a new task" onChange={onChange} />
+          <StyledInput
+            value={value}
+            placeholder="Add a new task"
+            onChange={onChange}
+            addonAfter={<AddButton onClick={onSubmit}>+</AddButton>}
+          />
         </Form.Item>
       </Layout>
     </Form>
