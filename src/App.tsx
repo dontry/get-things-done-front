@@ -23,8 +23,8 @@ const App: React.FC<any> = props => {
         <Layout>
           <Content>
             <Switch>
-              <ProtectedRoute path={`${match.url}/:type`} component={TaskBoard} />
-              <ProtectedRoute path={`${match.url}/:type/editor`} component={TaskEditor} />
+              <ProtectedRoute path={`${match.url}/:attribute`} component={TaskBoard} />
+              <ProtectedRoute path={`${match.url}/:attribute/editor`} component={TaskEditor} />
             </Switch>
           </Content>
           <Footer

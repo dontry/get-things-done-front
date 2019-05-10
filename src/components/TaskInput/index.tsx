@@ -9,6 +9,7 @@ const AddButton = styled(Button)`
   border: none !important;
   background-color: transparent !important;
 `;
+
 const StyledInput = styled(Input)`
   .ant-input-group-addon {
     padding: 0;
@@ -19,9 +20,10 @@ interface ITaskInputProps {
   value: string;
   onSubmit(e: React.SyntheticEvent): void;
   onChange(e: React.SyntheticEvent<HTMLInputElement>): void;
+  onKeyPress?(e: React.KeyboardEvent<HTMLInputElement>): void;
 }
 
-const TaskInput = ({ onSubmit, onChange, value }: ITaskInputProps) => {
+const TaskInput = ({ onSubmit, onChange, onKeyPress, value }: ITaskInputProps) => {
   return (
     <Form onSubmit={onSubmit}>
       <Layout style={{ backgroundColor: "#fff" }}>
@@ -29,6 +31,7 @@ const TaskInput = ({ onSubmit, onChange, value }: ITaskInputProps) => {
           <StyledInput
             value={value}
             placeholder="Add a new task"
+            onKeyPress={onKeyPress}
             onChange={onChange}
             addonAfter={<AddButton onClick={onSubmit}>+</AddButton>}
           />

@@ -7,8 +7,8 @@ import { DragDropContext } from "react-beautiful-dnd";
 import TaskList from "../components/TaskList/TaskList";
 import TaskInput from "../components/TaskInput";
 import * as taskAction from "../actions/taskAction";
-import { RequestType } from "../types";
-import { ITask, INewTask } from "../types";
+import Task from "../classes/Task";
+import { ITask, INewTask, Attribute, RequestType } from "../types";
 import Mask from "../components/Mask";
 
 const Container = styled.div`
@@ -34,13 +34,14 @@ const useNewTaskTitle = () => {
   return { newTaskTitle, setTaskTitle };
 };
 
-// const useKeyDown = (map, defaultValue) => {
+// const useKeyDown = (map:string[], defaultValue: string, callback: () =>{}) => {
 //   const [match, setMatch] = useState(defaultValue);
 //   useEffect(() => {
-//     const handleKey = ({ key }) => {
+//     const handleKey = async ({ key }: any): Promise<void> => {
 //       setMatch(prevMatch =>
 //         Object.keys(map).some(k => k === key) ? map[key] : prevMatch
 //       );
+//       await callback();
 //     };
 //     document.addEventListener("keydown", handleKey);
 //     return () => document.removeEventListener("keydown", handleKey);
@@ -49,12 +50,13 @@ const useNewTaskTitle = () => {
 // };
 
 interface ITaskBoardProps {
-  type: string;
+  attribute: Attribute;
+  userId: string;
   tasks: ITask[];
   fetching: boolean;
 }
 
-const TaskBoard = ({ type, tasks, fetching }: ITaskBoardProps) => {
+const TaskBoard = ({ attribute, tasks, userId, fetching }: ITaskBoardProps) => {
   const { newTaskTitle, setTaskTitle } = useNewTaskTitle();
   const isMounted = useRef(true);
   // const taskIds = tasks.map(task => task.id);
@@ -80,7 +82,7 @@ const TaskBoard = ({ type, tasks, fetching }: ITaskBoardProps) => {
             <Spin size="large" />
           </Mask>
         ) : (
-          <TaskList id={type} type={type} tasks={tasks} />
+          <TaskList id={attribute} type={attribute} tasks={tasks} />
         )}
       </DragDropContext>
     </Container>
@@ -104,38 +106,39 @@ const TaskBoard = ({ type, tasks, fetching }: ITaskBoardProps) => {
 
   function _handleSubmit(e: React.SyntheticEvent) {
     e.preventDefault();
-    // const newTask: INewTask = {
-    //   title: newTaskTitle,
-    //   attribute: "inbox",
-    //   priority: Priority.MEDIUM,
-    //   createdAt: Date.now(),
-    //   startAt: 0,
-    //   endAt: 0,
-    //   estimatedTime: 0,
-    //   context: "",
-    //   spentTime: 0,
-    //   allDay: true,
-    //   deleted: 0,
-    //   completed: 0,
-    //   archived: 0,
-    //   tags: [],
-    //   note: { content: "" }
-    // }
-
-    setTaskTitle("");
+    createNewTask();
   }
 
   function _handleChange(e: React.SyntheticEvent<HTMLInputElement>) {
     setTaskTitle(e.currentTarget.value);
   }
+
+  function _handleKeyPress(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter") {
+      createNewTask();
+    }
+  }
+
+  async function createNewTask() {
+    if (newTaskTitle !== "") {
+      const newTask = new Task({
+        title: newTaskTitle,
+        attribute,
+        userId
+      });
+
+      await taskAction.createTask(newTask);
+      setTaskTitle("");
+    }
+  }
 };
 
 // { location }: RouteComponentProps
-export default inject("taskStore", "requestStore")(
-  observer(({ taskStore, requestStore, match, ...rest }) => {
-    const { type } = match.params;
+export default inject("taskStore", "requestStore", "userStore")(
+  observer(({ taskStore, requestStore, userStore, match, ...rest }) => {
+    const { attribute } = match.params;
     let tasks = [];
-    switch (type) {
+    switch (attribute) {
       case "inbox":
         tasks = taskStore.inboxTasks;
         break;
@@ -145,13 +148,17 @@ export default inject("taskStore", "requestStore")(
       case "next":
         tasks = taskStore.nextTasks;
         break;
+      case "today":
+        tasks = taskStore.todayTasks;
+        break;
       default:
         break;
     }
     return (
       <TaskBoard
-        type={type}
+        attribute={attribute}
         tasks={tasks}
+        userId={userStore.userId}
         fetching={requestStore.getRequestByType(RequestType.TASK)}
       />
     );

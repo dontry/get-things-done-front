@@ -1,6 +1,7 @@
 import { observable, action, computed } from "mobx";
 // import { persist } from "mobx-persist";
 import { ITask, Attribute } from "src/types";
+import { isToday } from "date-fns";
 import mapToObject from "../lib/mapToObject";
 
 export interface ITaskStore {
@@ -8,6 +9,7 @@ export interface ITaskStore {
   inboxTasks: ITask[];
   planTasks: ITask[];
   nextTasks: ITask[];
+  todayTasks: ITask[];
   json: object;
   list: ITask[];
 }
@@ -44,6 +46,11 @@ export class TaskStore implements ITaskStore {
   @computed
   get nextTasks(): ITask[] {
     return getTasksByAttribute(this.tasks, "next");
+  }
+
+  @computed
+  get todayTasks(): ITask[] {
+    return this.list.filter(checkActive).filter(checkToday);
   }
 
   @computed
@@ -127,5 +134,17 @@ function getTasksByAttribute(tasks: Map<string, ITask>, attribute: Attribute): I
 }
 
 const taskStore = new TaskStore();
+
+function checkActive(task: ITask): boolean {
+  const { archived, deleted } = task;
+  return archived === 0 && deleted === 0;
+}
+
+// get tasks created or starts today
+function checkToday(task: ITask): boolean {
+  const createdDate = new Date(task.createdAt);
+  const startDate = new Date(task.startAt);
+  return isToday(createdDate) || isToday(startDate);
+}
 
 export default taskStore;

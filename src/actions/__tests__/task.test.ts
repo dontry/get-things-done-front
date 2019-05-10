@@ -66,6 +66,28 @@ describe("fetch all tasks", () => {
     });
   });
 
+  it("should create a new task on today", done => {
+    const user: IUser = userStore.user as IUser;
+    if (!user.id) {
+      throw new Error("userId is undefined");
+    }
+
+    const task = new Task({
+      title: faker.lorem.words(5),
+      attribute: "inbox",
+      userId: user.id
+    });
+
+    const prevTaskSize = taskStore.tasks.size;
+    const prevTodayTaskSize = taskStore.todayTasks.length;
+
+    taskAction.createTask(task).then(() => {
+      expect(taskStore.tasks.size).toBe(prevTaskSize + 1);
+      expect(taskStore.todayTasks.length).toBe(prevTodayTaskSize + 1);
+      done();
+    });
+  });
+
   it("should delete a task in inbox", async done => {
     await taskAction.fetchAllTasks();
     const tasks: ITask[] = taskStore.list;
