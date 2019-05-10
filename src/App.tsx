@@ -1,11 +1,13 @@
 import React from "react";
-import { Layout } from "antd";
-import Counter from "./components/_Counter";
+import { Layout, Avatar } from "antd";
 import { observer } from "mobx-react";
 import Sidebar from "./components/Sidebar";
+import UserIcon from "./components/UserIcon";
 import { Route, Switch } from "react-router-dom";
 import "./App.css";
 import TaskEditor from "./components/Editor/TaskEditor";
+import TaskBoard from "./views/TaskBoard";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const { Header, Content, Footer } = Layout;
 
@@ -13,16 +15,22 @@ const App: React.FC<any> = props => {
   const { match } = props;
   return (
     <Layout style={{ height: "100vh" }}>
-      <Sidebar />
+      <Header>
+        <UserIcon />
+      </Header>
       <Layout>
-        <Content>
-          <Switch>
-            <Route path={`${match.url}task`} component={TaskEditor} />
-          </Switch>
-        </Content>
-        <Footer
-          style={{ textAlign: "center" }}
-        >{`GTD © ${new Date().getFullYear()} Created by Dontry`}</Footer>
+        <Sidebar />
+        <Layout>
+          <Content>
+            <Switch>
+              <ProtectedRoute path={`${match.url}/:attribute`} component={TaskBoard} />
+              <ProtectedRoute path={`${match.url}/:attribute/editor`} component={TaskEditor} />
+            </Switch>
+          </Content>
+          <Footer
+            style={{ textAlign: "center", height: "48px", padding: "14px 50px" }}
+          >{`GTD © ${new Date().getFullYear()} Created by Dontry`}</Footer>
+        </Layout>
       </Layout>
     </Layout>
   );

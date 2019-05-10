@@ -1,23 +1,20 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import { observer, inject } from "mobx-react";
-import { AuthStore } from "../stores/authStore";
 import { LOGIN } from "../constants/pathname";
+import _ from "lodash";
 
-interface IProtectedRouteProps {
+/* interface IProtectedRouteProps {
   authenticated: boolean;
-}
+} */
 
-const ProtectedRoute: React.SFC<IProtectedRouteProps> = ({
-  component: Component,
-  authenticated,
-  ...rest
-}: any) => {
+const ProtectedRoute = ({ component: Component, ...rest }: any) => {
+  const token = window.localStorage.getItem("token");
   return (
     <Route
       {...rest}
       render={props =>
-        authenticated ? (
+        token ? (
           <Component {...props} />
         ) : (
           <Redirect to={{ pathname: LOGIN, state: { from: props.location } }} />
@@ -27,9 +24,12 @@ const ProtectedRoute: React.SFC<IProtectedRouteProps> = ({
   );
 };
 
-export default inject("authStore")(
-  observer(({ authStore, ...rest }) => {
-    console.log(authStore.authenticated);
-    return <ProtectedRoute authenticated={authStore.authenticated} {...rest} />;
+/*  
+inject("userStore")(
+  observer(({ userStore, ...rest }) => {
+    return <ProtectedRoute authenticated={} {...rest} />;
   })
-);
+); 
+*/
+
+export default ProtectedRoute;

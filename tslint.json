@@ -5,6 +5,7 @@
   "rules": {
     "quotemark": [true, "double"],
     "no-console": { "severity": "warn" },
+    "no-shadowed-variable": { "severity": "warn" },
     "no-var-requires": true,
     "no-empty": { "severity": "warn" },
     "trailing-comma": false,
