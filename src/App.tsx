@@ -8,11 +8,14 @@ import "./App.css";
 import TaskEditor from "./components/Editor/TaskEditor";
 import TaskBoard from "./views/TaskBoard";
 import ProtectedRoute from "./components/ProtectedRoute";
+import WithMessagePopup from "./components/WithMessagePopup";
+import { MessageType } from "./types";
 
 const { Header, Content, Footer } = Layout;
 
 const App: React.FC<any> = props => {
   const { match } = props;
+  const TaskboardWithMessage = WithMessagePopup(TaskBoard, MessageType.NETWORK);
   return (
     <Layout style={{ height: "100vh" }}>
       <Header>
@@ -23,8 +26,8 @@ const App: React.FC<any> = props => {
         <Layout>
           <Content>
             <Switch>
-              <ProtectedRoute path={`${match.url}/:type`} component={TaskBoard} />
-              <ProtectedRoute path={`${match.url}/:type/editor`} component={TaskEditor} />
+              <ProtectedRoute path={`${match.url}/:type`} component={TaskboardWithMessage} />
+              <ProtectedRoute path={`${match.url}/:type/editor`} component={TaskboardWithMessage} />
             </Switch>
           </Content>
           <Footer

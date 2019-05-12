@@ -6,7 +6,7 @@ import { MessageType } from "../types";
 const REGEX = /^@(info|warning|error)/i;
 
 // https://stackoverflow.com/questions/31815633/what-does-the-error-jsx-element-type-does-not-have-any-construct-or-call
-const WithMessagePopup = (WrappedComponent: typeof Component, messageType: MessageType) => {
+const WithMessagePopup = (WrappedComponent: any, messageType: MessageType) => {
   return inject("messageStore")(
     observer(({ messageStore, ...props }) => {
       const error = messageStore.messages.get(messageType);

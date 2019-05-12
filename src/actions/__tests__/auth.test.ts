@@ -7,6 +7,8 @@ import loginUser from "../../test/fixture/loginUser";
 
 const credential: ILoginCredential = userStub;
 
+jest.mock("../../stores/routerStore");
+
 describe("login", () => {
   beforeAll(() => {
     window.localStorage.clear();

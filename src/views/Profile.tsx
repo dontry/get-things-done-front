@@ -29,7 +29,7 @@ const Profile = ({ user }: IProfileProps) => {
       </Header>
       <Content>
         <FormWrapper>
-          <ProfileForm onSubmit={register} user={user} />;
+          <ProfileForm onSubmit={register} user={user} />
         </FormWrapper>
       </Content>
       <Footer

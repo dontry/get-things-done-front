@@ -1,14 +1,19 @@
-import { requestStore, userStore, routerStore, messageStore } from "../stores";
-import { ILoginCredential, RequestType, IRegisterProfile, MessageType } from "../types";
+import { requestStore, userStore, routerStore } from "../stores";
+import { ILoginCredential, RequestType, IRegisterProfile } from "../types";
 import api from "../api";
 
 const requestType = RequestType.USER;
 
 export function register(profile: IRegisterProfile) {
   requestStore.setRequestInProgress(requestType, true);
-  return api.post("/auth/register", profile).then(res => {
-    routerStore.push("/login");
-  });
+  return api
+    .post("/auth/register", profile)
+    .then(res => {
+      routerStore.push("/login");
+    })
+    .catch(error => {
+      requestStore.setRequestInProgress(requestType, false);
+    });
 }
 
 export function login(credential: ILoginCredential) {
@@ -24,11 +29,7 @@ export function login(credential: ILoginCredential) {
       routerStore.push("/home/inbox");
     })
     .catch(error => {
-      if (error.data) {
-        messageStore.setError(MessageType.NETWORK, error.data.message);
-      } else {
-        messageStore.setError(MessageType.NETWORK, error.message);
-      }
+      requestStore.setRequestInProgress(requestType, false);
     });
 }
 

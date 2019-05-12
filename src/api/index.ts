@@ -1,5 +1,6 @@
 import axios, { Canceler, AxiosResponse } from "axios";
-import routerStore from "../stores/routerStore";
+import { routerStore, messageStore } from "../stores";
+import { MessageType } from "../types";
 
 let cancel: Canceler;
 const promiseArray: any = {};
@@ -77,6 +78,17 @@ httpClient.interceptors.response.use(
   }
 );
 
+function handleNetworkError(reject: any) {
+  return (error: any) => {
+    if (error.data) {
+      messageStore.setError(MessageType.NETWORK, error.data.message);
+    } else {
+      messageStore.setError(MessageType.NETWORK, error.message);
+    }
+    reject(error);
+  };
+}
+
 export default {
   get(url: string, params?: any): Promise<AxiosResponse> {
     return new Promise((resolve, reject) => {
@@ -87,9 +99,11 @@ export default {
         cancelToken: new CancelToken(c => {
           cancel = c;
         })
-      }).then(response => {
-        resolve(response);
-      });
+      })
+        .then(response => {
+          resolve(response);
+        })
+        .catch(handleNetworkError(reject));
     });
   },
   post(url: string, payload: any): Promise<AxiosResponse> {
@@ -105,7 +119,7 @@ export default {
         .then(response => {
           resolve(response);
         })
-        .catch(err => reject(err));
+        .catch(handleNetworkError(reject));
     });
   },
   delete(url: string, params?: any): Promise<AxiosResponse> {
@@ -121,7 +135,7 @@ export default {
         .then(response => {
           resolve(response);
         })
-        .catch(err => reject(err));
+        .catch(handleNetworkError(reject));
     });
   },
   put(url: string, payload: any): Promise<AxiosResponse> {
@@ -137,7 +151,7 @@ export default {
         .then(response => {
           resolve(response);
         })
-        .catch(err => reject(err));
+        .catch(handleNetworkError(reject));
     });
   }
 };
