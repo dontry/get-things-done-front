@@ -12,12 +12,20 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "isolatedModules": true,
+    "isolatedModules": false,
     "noEmit": true,
     "jsx": "react",
     "forceConsistentCasingInFileNames": true,
     "strictNullChecks": true,
-    "experimentalDecorators": true
-  },
-  "include": ["src"]
+    "experimentalDecorators": true,
+    "paths": {
+      "@actions/*": ["src/actions/*"],
+      "@constants/*": ["src/constants/*"],
+      "@stores/*": ["src/stores/*"],
+      "@views/*": ["src/views/*"]
+      // "@types/*": ["src/types/*"]
+    },
+
+    "downlevelIteration": true
+  }
 }

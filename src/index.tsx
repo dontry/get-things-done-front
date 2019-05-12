@@ -1,47 +1,39 @@
 import React from "react";
 import ReactDOM from "react-dom";
 // https://reacttraining.com/react-router/web/api/Router
-import { Router, Switch, Route, Link } from "react-router-dom";
+import { Router, Switch, Route, Link, Redirect } from "react-router-dom";
 import { observer, Provider } from "mobx-react";
 import DevTools from "mobx-react-devtools";
 import ProtectedRoute from "./components/ProtectedRoute";
-import Counter from "./components/_Counter";
 import App from "./App";
-import Login from "./view/Login";
-import Register from "./view/Register";
-import NotFound from "./view/NotFound";
+import Login from "./views/Login";
+import Register from "./views/Register";
+import NotFound from "./views/NotFound";
+import Profile from "./views/Profile";
 import { setConfig } from "react-hot-loader";
-import appStore from "./stores";
+import * as stores from "./stores";
 import * as serviceWorker from "./serviceWorker";
-import { create, persist } from "mobx-persist";
 import { createBrowserHistory } from "history";
 import { syncHistoryWithStore } from "mobx-react-router";
 import "./index.css";
 
 const rootEl = document.getElementById("root");
 setConfig({ ignoreSFC: true });
-const hydrate = create({ jasonify: false });
-const initialStore = (window as any).__INITIAL_STATE__ && (window as any).__INITIAL_STATE__.app;
-
 const browserHistory = createBrowserHistory();
+const history = syncHistoryWithStore(browserHistory, stores.routerStore);
 
 (async () => {
-  await hydrate("appState", appStore, initialStore).then(() => {
-    console.log("rehydrate");
-    console.log(appStore.auth.authenticated);
-  });
-
-  const history = syncHistoryWithStore(browserHistory, appStore.router);
-
   ReactDOM.render(
-    <Provider {...appStore.getAllState()}>
+    <Provider {...stores}>
       <>
         <Router history={history}>
           <Switch>
-            <ProtectedRoute path="/counter" component={Counter} />
+            <Redirect exact path="/" to="/home" />
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
-            <Route path="/" component={App} />
+            <ProtectedRoute path="/home" component={App} />
+            <ProtectedRoute path="/profile" component={Profile} />
+            <Route path="/404" component={NotFound} />
             <Route path="*" component={NotFound} />
           </Switch>
         </Router>

@@ -1,4 +1,5 @@
-"use strict";
+/* tslint:disable */
+
 
 const fs = require("fs");
 const path = require("path");
@@ -174,6 +175,7 @@ module.exports = function(webpackEnv) {
               ecma: 8
             },
             compress: {
+              // @ts-ignore
               ecma: 5,
               warnings: false,
               // Disabled because of an issue with Uglify breaking seemingly valid code:
@@ -559,7 +561,7 @@ module.exports = function(webpackEnv) {
             module: "esnext",
             moduleResolution: "node",
             resolveJsonModule: true,
-            isolatedModules: true,
+            isolatedModules: false,
             noEmit: true,
             jsx: "preserve"
           },

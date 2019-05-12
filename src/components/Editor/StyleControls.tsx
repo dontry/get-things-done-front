@@ -29,12 +29,12 @@ const ControlWrapper = styled.div`
   user-select: none;
 `;
 
-interface StyleButtonProps {
+interface IStyleButtonProps {
   active: boolean;
 }
 
 const ControlButton = styled.button`
-  color: ${(props: StyleButtonProps) => (props.active ? "#5890ff" : "#999")};
+  color: ${(props: IStyleButtonProps) => (props.active ? "#5890ff" : "#999")};
   cursor: pointer;
   margin-right: 16px;
   padding: 2px 0;
@@ -43,12 +43,12 @@ const ControlButton = styled.button`
   outline: none;
 `;
 
-interface ControlProps {
+interface IControlProps {
   editorState: EditorState;
   onToggle(style: string): void;
 }
 
-const BlockStyleControls = ({ editorState, onToggle }: ControlProps) => {
+const BlockStyleControls = ({ editorState, onToggle }: IControlProps) => {
   // const {editorState} = props;
   const selection = editorState.getSelection();
   const blockTyype = editorState
@@ -59,10 +59,7 @@ const BlockStyleControls = ({ editorState, onToggle }: ControlProps) => {
   return (
     <ControlWrapper>
       {BLOCK_TYPES.map(type => (
-        <ControlButton
-          active={type.style === blockTyype}
-          onMouseDown={() => onToggle(type.style)}
-        >
+        <ControlButton active={type.style === blockTyype} onMouseDown={() => onToggle(type.style)}>
           {type.label}
         </ControlButton>
       ))}
@@ -80,10 +77,7 @@ const InlinStyleControls = ({ editorState, onToggle }: ControlProps) => {
   return (
     <ControlWrapper>
       {INLINE_STYLES.map(type => (
-        <ControlButton
-          active={type.style === blockTyype}
-          onMouseDown={() => onToggle(type.style)}
-        >
+        <ControlButton active={type.style === blockTyype} onMouseDown={() => onToggle(type.style)}>
           {type.label}
         </ControlButton>
       ))}

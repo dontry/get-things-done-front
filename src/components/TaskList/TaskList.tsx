@@ -1,34 +1,38 @@
-import React, { memo } from "react";
+import React from "react";
 import { Droppable } from "react-beautiful-dnd";
 import TaskItem from "./TaskItem";
 import { TaskListContainer, TaskListBody } from "./style";
-import { mockData } from "./mockData";
+import { ITask } from "src/types";
 
 interface ITaskListProps {
-  list: object;
-  index: number;
+  id: string;
+  tasks: ITask[];
+  index?: number;
+  type: string;
 }
 
-const TaskList: React.FC<ITAskListProps> = ({ list, index = 0 }) => {
-  list = mockData;
-  const { columns, tasks } = list;
-  const id = "list-1";
+const TaskList = ({ id, tasks, index = 0, type }: ITaskListProps) => {
   return (
-    <Droppable droppableId={id} index={index} type="TASK_LIST">
+    <Droppable droppableId={id} type={type}>
       {provided => (
-        <TaskListContainer {...provided.draggableProps} ref={provided.innerRef}>
-          <InnerList tasks={tasks} />
+        <TaskListContainer {...provided.droppableProps} ref={provided.innerRef}>
+          <InnerList type={type} tasks={tasks} />
         </TaskListContainer>
       )}
     </Droppable>
   );
 };
 
-const InnerList = memo(({ tasks }) => {
+interface IInnerListProps {
+  type: string;
+  tasks: ITask[];
+}
+
+const InnerList = React.memo(({ tasks, type }: IInnerListProps) => {
   return (
     <TaskListBody>
-      {tasks.map(task => (
-        <TaskItem key={task.id} task={task} index={index} />
+      {tasks.map((task, index) => (
+        <TaskItem type={type} key={task.id} task={task} index={index} />
       ))}
     </TaskListBody>
   );
