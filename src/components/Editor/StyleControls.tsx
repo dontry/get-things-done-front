@@ -67,7 +67,7 @@ const BlockStyleControls = ({ editorState, onToggle }: IControlProps) => {
   );
 };
 
-const InlinStyleControls = ({ editorState, onToggle }: ControlProps) => {
+const InlinStyleControls = ({ editorState, onToggle }: IControlProps) => {
   const selection = editorState.getSelection();
   const blockTyype = editorState
     .getCurrentContent()

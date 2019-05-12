@@ -45,7 +45,9 @@ export class TaskStore implements ITaskStore {
     for (const [key, task] of this.tasks) {
       list.push(task);
     }
-    return list;
+    return list.sort((a, b) => {
+      return a.pos - b.pos;
+    });
   }
 
   @computed
@@ -80,7 +82,11 @@ export class TaskStore implements ITaskStore {
 
   @computed
   public get todayTasks(): ITask[] {
-    return this.list.filter(checkActive).filter(checkToday);
+    const getTodayTasks = _.flow(
+      fp.filter(checkActive),
+      fp.filter(checkToday)
+    );
+    return getTodayTasks(this.list);
   }
 
   @computed
