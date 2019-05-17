@@ -1,7 +1,7 @@
 import { observable, action, computed } from "mobx";
 import hydrate from "../lib/hydrate";
 import { persist } from "mobx-persist";
-import { IUser } from "src/types";
+import { IUser } from "../types";
 import _ from "lodash";
 
 class UserStore {

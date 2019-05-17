@@ -1,7 +1,7 @@
 import { create } from "mobx-persist";
 
 const _hydrate = create({
-  storage: localStorage,
+  storage: window.localStorage,
   jsonify: true
 });
 

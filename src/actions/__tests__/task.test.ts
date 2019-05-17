@@ -8,6 +8,7 @@ import Task from "../../classes/Task";
 import loginUser from "../../test/fixture/loginUser";
 import user from "../../test/fixture/user";
 import initializeRouter from "../../test/fixture/initializeRouter";
+import { persistanceService } from "../../classes/PersistanceService";
 import faker from "faker";
 
 describe("fetch all tasks", () => {
@@ -20,7 +21,7 @@ describe("fetch all tasks", () => {
 
   afterAll(() => {
     userStore.clearUser();
-    window.localStorage.removeItem("token");
+    persistanceService.removeItem("token");
   });
   it("should return tasks", done => {
     taskAction.fetchAllTasks().then(() => {

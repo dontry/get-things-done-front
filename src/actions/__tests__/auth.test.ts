@@ -4,6 +4,8 @@ import userStore from "../../stores/userStore";
 import requestStore from "../../stores/requestStore";
 import { login, logout } from "../authAction";
 import loginUser from "../../test/fixture/loginUser";
+import mockStorage from "../../test/fixture/mockStorage";
+import { persistanceService } from "../../classes/PersistanceService";
 
 const credential: ILoginCredential = userStub;
 
@@ -11,12 +13,13 @@ jest.mock("../../stores/routerStore");
 
 describe("login", () => {
   beforeAll(() => {
-    window.localStorage.clear();
+    mockStorage();
+    persistanceService.clear();
     userStore.clearUser();
     jest.clearAllMocks();
   });
   afterEach(() => {
-    window.localStorage.clear();
+    persistanceService.clear();
     userStore.clearUser();
     jest.clearAllMocks();
   });
@@ -38,11 +41,11 @@ describe("login", () => {
     });
   });
 
-  it("should call window setItem and create a token", done => {
-    const spy = jest.spyOn(window.localStorage.__proto__, "setItem");
+  it("should call storage setItem and create a token", done => {
+    const spy = jest.spyOn(persistanceService, "setItem");
     login(credential).then(() => {
-      expect(spy).toHaveBeenCalledTimes(2); /// TOFIX: why is this called twice?????
-      expect(window.localStorage.getItem("token")).toBeTruthy();
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(persistanceService.getItem("token")).toBeTruthy();
       done();
     });
   });
@@ -54,12 +57,14 @@ describe("logout", () => {
     done();
   });
   afterEach(() => {
-    window.localStorage.clear();
+    persistanceService.clear();
     userStore.clearUser();
     jest.clearAllMocks();
   });
   it("should call localStorage.removeItem('token')", done => {
-    const spy = jest.spyOn(window.localStorage.__proto__, "removeItem");
+    // spy window.localStorage
+    // const spy = jest.spyOn(window.localStorage.__proto__, "removeItem");
+    const spy = jest.spyOn(persistanceService, "removeItem");
     logout();
     expect(spy).toHaveBeenCalledTimes(1);
     done();

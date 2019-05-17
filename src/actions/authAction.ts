@@ -1,5 +1,6 @@
 import { requestStore, userStore, routerStore } from "../stores";
 import { ILoginCredential, RequestType, IRegisterProfile } from "../types";
+import { persistanceService } from "../classes/PersistanceService";
 import api from "../api";
 
 const requestType = RequestType.USER;
@@ -24,7 +25,7 @@ export function login(credential: ILoginCredential) {
       const { data } = res;
       const { user, token } = data;
       userStore.mergeUser(user);
-      window.localStorage.setItem("token", token);
+      persistanceService.setItem("token", token);
       requestStore.setRequestInProgress(requestType, false);
       routerStore.push("/home/inbox");
     })
@@ -35,5 +36,5 @@ export function login(credential: ILoginCredential) {
 
 export function logout() {
   userStore.clearUser();
-  window.localStorage.removeItem("token");
+  persistanceService.removeItem("token");
 }

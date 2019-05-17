@@ -1,6 +1,7 @@
 import axios, { Canceler, AxiosResponse } from "axios";
 import { routerStore, messageStore } from "../stores";
 import { MessageType } from "../types";
+import { persistanceService } from "../classes/PersistanceService";
 
 let cancel: Canceler;
 const promiseArray: any = {};
@@ -28,7 +29,7 @@ httpClient.interceptors.request.use(
 
     // TODO: add token
     // const token = store.state.token;
-    const token = window.localStorage.getItem("token");
+    const token = persistanceService.getItem("token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -58,7 +59,7 @@ httpClient.interceptors.response.use(
             break;
           case 403:
             // TODO: Forbidden token expires
-            localStorage.removeItem("token");
+            persistanceService.removeItem("token");
             routerStore.push("/login");
             break;
           case 404:

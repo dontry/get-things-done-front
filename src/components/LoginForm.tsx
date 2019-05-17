@@ -13,8 +13,14 @@ const footerFormItemLayout = {
   }
 };
 
+export interface ILoginFormValues {
+  username: string;
+  password: string;
+  remember: boolean;
+}
+
 interface IFormProps {
-  onSubmit(credential: any): Promise<void>;
+  onSubmit(credential: ILoginFormValues): Promise<void>;
 }
 
 class RawLoginForm extends React.Component<IFormProps & FormComponentProps> {
@@ -64,8 +70,8 @@ class RawLoginForm extends React.Component<IFormProps & FormComponentProps> {
     e.preventDefault();
     this.props.form.validateFields((err: Error, values: any) => {
       if (!err) {
-        const { username, password } = values;
-        this.props.onSubmit({ username, password });
+        const { username, password, remember } = values;
+        this.props.onSubmit({ username, password, remember });
       }
     });
   };

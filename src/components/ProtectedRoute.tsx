@@ -2,6 +2,7 @@ import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import { observer, inject } from "mobx-react";
 import { LOGIN } from "../constants/pathname";
+import { persistanceService } from "../classes/PersistanceService";
 import _ from "lodash";
 
 /* interface IProtectedRouteProps {
@@ -9,7 +10,7 @@ import _ from "lodash";
 } */
 
 const ProtectedRoute = ({ component: Component, ...rest }: any) => {
-  const token = window.localStorage.getItem("token");
+  const token = persistanceService.getItem("token");
   return (
     <Route
       {...rest}

@@ -1,14 +1,17 @@
 import api from "../index";
-import { ITask, ILoginCredential } from "src/types";
+import { ITask, ILoginCredential } from "../../types";
 import loginUser from "../../test/fixture/loginUser";
 import initializeRouter from "../../test/fixture/initializeRouter";
 import userStub from "../../test/fixture/user";
 import userStore from "../../stores/userStore";
+import mockStorage from "../../test/fixture/mockStorage";
+import { persistanceService } from "../../classes/PersistanceService";
 
 describe("login", () => {
   beforeAll(() => {
+    mockStorage();
     userStore.clearUser();
-    window.localStorage.clear();
+    persistanceService.clear();
   });
 
   it("should login successfully", done => {
@@ -24,7 +27,7 @@ describe("login", () => {
 
 describe("tasks", () => {
   beforeAll(done => {
-    window.localStorage.clear();
+    persistanceService.clear();
     userStore.clearUser();
     jest.clearAllMocks();
 
@@ -33,11 +36,13 @@ describe("tasks", () => {
       done();
     });
   });
+
   afterAll(() => {
-    window.localStorage.clear();
+    persistanceService.clear();
     userStore.clearUser();
     jest.clearAllMocks();
   });
+
   it("should return string", done => {
     api.get("/hello").then(res => {
       const { data } = res;
