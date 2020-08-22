@@ -28,13 +28,11 @@ const Profile = ({ user }: IProfileProps) => {
         <UserIcon />
       </Header>
       <Content>
-        <FormWrapper>
-          <ProfileForm onSubmit={register} user={user} />
-        </FormWrapper>
+        <FormWrapper>{/* <ProfileForm onSubmit={register} user={user} /> */}</FormWrapper>
       </Content>
       <Footer
         style={{ textAlign: "center" }}
-      >{`GTD © ${new Date().getFullYear()} Created by Dontry`}</Footer>
+      >{`GTD © ${new Date().getFullYear()} Created by Don`}</Footer>
     </Layout>
   );
 };

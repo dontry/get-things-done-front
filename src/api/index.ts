@@ -27,9 +27,9 @@ httpClient.interceptors.request.use(
       promiseArray[config.url] = cancel;
     }
 
-    // TODO: add token
+    // TODO: add access token
     // const token = store.state.token;
-    const token = persistanceService.getItem("token");
+    const token = persistanceService.getItem("access_token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -65,6 +65,7 @@ httpClient.interceptors.response.use(
           case 404:
             // TODO: Page not found
             routerStore.push("/404");
+            break;
           case 500:
           default:
             // TODO: Server error

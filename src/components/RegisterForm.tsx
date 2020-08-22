@@ -1,6 +1,6 @@
 import React, { FormEvent, useState } from "react";
 import { FormComponentProps } from "antd/lib/form/Form";
-import { Form, Icon, Input, Button, Select } from "antd";
+import { Form, Icon, Input, Button, Select, InputNumber } from "antd";
 import { formItemLayout, footerFormItemLayout } from "../constants/layout";
 const { Option } = Select;
 
@@ -37,8 +37,8 @@ const RawRegisterForm: React.FC<IFormProps & FormComponentProps> = props => {
   };
 
   const _validateAge = (rule: any, value: number, callback: (s?: string) => void) => {
-    if (value < 0) {
-      callback("Age value should be positive.");
+    if (value < 18) {
+      callback("Your age should not be under 18.");
     } else {
       callback();
     }
@@ -114,7 +114,7 @@ const RawRegisterForm: React.FC<IFormProps & FormComponentProps> = props => {
               validator: _validateAge
             }
           ]
-        })(<Input type="number" />)}
+        })(<InputNumber />)}
       </Form.Item>
       <Form.Item {...formItemLayout} label="Sex">
         {getFieldDecorator("sex", {
@@ -122,9 +122,9 @@ const RawRegisterForm: React.FC<IFormProps & FormComponentProps> = props => {
         })(
           <Select>
             <Option value="" />
-            <Option value="male">Male</Option>
-            <Option value="female">Female</Option>
-            <Option value="other">Other</Option>
+            <Option value="MALE">Male</Option>
+            <Option value="FEMALE">Female</Option>
+            <Option value="OTHER">Other</Option>
           </Select>
         )}
       </Form.Item>

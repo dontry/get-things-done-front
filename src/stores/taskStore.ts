@@ -53,39 +53,27 @@ export class TaskStore implements ITaskStore {
   @computed
   public get inboxTasks(): ITask[] {
     const checkInbox = checkByAttribute("inbox");
-    const getInboxTasks = _.flow(
-      fp.filter(checkActive),
-      fp.filter(checkInbox)
-    );
+    const getInboxTasks = _.flow(fp.filter(checkActive), fp.filter(checkInbox));
     return getInboxTasks(this.list);
   }
 
   @computed
   public get planTasks(): ITask[] {
     const checkPlan = checkByAttribute("plan");
-    const getPlanTasks = _.flow(
-      fp.filter(checkActive),
-      fp.filter(checkPlan)
-    );
+    const getPlanTasks = _.flow(fp.filter(checkActive), fp.filter(checkPlan));
     return getPlanTasks(this.list);
   }
 
   @computed
   public get nextTasks(): ITask[] {
     const checkNext = checkByAttribute("next");
-    const getNextTasks = _.flow(
-      fp.filter(checkActive),
-      fp.filter(checkNext)
-    );
+    const getNextTasks = _.flow(fp.filter(checkActive), fp.filter(checkNext));
     return getNextTasks(this.list);
   }
 
   @computed
   public get todayTasks(): ITask[] {
-    const getTodayTasks = _.flow(
-      fp.filter(checkActive),
-      fp.filter(checkToday)
-    );
+    const getTodayTasks = _.flow(fp.filter(checkActive), fp.filter(checkToday));
     return getTodayTasks(this.list);
   }
 
@@ -100,7 +88,7 @@ export class TaskStore implements ITaskStore {
   }
 
   @action
-  public addTaskList(tasks: ITask[]): void {
+  public addTaskList(tasks: ITask[] = []): void {
     for (const task of tasks) {
       if (task.id) {
         this.tasks.set(task.id, task);
@@ -168,8 +156,8 @@ function getTasksByAttribute(tasks: Map<string, ITask>, attribute: Attribute): I
 const taskStore = new TaskStore();
 
 function checkActive(task: ITask): boolean {
-  const { archived, deleted, completed } = task;
-  return archived === 0 && deleted === 0 && completed === 0;
+  const { archived, deleted, completedAt } = task;
+  return archived === 0 && deleted === 0 && completedAt === 0;
 }
 
 // get tasks created or starts today
@@ -187,7 +175,7 @@ function checkDeleted(task: ITask): boolean {
 }
 
 function checkCompleted(task: ITask): boolean {
-  return task.completed > 0;
+  return task.completedAt > 0;
 }
 
 export default taskStore;

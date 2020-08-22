@@ -1,7 +1,9 @@
+import { useEffect } from "react";
 import requestStore from "../stores/requestStore";
+import { useQuery } from "react-query";
 import taskStore from "../stores/taskStore";
 import api from "../api";
-import { ITask, INewTask } from "../types";
+import { ITask } from "../types";
 import Task from "../classes/Task";
 import { RequestType } from "../types";
 import _ from "lodash";
@@ -9,17 +11,11 @@ import _ from "lodash";
 const requestType = RequestType.TASK;
 
 export function fetchAllTasks() {
-  requestStore.setRequestInProgress(requestType, true);
-  return api
-    .get("/tasks")
-    .then(res => {
-      const tasks: ITask[] = res.data;
-      taskStore.addTaskList(tasks);
-      requestStore.setRequestInProgress(requestType, false);
-    })
-    .catch(error => {
-      requestStore.setRequestInProgress(requestType, false);
-    });
+  const { isLoading, data } = useQuery("tasks", () => api.get("/tasks").then(res => res.data));
+  useEffect(() => {
+    requestStore.setRequestInProgress(requestType, isLoading);
+      taskStore.addTaskList(data);
+  }, [isLoading, data]);
 }
 
 export function updateTaskById(id: string, payload: ITask) {
@@ -42,7 +38,6 @@ export function createTask(payload: Task): Promise<void> {
     .post(`/tasks`, payload)
     .then(res => {
       const task = res.data;
-      console.log("new task:", task);
       taskStore.addTask(task);
       requestStore.setRequestInProgress(requestType, false);
     })

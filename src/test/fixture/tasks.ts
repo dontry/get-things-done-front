@@ -1,4 +1,4 @@
-import { Priority, ITask } from "../../types";
+import { ITask } from "../../types";
 
 export const tasks: ITask[] = [
   {
@@ -14,7 +14,7 @@ export const tasks: ITask[] = [
     spentTime: 0,
     allDay: true,
     deleted: 0,
-    completed: 0,
+    completedAt: 0,
     archived: 0,
     tags: [],
     userId: "5cced2fb1695ce1a38dbe2ac",
@@ -33,7 +33,7 @@ export const tasks: ITask[] = [
     spentTime: 0,
     allDay: true,
     deleted: 0,
-    completed: 0,
+    completedAt: 0,
     archived: 0,
     tags: [],
     userId: "5cced2fb1695ce1a38dbe2ac",
@@ -52,7 +52,7 @@ export const tasks: ITask[] = [
     spentTime: 0,
     allDay: true,
     deleted: 1557578367336,
-    completed: 0,
+    completedAt: 0,
     archived: 0,
     tags: [],
     userId: "5cced2fb1695ce1a38dbe2ac",
@@ -71,7 +71,7 @@ export const tasks: ITask[] = [
     spentTime: 0,
     allDay: true,
     deleted: 0,
-    completed: 0,
+    completedAt: 0,
     archived: 0,
     tags: [],
     userId: "5cced2fb1695ce1a38dbe2ac",
@@ -90,7 +90,7 @@ export const tasks: ITask[] = [
     spentTime: 0,
     allDay: true,
     deleted: 0,
-    completed: 0,
+    completedAt: 0,
     archived: 0,
     tags: [],
     userId: "5cced2fb1695ce1a38dbe2ac",

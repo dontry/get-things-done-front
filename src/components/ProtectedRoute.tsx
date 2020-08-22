@@ -10,7 +10,7 @@ import _ from "lodash";
 } */
 
 const ProtectedRoute = ({ component: Component, ...rest }: any) => {
-  const token = persistanceService.getItem("token");
+  const token = persistanceService.getItem("access_token");
   return (
     <Route
       {...rest}

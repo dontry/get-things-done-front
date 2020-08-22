@@ -8,7 +8,7 @@ const requestType = RequestType.USER;
 export function register(profile: IRegisterProfile) {
   requestStore.setRequestInProgress(requestType, true);
   return api
-    .post("/auth/register", profile)
+    .post("/register", profile)
     .then(res => {
       routerStore.push("/login");
     })
@@ -20,12 +20,13 @@ export function register(profile: IRegisterProfile) {
 export function login(credential: ILoginCredential) {
   requestStore.setRequestInProgress(requestType, true);
   return api
-    .post("/auth/login", credential)
+    .post("/login", credential)
     .then(res => {
       const { data } = res;
-      const { user, token } = data;
+      const { user, access_token, access_token_expires_at } = data;
       userStore.mergeUser(user);
-      persistanceService.setItem("token", token);
+      persistanceService.setItem("access_token", access_token);
+      persistanceService.setItem("access_token_expires_at", access_token_expires_at);
       requestStore.setRequestInProgress(requestType, false);
       routerStore.push("/home/inbox");
     })

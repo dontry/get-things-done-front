@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, memo } from "react";
 import { inject, observer } from "mobx-react";
 import { RouteComponentProps } from "react-router";
 import { Layout, Form, Input, Spin } from "antd";
@@ -53,19 +53,12 @@ interface ITaskBoardProps {
 }
 
 const TaskBoard = ({ type, tasks, fetching }: ITaskBoardProps) => {
-  const isMounted = useRef(true);
+  // const isMounted = useRef(true);
   // const taskIds = tasks.map(task => task.id);
   // const { list, setList } = useTaskList(taskIds);
   const isTaskInputVisible = checkTaskInputVisibility(type);
 
-  useEffect(() => {
-    if (isMounted.current) {
-      taskAction.fetchAllTasks();
-    }
-    return () => {
-      isMounted.current = false;
-    };
-  }, [tasks]);
+  taskAction.fetchAllTasks();
 
   return (
     <Container>
@@ -80,8 +73,8 @@ const TaskBoard = ({ type, tasks, fetching }: ITaskBoardProps) => {
             <Spin size="large" />
           </Mask>
         ) : (
-          <TaskList id={type} type={type} tasks={tasks} />
-        )}
+            <TaskList id={type} type={type} tasks={tasks} />
+          )}
       </DragDropContext>
     </Container>
   );
@@ -107,7 +100,6 @@ const TaskBoard = ({ type, tasks, fetching }: ITaskBoardProps) => {
   }
 };
 
-// { location }: RouteComponentProps
 export default inject("taskStore", "requestStore")(
   observer(({ taskStore, requestStore, userStore, match, ...rest }) => {
     const { type } = match.params;

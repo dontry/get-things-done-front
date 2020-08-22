@@ -31,40 +31,40 @@ const TaskItem = React.memo(({ type, task, index }: ITaskItemProps) => {
     </Draggable>
   );
 
-  function _renderTask(task: ITask, type: string) {
-    switch (type) {
+  function _renderTask(_task: ITask, _type: string) {
+    switch (_type) {
       case "deleted":
-        return <DeletedTask task={task} />;
-      case "completed":
-        return <CompletedTask task={task} handleCheck={_handleCheck} />;
+        return <DeletedTask task={_task} />;
+      case "completedAt":
+        return <CompletedTask task={_task} handleCheck={_handleCheck} />;
       default:
-        return <TodoTask task={task} handleCheck={_handleCheck} handleDelete={_handleDelete} />;
+        return <TodoTask task={_task} handleCheck={_handleCheck} handleDelete={_handleDelete} />;
     }
   }
 
-  async function _handleCheck(task: ITask) {
-    if (task.completed === 0) {
-      task.completed = Date.now();
+  async function _handleCheck(_task: ITask) {
+    if (_task.completedAt === 0) {
+      _task.completedAt = Date.now();
     } else {
-      task.completed = 0;
+      _task.completedAt = 0;
     }
-    if (task.id) {
-      taskAction.updateTaskById(task.id, task);
+    if (_task.id) {
+      taskAction.updateTaskById(_task.id, _task);
     }
   }
 
-  async function _handleDelete(task: ITask) {
-    task.deleted = Date.now();
-    if (task.id) {
-      taskAction.updateTaskById(task.id, task);
+  async function _handleDelete(_task: ITask) {
+    _task.deleted = 1;
+    if (_task.id) {
+      taskAction.updateTaskById(_task.id, _task);
     }
   }
 });
 
 interface ITaskProps {
   task: ITask;
-  handleCheck?(task: ITask): void;
-  handleDelete?(task: ITask): void;
+  handleCheck?: (task: ITask) => void;
+  handleDelete?: (task: ITask) => void;
 }
 
 const TodoTask = ({ task, handleCheck, handleDelete }: ITaskProps) => (
@@ -79,7 +79,7 @@ const DeletedTask = ({ task }: ITaskProps) => <TitleWrapper>{task.title}</TitleW
 
 const CompletedTask = ({ task, handleCheck }: ITaskProps) => (
   <>
-    <Checkbox checked={task.completed > 0} onChange={() => handleCheck && handleCheck(task)} />
+    <Checkbox checked={task.completedAt > 0} onChange={() => handleCheck && handleCheck(task)} />
     <TitleWrapper>{task.title}</TitleWrapper>
   </>
 );

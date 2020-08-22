@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FormComponentProps } from "antd/lib/form/Form";
 import { IUser } from "../types";
 import { formItemLayout, footerFormItemLayout } from "../constants/layout";
-import { Form, Icon, Input, Button, Checkbox, message, Select } from "antd";
+import { Form, Input, Button, Select } from "antd";
 
 const { Option } = Select;
 

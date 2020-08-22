@@ -63,13 +63,13 @@ export interface ITask {
   priority: Priority;
   createdAt: number;
   startAt: number;
+  completedAt: number;
   endAt: number;
   estimatedTime: number;
   context?: string;
   spentTime?: number;
   allDay: boolean;
   deleted: number;
-  completed: number;
   archived: number;
   tags: string[];
   note?: INote;
@@ -88,15 +88,38 @@ export interface INewTask {
   estimatedTime?: number;
   context?: string;
   spentTime?: number;
-  allDay?: boolean;
+  allDay?: number;
+  hidden?: number;
   deleted?: number;
-  completed?: number;
+  completedAt?: number;
   archived?: number;
+  source?: string;
   tags?: string[];
   note?: INote;
+  reminders?: IReminder[];
+  repeaters?: IRepeater[];
   project?: string;
 }
 
 export interface INote {
   content: string;
+}
+
+export enum Frequency {
+  HOURLY = "HOURLY",
+  DAILY = "DAILY",
+  WEEKLY = "WEEKLY",
+  MONTHLY = "MONTHLY",
+  QUARTERLY = "QUARTERLY",
+  YEARLY = "YEARLY"
+}
+
+export interface IRepeater {
+  frequency: Frequency;
+  ends_on: number;
+}
+
+export interface IReminder {
+  frequency: number;
+  count: number;
 }

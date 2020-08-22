@@ -5,6 +5,12 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "command": "npm start",
+      "name": "Start front-end",
+      "request": "launch",
+      "type": "node-terminal"
+    },
+    {
       "type": "chrome",
       "request": "attach",
       "name": "Attach to Chrome",
@@ -17,6 +23,6 @@
       "name": "Launch Chrome against localhost",
       "url": "http://localhost:3006",
       "webRoot": "${workspaceFolder}"
-    }
+    },
   ]
 }

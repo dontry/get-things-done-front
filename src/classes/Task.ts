@@ -1,4 +1,4 @@
-import { Attribute, Priority, INewTask, INote } from "../types/index";
+import { Attribute, Priority, INewTask, INote, IRepeater, IReminder } from "../types/index";
 
 class Task {
   private title: string;
@@ -11,13 +11,17 @@ class Task {
   private estimatedTime: number;
   private context: string;
   private spentTime: number;
-  private allDay: boolean;
+  private allDay: number;
   private deleted: number;
-  private completed: number;
+  private completedAt: number;
   private archived: number;
+  private hidden: number;
   private tags: string[];
+  private source: string;
   private note: INote | undefined;
   private project: string | undefined;
+  private repeaters: IRepeater[];
+  private reminders: IReminder[];
   private pos: string | undefined;
 
   constructor({
@@ -27,14 +31,18 @@ class Task {
     priority = Priority.MEDIUM,
     startAt = 0,
     endAt = 0,
+    completedAt = 0,
     estimatedTime = 0,
     context = "",
     spentTime = 0,
-    allDay = true,
+    allDay = 1,
+    hidden = 0,
     deleted = 0,
-    completed = 0,
     archived = 0,
     tags = [],
+    repeaters = [],
+    reminders = [],
+    source = "",
     note,
     project
   }: INewTask) {
@@ -49,11 +57,15 @@ class Task {
     this.context = context;
     this.spentTime = spentTime;
     (this.allDay = allDay), (this.deleted = deleted);
-    this.completed = completed;
+    this.completedAt = completedAt;
     this.archived = archived;
     this.tags = tags;
     this.note = note;
     this.project = project;
+    this.repeaters = repeaters;
+    this.reminders = reminders;
+    this.source = source;
+    this.hidden = hidden;
   }
 
   public toJson() {
@@ -69,7 +81,7 @@ class Task {
       spentTime: this.spentTime,
       allDay: this.allDay,
       deleted: this.deleted,
-      completed: this.completed,
+      completedAt: this.completedAt,
       archived: this.archived,
       tags: this.tags,
       note: this.note,

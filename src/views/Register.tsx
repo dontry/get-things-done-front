@@ -1,6 +1,4 @@
 import React from "react";
-import { message } from "antd";
-import { observer, inject } from "mobx-react";
 import RegisterForm from "../components/RegisterForm";
 import { register } from "../actions/authAction";
 import { MessageType } from "../types";
