@@ -1,4 +1,4 @@
-import axios, { Canceler, AxiosResponse } from "axios";
+import axios, { Canceler, AxiosResponse, AxiosRequestConfig } from "axios";
 import { routerStore, messageStore } from "../stores";
 import { MessageType } from "../types";
 import { persistanceService } from "../classes/PersistanceService";
@@ -7,12 +7,11 @@ let cancel: Canceler;
 const promiseArray: any = {};
 const CancelToken = axios.CancelToken;
 
-console.log(`BASE_URL: ${process.env.BASE_URL}`);
-
-const options = {
+const options: AxiosRequestConfig = {
   baseURL: `${process.env.BASE_URL}`,
   headers: { "X-Requested-With": "XMLHttpRequest" },
-  timeout: 10000
+  timeout: 10000,
+  withCredentials: true
 };
 
 const httpClient = axios.create(options);
@@ -27,8 +26,6 @@ httpClient.interceptors.request.use(
       promiseArray[config.url] = cancel;
     }
 
-    // TODO: add access token
-    // const token = store.state.token;
     const token = persistanceService.getItem("access_token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -55,7 +52,13 @@ httpClient.interceptors.response.use(
           // Unauthorized
           case 401:
             // TODO: redirect to login
-            routerStore.push("/login");
+            if (error.response.data.message === "jwt expired") {
+              httpClient.post("/renew_session").then(res => {
+                persistanceService.setItem("access_token", res.data.access_token);
+              });
+            } else {
+              routerStore.push("/login");
+            }
             break;
           case 403:
             // TODO: Forbidden token expires
