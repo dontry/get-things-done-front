@@ -92,7 +92,8 @@
     "lint": "tslint src/**/*.ts{,?}",
     "prettier": "prettier  \"**/*.+(js|jsx|json|yml|yaml|css|less|scss|ts|tsx|md|mdx|graphql|vue)\"",
     "format": "npm run prettier -- --write",
-    "validate-staged": "lint-staged"
+    "validate-staged": "lint-staged",
+    "version": "conventional-changelog -p angular -i CHANGELOG.md -s && git add CHANGELOG.md"
   },
   "eslintConfig": {
     "extends": "react-app"

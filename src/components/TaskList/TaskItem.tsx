@@ -15,6 +15,7 @@ const TaskItem = React.memo(({ type, task, index }: ITaskItemProps) => {
   if (!task.id) {
     return null;
   }
+  const { updateTask } = taskAction.useUpdateTask();
 
   return (
     <Draggable draggableId={task.id} index={index}>
@@ -49,14 +50,14 @@ const TaskItem = React.memo(({ type, task, index }: ITaskItemProps) => {
       _task.completedAt = 0;
     }
     if (_task.id) {
-      taskAction.updateTaskById(_task.id, _task);
+      updateTask({ task: _task });
     }
   }
 
   async function _handleDelete(_task: ITask) {
     _task.deleted = 1;
     if (_task.id) {
-      taskAction.updateTaskById(_task.id, _task);
+      updateTask({ task: _task });
     }
   }
 });

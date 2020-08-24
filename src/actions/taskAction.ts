@@ -1,63 +1,97 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { useMutation, usePaginatedQuery, queryCache } from "react-query";
 import requestStore from "../stores/requestStore";
-import { useQuery } from "react-query";
 import taskStore from "../stores/taskStore";
 import api from "../api";
-import { ITask } from "../types";
-import Task from "../classes/Task";
-import { RequestType } from "../types";
+import { ITask, INewTask } from "../types";
 import _ from "lodash";
 
-const requestType = RequestType.TASK;
-
-export function fetchAllTasks() {
-  const { isLoading, data } = useQuery("tasks", () => api.get("/tasks").then(res => res.data));
-  useEffect(() => {
-    requestStore.setRequestInProgress(requestType, isLoading);
-      taskStore.addTaskList(data);
-  }, [isLoading, data]);
-}
-
-export function updateTaskById(id: string, payload: ITask) {
-  requestStore.setRequestInProgress(requestType, true);
-  return api
-    .put(`/tasks/${id}`, payload)
-    .then(res => {
-      const task = res.data;
-      taskStore.updateTaskById(id, task);
-      requestStore.setRequestInProgress(requestType, false);
-    })
-    .catch(error => {
-      requestStore.setRequestInProgress(requestType, false);
-    });
-}
-
-export function createTask(payload: Task): Promise<void> {
-  requestStore.setRequestInProgress(requestType, true);
-  return api
-    .post(`/tasks`, payload)
-    .then(res => {
-      const task = res.data;
-      taskStore.addTask(task);
-      requestStore.setRequestInProgress(requestType, false);
-    })
-    .catch(error => {
-      requestStore.setRequestInProgress(requestType, false);
-    });
-}
-
-export function deleteTask(id: string) {
-  requestStore.setRequestInProgress(requestType, true);
-  return api
-    .delete(`/tasks/${id}`)
-    .then(res => {
-      console.log(`deletTask: ${JSON.stringify(res.data)}`);
-      if (!_.isEmpty(res.data)) {
-        taskStore.deleteTaskById(id);
-        requestStore.setRequestInProgress(requestType, false);
+export function useFetchTasks(category: string, paginationParams: string = `page=1&limit=15`) {
+  const queryKey = useRef([] as string[]);
+  queryKey.current = ["tasks", category, paginationParams];
+  const { status, error, resolvedData } = usePaginatedQuery(
+    [`tasks`, category, paginationParams],
+    (key, _category, _paginationParams) =>
+      api.get(`/${key}?category=${_category}&${_paginationParams}`).then(res => res.data),
+    {
+      initialData: {
+        items: [],
+        next: "",
+        previous: "",
+        pageCount: 0
       }
-    })
-    .catch(error => {
-      requestStore.setRequestInProgress(requestType, false);
-    });
+    }
+  );
+
+  const { items, next, previous, pageCount } = resolvedData;
+  useEffect(() => {
+    if (status === "success") {
+      taskStore.addTaskList(items);
+      requestStore.setCurrentQueryKey(queryKey.current);
+    }
+  }, [status, items]);
+
+  return { items, next, previous, pageCount, status, error };
+}
+
+interface IUpdateTaskMutationVariable {
+  task: ITask;
+}
+
+export function useUpdateTask() {
+  const [updateTask, { data, error, status }] = useMutation<ITask, IUpdateTaskMutationVariable>(
+    ({ task }) => api.put(`/tasks/${task.id}`, task).then(res => res.data),
+    {
+      onSuccess: () => {
+        queryCache.invalidateQueries(requestStore.currentQueryKey);
+      }
+    }
+  );
+
+  useEffect(() => {
+    if (status === "success") {
+      const task = data as ITask;
+      taskStore.updateTask(task);
+    }
+  }, [status, data]);
+
+  return { updateTask, status, data, error };
+}
+
+interface ICreateTaskMutationVariable {
+  task: INewTask;
+}
+
+export function useCreateTask() {
+  const [createTask, { data, error, status }] = useMutation<ITask, ICreateTaskMutationVariable>(
+    ({ task }) => api.post(`/tasks`, task).then(res => res.data),
+    {
+      onSuccess: () => {
+        queryCache.invalidateQueries(requestStore.currentQueryKey);
+      }
+    }
+  );
+
+  useEffect(() => {
+    if (status === "success") {
+      const task = data as ITask;
+      taskStore.addTask(task);
+    }
+  }, [status, data]);
+
+  return { createTask, status, data, error };
+}
+
+export function useDeleteTaskById(id: string) {
+  const [createTask, { error, status }] = useMutation(_payload =>
+    api.delete(`/tasks/${id}`).then(res => res.data)
+  );
+
+  useEffect(() => {
+    if (status === "success") {
+      taskStore.deleteTaskById(id);
+    }
+  }, [status]);
+
+  return { createTask, status, error };
 }

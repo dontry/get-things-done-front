@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Layout } from "antd";
 import { observer } from "mobx-react";
 import Sidebar from "./components/Sidebar";
@@ -10,14 +10,17 @@ import WithMessagePopup from "./components/WithMessagePopup";
 import { MessageType } from "./types";
 import { ReactQueryDevtools } from "react-query-devtools";
 import "./App.css";
+import { ReactQueryConfigProvider } from "react-query";
 
 const { Header, Content, Footer } = Layout;
+
+const queryConfig = { queries: { refetchOnWindowFocus: false } };
 
 const App: React.FC<any> = props => {
   const { match } = props;
   const TaskboardWithMessage = WithMessagePopup(TaskBoard, MessageType.NETWORK);
   return (
-    <>
+    <ReactQueryConfigProvider config={queryConfig}>
       <Layout style={{ height: "100vh" }}>
         <Header>
           <UserIcon />
@@ -41,7 +44,7 @@ const App: React.FC<any> = props => {
         </Layout>
       </Layout>
       <ReactQueryDevtools initialIsOpen />
-    </>
+    </ReactQueryConfigProvider>
   );
 };
 

@@ -1,4 +1,4 @@
-import { Attribute, Priority, INewTask, INote, IRepeater, IReminder } from "../types/index";
+import { Attribute, Priority, INewTask, INote, IRepeater, IReminder, ITask } from "../types/index";
 
 class Task {
   private title: string;
@@ -68,7 +68,7 @@ class Task {
     this.hidden = hidden;
   }
 
-  public toJson() {
+  public toJson(): INewTask {
     return {
       title: this.title,
       attribute: this.attribute,
@@ -85,7 +85,12 @@ class Task {
       archived: this.archived,
       tags: this.tags,
       note: this.note,
-      project: this.project
+      project: this.project,
+      userId: this.userId,
+      hidden: this.hidden,
+      source: this.source,
+      reminders: this.reminders,
+      repeaters: this.repeaters
     };
   }
 }

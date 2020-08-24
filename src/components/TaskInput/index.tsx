@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { Layout, Form, Input, Button } from "antd";
 import Task from "../../classes/Task";
 import * as taskAction from "../../actions/taskAction";
-import { Attribute } from "../../types/index";
+import { Attribute, ITask, INewTask } from "../../types/index";
 
 const AddButton = styled(Button)`
   font-size: 14px;
@@ -32,6 +32,8 @@ interface ITaskInputProps {
 
 const TaskInput = ({ type, userId }: ITaskInputProps) => {
   const { newTaskTitle, setTaskTitle } = useNewTaskTitle();
+
+  const { createTask } = taskAction.useCreateTask();
   return (
     <Form onSubmit={_handleSubmit}>
       <Layout style={{ backgroundColor: "#fff" }}>
@@ -63,18 +65,18 @@ const TaskInput = ({ type, userId }: ITaskInputProps) => {
     }
   }
 
-  async function createNewTask(title: string, type: string, userId: string): Promise<void> {
+  async function createNewTask(_title: string, _type: string, _userId: string): Promise<void> {
     if (newTaskTitle === "") {
       return;
     }
 
     let newTask: Task;
-    switch (type) {
+    switch (_type) {
       case "today":
         newTask = new Task({
           title: newTaskTitle,
           attribute: "plan",
-          userId,
+          userId: _userId,
           startAt: Date.now()
         });
         break;
@@ -83,11 +85,11 @@ const TaskInput = ({ type, userId }: ITaskInputProps) => {
       default:
         newTask = new Task({
           title: newTaskTitle,
-          attribute: type as Attribute,
-          userId
+          attribute: _type as Attribute,
+          userId: _userId
         });
     }
-    await taskAction.createTask(newTask);
+    createTask({ task: newTask.toJson() as INewTask });
     setTaskTitle("");
   }
 };

@@ -1,5 +1,3 @@
-import React from "react";
-import { Card } from "antd";
 import { DroppableProvided } from "react-beautiful-dnd";
 import styled, { StyledFunction } from "styled-components";
 

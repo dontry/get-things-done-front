@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { Droppable } from "react-beautiful-dnd";
 import TaskItem from "./TaskItem";
 import { TaskListContainer, TaskListBody } from "./style";
@@ -8,15 +8,15 @@ interface ITaskListProps {
   id: string;
   tasks: ITask[];
   index?: number;
-  type: string;
+  category: string;
 }
 
-const TaskList = ({ id, tasks, index = 0, type }: ITaskListProps) => {
+const TaskList = ({ id, tasks, category }: ITaskListProps) => {
   return (
-    <Droppable droppableId={id} type={type}>
+    <Droppable droppableId={id} type={category}>
       {provided => (
         <TaskListContainer {...provided.droppableProps} ref={provided.innerRef}>
-          <InnerList type={type} tasks={tasks} />
+          <InnerList category={category} tasks={tasks} />
         </TaskListContainer>
       )}
     </Droppable>
@@ -24,11 +24,11 @@ const TaskList = ({ id, tasks, index = 0, type }: ITaskListProps) => {
 };
 
 interface IInnerListProps {
-  type: string;
+  category: string;
   tasks: ITask[];
 }
 
-const InnerList = React.memo(({ tasks, type }: IInnerListProps) => {
+const InnerList = memo(({ tasks, category: type }: IInnerListProps) => {
   return (
     <TaskListBody>
       {tasks.map((task, index) => (

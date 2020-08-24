@@ -1,15 +1,12 @@
-import React, { useState, useEffect, useRef, memo } from "react";
-import { inject, observer } from "mobx-react";
-import { RouteComponentProps } from "react-router";
-import { Layout, Form, Input, Spin } from "antd";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
+import { Form, Input, Spin, Pagination } from "antd";
 import styled from "styled-components";
 import { DragDropContext } from "react-beautiful-dnd";
 import TaskList from "../components/TaskList/TaskList";
 import TaskInput from "../components/TaskInput";
 import * as taskAction from "../actions/taskAction";
-import Task from "../classes/Task";
-import { ITask, RequestType } from "../types";
 import Mask from "../components/Mask";
+import { inject, observer } from "mobx-react";
 
 const Container = styled.div`
   position: relative;
@@ -18,64 +15,45 @@ const Container = styled.div`
   overflow: auto;
 `;
 
-interface ITaskList {
-  id: string;
-  title: string;
-  taskIds: string[];
-}
-
-const useTaskList = (initialList: any[]) => {
-  const [list, setList] = useState(initialList);
-  return { list, setList };
-};
-
 const inputVisibleType = ["inbox", "today", "next", "scheduled", "someday", "reference"];
 
-// const useKeyDown = (map:string[], defaultValue: string, callback: () =>{}) => {
-//   const [match, setMatch] = useState(defaultValue);
-//   useEffect(() => {
-//     const handleKey = async ({ key }: any): Promise<void> => {
-//       setMatch(prevMatch =>
-//         Object.keys(map).some(k => k === key) ? map[key] : prevMatch
-//       );
-//       await callback();
-//     };
-//     document.addEventListener("keydown", handleKey);
-//     return () => document.removeEventListener("keydown", handleKey);
-//   }, []);
-//   return {match, setMatch};
-// };
-
 interface ITaskBoardProps {
-  type: string;
-  tasks: ITask[];
-  fetching: boolean;
+  category: string;
 }
 
-const TaskBoard = ({ type, tasks, fetching }: ITaskBoardProps) => {
-  // const isMounted = useRef(true);
-  // const taskIds = tasks.map(task => task.id);
-  // const { list, setList } = useTaskList(taskIds);
-  const isTaskInputVisible = checkTaskInputVisibility(type);
+const TaskBoard = ({ category }: ITaskBoardProps) => {
+  const isTaskInputVisible = useMemo(() => {
+    return inputVisibleType.includes(category);
+  }, [category]);
 
-  taskAction.fetchAllTasks();
+  const [pageIndex, setPageIndex] = useState(1);
+  const paginationParams = useMemo(() => `page=${pageIndex}&limit=15`, [pageIndex]);
+
+  const { status, items, pageCount } = taskAction.useFetchTasks(category, paginationParams);
 
   return (
     <Container>
       {isTaskInputVisible && (
         <Form>
-          <TaskInput type={type} />
+          <TaskInput type={category} />
         </Form>
       )}
       <DragDropContext onDragEnd={onDragEnd}>
-        {fetching ? (
+        {status === "loading" ? (
           <Mask>
             <Spin size="large" />
           </Mask>
         ) : (
-            <TaskList id={type} type={type} tasks={tasks} />
-          )}
+          <TaskList id={category} category={category} tasks={items} />
+        )}
       </DragDropContext>
+      {pageCount > 0 && (
+        <Pagination
+          defaultCurrent={1}
+          total={pageCount}
+          onChange={handlePaginationChange}
+        ></Pagination>
+      )}
     </Container>
   );
 
@@ -95,44 +73,11 @@ const TaskBoard = ({ type, tasks, fetching }: ITaskBoardProps) => {
     // setList(list);
   }
 
-  function checkTaskInputVisibility(type: string): boolean {
-    return inputVisibleType.includes(type);
+  function handlePaginationChange(page: number) {
+    useCallback(() => {
+      setPageIndex(page);
+    }, [page]);
   }
 };
 
-export default inject("taskStore", "requestStore")(
-  observer(({ taskStore, requestStore, userStore, match, ...rest }) => {
-    const { type } = match.params;
-    let tasks = [];
-    switch (type) {
-      case "inbox":
-        tasks = taskStore.inboxTasks;
-        break;
-      case "plan":
-      case "scheduled":
-        tasks = taskStore.planTasks;
-        break;
-      case "next":
-        tasks = taskStore.nextTasks;
-        break;
-      case "today":
-        tasks = taskStore.todayTasks;
-        break;
-      case "completed":
-        tasks = taskStore.completedTasks;
-        break;
-      case "deleted":
-        tasks = taskStore.deletedTasks;
-        break;
-      default:
-        break;
-    }
-    return (
-      <TaskBoard
-        type={type}
-        tasks={tasks}
-        fetching={requestStore.getRequestByType(RequestType.TASK)}
-      />
-    );
-  })
-);
+export default inject()(observer(({ match }) => <TaskBoard category={match.params.type} />));

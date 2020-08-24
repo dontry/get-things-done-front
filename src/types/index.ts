@@ -68,7 +68,7 @@ export interface ITask {
   estimatedTime: number;
   context?: string;
   spentTime?: number;
-  allDay: boolean;
+  allDay: number;
   deleted: number;
   archived: number;
   tags: string[];

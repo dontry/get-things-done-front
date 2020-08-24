@@ -127,6 +127,20 @@ export class TaskStore implements ITaskStore {
 
   @action
   /**
+   * updateTaskById
+   */
+  public updateTask(task: ITask) {
+    if (!task.id) {
+      return;
+    }
+
+    if (this.tasks.get(task.id)) {
+      this.tasks.set(task.id, task);
+    }
+  }
+
+  @action
+  /**
    * deleteTaskById
    */
   public deleteTaskById(id: string): void {
