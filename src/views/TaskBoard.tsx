@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { Form, Input, Spin, Pagination } from "antd";
-import styled from "styled-components";
-import { DragDropContext } from "react-beautiful-dnd";
-import TaskList from "../components/TaskList/TaskList";
-import TaskInput from "../components/TaskInput";
-import * as taskAction from "../actions/taskAction";
-import Mask from "../components/Mask";
-import { inject, observer } from "mobx-react";
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { Form, Input, Spin, Pagination } from 'antd';
+import styled from 'styled-components';
+import { DragDropContext } from 'react-beautiful-dnd';
+import TaskList from '../components/TaskList/TaskList';
+import TaskInput from '../components/TaskInput';
+import * as taskAction from '../actions/taskAction';
+import Mask from '../components/Mask';
+import { inject, observer } from 'mobx-react';
 
 const Container = styled.div`
   position: relative;
@@ -15,7 +15,7 @@ const Container = styled.div`
   overflow: auto;
 `;
 
-const inputVisibleType = ["inbox", "today", "next", "scheduled", "someday", "reference"];
+const inputVisibleType = ['inbox', 'today', 'next', 'scheduled', 'someday', 'reference'];
 
 interface ITaskBoardProps {
   category: string;
@@ -39,9 +39,9 @@ const TaskBoard = ({ category }: ITaskBoardProps) => {
         </Form>
       )}
       <DragDropContext onDragEnd={onDragEnd}>
-        {status === "loading" ? (
+        {status === 'loading' ? (
           <Mask>
-            <Spin size="large" />
+            <Spin size='large' />
           </Mask>
         ) : (
           <TaskList id={category} category={category} tasks={items} />

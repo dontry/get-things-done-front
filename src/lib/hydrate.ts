@@ -1,4 +1,4 @@
-import { create } from "mobx-persist";
+import { create } from 'mobx-persist';
 
 const _hydrate = create({
   storage: window.localStorage,

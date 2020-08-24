@@ -1,5 +1,5 @@
 // Task types
-export type Attribute = "plan" | "next" | "inbox" | "noplan" | "reference";
+export type Attribute = 'plan' | 'next' | 'inbox' | 'noplan' | 'reference';
 
 export enum Priority {
   LOWEST = 1,
@@ -10,14 +10,14 @@ export enum Priority {
 }
 
 export enum RequestType {
-  USER = "USER",
-  TASK = "TASK",
-  PROJECT = "PROJECT",
-  REFERENCE = "REFERENCE"
+  USER = 'USER',
+  TASK = 'TASK',
+  PROJECT = 'PROJECT',
+  REFERENCE = 'REFERENCE'
 }
 
 export enum MessageType {
-  NETWORK = "@error/NETWORK"
+  NETWORK = '@error/NETWORK'
 }
 
 export interface ILoginCredential {
@@ -40,9 +40,9 @@ interface IFullName {
 }
 
 export enum Sex {
-  MALE = "MALE",
-  FEMALE = "FEMALE",
-  OTHER = "OTHER"
+  MALE = 'MALE',
+  FEMALE = 'FEMALE',
+  OTHER = 'OTHER'
 }
 
 export interface IUser {
@@ -106,12 +106,12 @@ export interface INote {
 }
 
 export enum Frequency {
-  HOURLY = "HOURLY",
-  DAILY = "DAILY",
-  WEEKLY = "WEEKLY",
-  MONTHLY = "MONTHLY",
-  QUARTERLY = "QUARTERLY",
-  YEARLY = "YEARLY"
+  HOURLY = 'HOURLY',
+  DAILY = 'DAILY',
+  WEEKLY = 'WEEKLY',
+  MONTHLY = 'MONTHLY',
+  QUARTERLY = 'QUARTERLY',
+  YEARLY = 'YEARLY'
 }
 
 export interface IRepeater {

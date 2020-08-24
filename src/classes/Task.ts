@@ -1,4 +1,4 @@
-import { Attribute, Priority, INewTask, INote, IRepeater, IReminder, ITask } from "../types/index";
+import { Attribute, Priority, INewTask, INote, IRepeater, IReminder, ITask } from '../types/index';
 
 class Task {
   private title: string;
@@ -26,14 +26,14 @@ class Task {
 
   constructor({
     title,
-    attribute = "inbox",
+    attribute = 'inbox',
     userId,
     priority = Priority.MEDIUM,
     startAt = 0,
     endAt = 0,
     completedAt = 0,
     estimatedTime = 0,
-    context = "",
+    context = '',
     spentTime = 0,
     allDay = 1,
     hidden = 0,
@@ -42,7 +42,7 @@ class Task {
     tags = [],
     repeaters = [],
     reminders = [],
-    source = "",
+    source = '',
     note,
     project
   }: INewTask) {

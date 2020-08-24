@@ -1,7 +1,7 @@
-import styled from "styled-components";
-import Editable from "../EditableComponent";
-import { Select, Form, Layout } from "antd";
-import { Editor } from "draft-js";
+import styled from 'styled-components';
+import Editable from '../EditableComponent';
+import { Select, Form, Layout } from 'antd';
+import { Editor } from 'draft-js';
 
 export const EditorWrapper = styled.div`
   border: 1px solid #ccc;
@@ -20,7 +20,7 @@ export const EditorControlWrapper = styled.div`
   border-bottom: 1px solid #ccc;
 `;
 
-const Title = Editable("h2");
+const Title = Editable('h2');
 
 export const EditorTitle = styled(Title)`
   width: 100%;

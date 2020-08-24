@@ -1,5 +1,5 @@
-import { observable, action } from "mobx";
-import { MessageType } from "../types";
+import { observable, action } from 'mobx';
+import { MessageType } from '../types';
 
 class MessageStore {
   @observable public messages = observable.map({});

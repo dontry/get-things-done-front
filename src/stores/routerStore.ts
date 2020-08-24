@@ -1,4 +1,4 @@
-import { RouterStore } from "mobx-react-router";
+import { RouterStore } from 'mobx-react-router';
 
 const routerStore = new RouterStore();
 

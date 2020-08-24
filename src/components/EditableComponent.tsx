@@ -1,4 +1,4 @@
-import React, { Component, SyntheticEvent, createRef, ComponentClass } from "react";
+import React, { Component, SyntheticEvent, createRef, ComponentClass } from 'react';
 
 interface IEditableProps {
   value: string;
@@ -34,8 +34,8 @@ const Editable = (WrappedComponent: ComponentClass<any> | string) => {
         const node = this.editableRef.current!;
         const textContent = node.textContent!;
         if (onChange && this.isValueChanged()) {
-          if (textContent === "" && isAllowedEmpty === false) {
-            alert("Title cannot be empty.");
+          if (textContent === '' && isAllowedEmpty === false) {
+            alert('Title cannot be empty.');
             onChange(value);
             node.textContent = this.props.value;
           } else {
@@ -56,8 +56,8 @@ const Editable = (WrappedComponent: ComponentClass<any> | string) => {
 
     public handleKeyDown = (e: KeyboardEvent) => {
       switch (e.key) {
-        case "Enter":
-        case "Escape":
+        case 'Enter':
+        case 'Escape':
           this.save();
           break;
         default:
@@ -74,7 +74,7 @@ const Editable = (WrappedComponent: ComponentClass<any> | string) => {
       }
       return (
         <WrappedComponent
-          className={editing ? "editing" : ""}
+          className={editing ? 'editing' : ''}
           onClick={editOnClick ? this.edit : undefined}
           onSelect={editOnClick ? this.edit : undefined}
           contentEditable={editing}
@@ -83,7 +83,7 @@ const Editable = (WrappedComponent: ComponentClass<any> | string) => {
           onKeyDown={this.handleKeyDown}
           {...componentProps}
         >
-          {this.props.value || "Title"}
+          {this.props.value || 'Title'}
         </WrappedComponent>
       );
     }

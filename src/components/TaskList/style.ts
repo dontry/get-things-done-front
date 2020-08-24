@@ -1,5 +1,5 @@
-import { DroppableProvided } from "react-beautiful-dnd";
-import styled, { StyledFunction } from "styled-components";
+import { DroppableProvided } from 'react-beautiful-dnd';
+import styled, { StyledFunction } from 'styled-components';
 
 interface ITaskItemContainerProps extends DroppableProvided {
   isDragging: boolean;
@@ -11,8 +11,8 @@ export const TaskItemContainer = styled.div<any>`
   justify-content: space-between;
   width: 100%;
   margin-bottom: 8px;
-  border: ${props => (props.isDragging ? "1px solid #1890ff" : "1px solid #acacac")};
-  border-left: ${props => (props.isDragging ? "5px solid #1890ff" : "5px solid #acacac")};
+  border: ${props => (props.isDragging ? '1px solid #1890ff' : '1px solid #acacac')};
+  border-left: ${props => (props.isDragging ? '5px solid #1890ff' : '5px solid #acacac')};
   padding: 10px 8px;
   background-color: #fff;
 `;

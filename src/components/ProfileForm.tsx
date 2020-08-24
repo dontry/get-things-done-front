@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { FormComponentProps } from "antd/lib/form/Form";
-import { IUser } from "../types";
-import { formItemLayout, footerFormItemLayout } from "../constants/layout";
-import { Form, Input, Button, Select } from "antd";
+import React, { useState } from 'react';
+import { FormComponentProps } from 'antd/lib/form/Form';
+import { IUser } from '../types';
+import { formItemLayout, footerFormItemLayout } from '../constants/layout';
+import { Form, Input, Button, Select } from 'antd';
 
 const { Option } = Select;
 
@@ -20,52 +20,52 @@ const RawProfileForm: React.FC<IFormProps & FormComponentProps> = props => {
 
   return (
     <Form onSubmit={_handleSubmit}>
-      <Form.Item {...formItemLayout} label="Username">
+      <Form.Item {...formItemLayout} label='Username'>
         <Input disabled value={username} />
       </Form.Item>
-      <Form.Item {...formItemLayout} label="E-mail">
+      <Form.Item {...formItemLayout} label='E-mail'>
         <Input disabled value={email} />
       </Form.Item>
-      <Form.Item {...formItemLayout} label="First Name">
-        {getFieldDecorator("firstName", {
+      <Form.Item {...formItemLayout} label='First Name'>
+        {getFieldDecorator('firstName', {
           initialValue: firstName,
-          rules: [{ required: true, message: "Input your first name." }]
-        })(<Input type="string" />)}
+          rules: [{ required: true, message: 'Input your first name.' }]
+        })(<Input type='string' />)}
       </Form.Item>
-      <Form.Item {...formItemLayout} label="Last Name">
-        {getFieldDecorator("lastName", {
+      <Form.Item {...formItemLayout} label='Last Name'>
+        {getFieldDecorator('lastName', {
           initialValue: lastName,
-          rules: [{ required: true, message: "Input your last name." }]
-        })(<Input type="string" />)}
+          rules: [{ required: true, message: 'Input your last name.' }]
+        })(<Input type='string' />)}
       </Form.Item>
-      <Form.Item {...formItemLayout} label="Age">
-        {getFieldDecorator("age", {
+      <Form.Item {...formItemLayout} label='Age'>
+        {getFieldDecorator('age', {
           initialValue: age,
           rules: [
-            { required: true, message: "Input your age." },
+            { required: true, message: 'Input your age.' },
             {
               validator: _validateAge
             }
           ]
-        })(<Input type="number" />)}
+        })(<Input type='number' />)}
       </Form.Item>
-      <Form.Item {...formItemLayout} label="Sex">
-        {getFieldDecorator("sex", {
+      <Form.Item {...formItemLayout} label='Sex'>
+        {getFieldDecorator('sex', {
           initialValue: sex
         })(
           <Select>
-            <Option value="" />
-            <Option value="male">Male</Option>
-            <Option value="female">Female</Option>
-            <Option value="other">Other</Option>
+            <Option value='' />
+            <Option value='male'>Male</Option>
+            <Option value='female'>Female</Option>
+            <Option value='other'>Other</Option>
           </Select>
         )}
       </Form.Item>
       <Form.Item {...footerFormItemLayout}>
-        <Button type="default" htmlType="reset" className="login-form-button">
+        <Button type='default' htmlType='reset' className='login-form-button'>
           Cancel
         </Button>
-        <Button type="primary" htmlType="submit" className="login-form-button">
+        <Button type='primary' htmlType='submit' className='login-form-button'>
           Update
         </Button>
       </Form.Item>
@@ -86,7 +86,7 @@ const RawProfileForm: React.FC<IFormProps & FormComponentProps> = props => {
 
   function _validateAge(rule: any, value: number, callback: (s?: string) => void): void {
     if (value < 0) {
-      callback("Age value should be positive.");
+      callback('Age value should be positive.');
     } else {
       callback();
     }
@@ -94,7 +94,7 @@ const RawProfileForm: React.FC<IFormProps & FormComponentProps> = props => {
 
   function _validateName(rule: any, value: number, callback: (s?: string) => void): void {
     if (value < 0) {
-      callback("Age value should be positive.");
+      callback('Age value should be positive.');
     } else {
       callback();
     }

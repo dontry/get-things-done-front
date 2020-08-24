@@ -1,7 +1,7 @@
-import React, { useState, PureComponent, createRef } from "react";
-import { Form, Input, Menu, Dropdown, Icon, Select, DatePicker, Calendar, Layout } from "antd";
-import { FormComponentProps } from "antd/lib/form";
-import { formItemLayout } from "../../constants/layout";
+import React, { useState, PureComponent, createRef } from 'react';
+import { Form, Input, Menu, Dropdown, Icon, Select, DatePicker, Calendar, Layout } from 'antd';
+import { FormComponentProps } from 'antd/lib/form';
+import { formItemLayout } from '../../constants/layout';
 
 import {
   Editor,
@@ -12,7 +12,7 @@ import {
   DraftInlineStyle,
   DraftInlineStyleType,
   DraftHandleValue
-} from "draft-js";
+} from 'draft-js';
 import {
   EditorWrapper,
   EditorControlWrapper,
@@ -21,12 +21,12 @@ import {
   CalendarWrapper,
   EditorSider,
   EditorContentWrapper
-} from "./style";
-import { BlockStyleControls, InlinStyleControls } from "./StyleControls";
-import { ITask, Priority } from "../../types";
-import { SIDEBAR_OPTIONS, CONTEXT, TAGS } from "../../constants/misc";
-import { captialize } from "../../lib/capitalize";
-import moment from "moment";
+} from './style';
+import { BlockStyleControls, InlinStyleControls } from './StyleControls';
+import { ITask, Priority } from '../../types';
+import { SIDEBAR_OPTIONS, CONTEXT, TAGS } from '../../constants/misc';
+import { capitalize } from '../../lib/capitalize';
+import moment from 'moment';
 
 const MAX_DEPTH = 4;
 const { Content, Header } = Layout;
@@ -53,7 +53,7 @@ class CategorySelect extends PureComponent<ICategorySelectProps, ICategorySelect
 
   public _handleChange = (value: string): void => {
     this.props.onChange(value);
-    if (value !== "scheduled") {
+    if (value !== 'scheduled') {
       this.setState({ open: false });
       this.select!.blur();
     }
@@ -70,31 +70,31 @@ class CategorySelect extends PureComponent<ICategorySelectProps, ICategorySelect
   public _handleCalendarChange = (date?: moment.Moment) => {
     if (date) {
       const timestamp: number = date.unix();
-      console.log("timestamp:", timestamp);
+      console.log('timestamp:', timestamp);
     }
   };
 
   public render() {
     const { value } = this.props;
     const { open } = this.state;
-    console.log("value:", value);
+    console.log('value:', value);
     return (
       <SelectWrapper>
         <Select
           ref={dom => {
             this.select = dom;
           }}
-          defaultValue="inbox"
+          defaultValue='inbox'
           open={open}
           onFocus={this._handleFocus}
           onBlur={this._handleBlur}
           onChange={this._handleChange}
         >
           {SIDEBAR_OPTIONS.map(option => (
-            <Select.Option value={option}>{captialize(option)}</Select.Option>
+            <Select.Option value={option}>{capitalize(option)}</Select.Option>
           ))}
         </Select>
-        {value === "scheduled" && (
+        {value === 'scheduled' && (
           <CalendarWrapper>
             <Calendar fullscreen={false} onChange={this._handleCalendarChange} />
           </CalendarWrapper>
@@ -107,7 +107,7 @@ class CategorySelect extends PureComponent<ICategorySelectProps, ICategorySelect
 const TaskEditor: React.FC<ITask & FormComponentProps> = ({ title }) => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
-  const [taskCategory, setTaskCategory] = useState("inbox");
+  const [taskCategory, setTaskCategory] = useState('inbox');
 
   const _onEditorStateChange = (_editorState: EditorState): void => {
     setEditorState(_editorState);
@@ -120,9 +120,9 @@ const TaskEditor: React.FC<ITask & FormComponentProps> = ({ title }) => {
     const newState = RichUtils.handleKeyCommand(_editorState, command);
     if (newState) {
       _onEditorStateChange(_editorState);
-      return "handled";
+      return 'handled';
     } else {
-      return "not-handled";
+      return 'not-handled';
     }
   };
 
@@ -150,14 +150,14 @@ const TaskEditor: React.FC<ITask & FormComponentProps> = ({ title }) => {
   return (
     <Form>
       <Layout>
-        <Header style={{ background: "#f0f2f5", height: "48px", marginTop: "10px" }}>
-          <Form.Item style={{ margin: "0 auto" }}>
+        <Header style={{ background: '#f0f2f5', height: '48px', marginTop: '10px' }}>
+          <Form.Item style={{ margin: '0 auto' }}>
             <EditorTitle value={title} />
           </Form.Item>
         </Header>
         <Layout style={{ marginTop: 0 }}>
-          <Content style={{ padding: "0 10px", marginTop: "8px" }}>
-            <Form.Item label="Note">
+          <Content style={{ padding: '0 10px', marginTop: '8px' }}>
+            <Form.Item label='Note'>
               <EditorWrapper>
                 <EditorControlWrapper>
                   <BlockStyleControls editorState={editorState} onToggle={_toggleBlockType} />
@@ -173,11 +173,11 @@ const TaskEditor: React.FC<ITask & FormComponentProps> = ({ title }) => {
               </EditorWrapper>
             </Form.Item>
           </Content>
-          <EditorSider style={{ background: "#f0f2f5", margin: "34px 10px 0 5px" }}>
+          <EditorSider style={{ background: '#f0f2f5', margin: '34px 10px 0 5px' }}>
             <Form.Item
               label={
                 <span>
-                  <Icon type="bars" /> Category
+                  <Icon type='bars' /> Category
                 </span>
               }
             >
@@ -186,7 +186,7 @@ const TaskEditor: React.FC<ITask & FormComponentProps> = ({ title }) => {
             <Form.Item
               label={
                 <span>
-                  <Icon type="arrow-up" /> Priority
+                  <Icon type='arrow-up' /> Priority
                 </span>
               }
             >
@@ -201,7 +201,7 @@ const TaskEditor: React.FC<ITask & FormComponentProps> = ({ title }) => {
             <Form.Item
               label={
                 <span>
-                  <Icon type="environment" /> Context
+                  <Icon type='environment' /> Context
                 </span>
               }
             >
@@ -214,11 +214,11 @@ const TaskEditor: React.FC<ITask & FormComponentProps> = ({ title }) => {
             <Form.Item
               label={
                 <span>
-                  <Icon type="tag" /> Tags
+                  <Icon type='tag' /> Tags
                 </span>
               }
             >
-              <Select mode="multiple" placeholder="Add label">
+              <Select mode='multiple' placeholder='Add label'>
                 {TAGS.map(tag => (
                   <Select.Option value={tag}>{tag}</Select.Option>
                 ))}
@@ -227,7 +227,7 @@ const TaskEditor: React.FC<ITask & FormComponentProps> = ({ title }) => {
             <Form.Item
               label={
                 <span>
-                  <Icon type="bell" /> Reminders
+                  <Icon type='bell' /> Reminders
                 </span>
               }
             >

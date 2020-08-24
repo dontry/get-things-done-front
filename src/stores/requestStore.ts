@@ -1,7 +1,7 @@
-import { observable, action, computed } from "mobx";
-import { RequestType } from "../types";
+import { observable, action, computed } from 'mobx';
+import { RequestType } from '../types';
 
-const CURRENT_QUERY_KEY = "currentQueryKey";
+const CURRENT_QUERY_KEY = 'currentQueryKey';
 
 class RequestStore {
   @observable public requests = observable.map({});

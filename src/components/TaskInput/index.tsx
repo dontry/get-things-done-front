@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { inject, observer } from "mobx-react";
-import styled from "styled-components";
-import { Layout, Form, Input, Button } from "antd";
-import Task from "../../classes/Task";
-import * as taskAction from "../../actions/taskAction";
-import { Attribute, ITask, INewTask } from "../../types/index";
+import React, { useState, useEffect } from 'react';
+import { inject, observer } from 'mobx-react';
+import styled from 'styled-components';
+import { Layout, Form, Input, Button } from 'antd';
+import Task from '../../classes/Task';
+import * as taskAction from '../../actions/taskAction';
+import { Attribute, ITask, INewTask } from '../../types/index';
 
 const AddButton = styled(Button)`
   font-size: 14px;
@@ -21,7 +21,7 @@ const StyledInput = styled(Input)`
 `;
 
 const useNewTaskTitle = () => {
-  const [newTaskTitle, setTaskTitle] = useState("");
+  const [newTaskTitle, setTaskTitle] = useState('');
   return { newTaskTitle, setTaskTitle };
 };
 
@@ -36,11 +36,11 @@ const TaskInput = ({ type, userId }: ITaskInputProps) => {
   const { createTask } = taskAction.useCreateTask();
   return (
     <Form onSubmit={_handleSubmit}>
-      <Layout style={{ backgroundColor: "#fff" }}>
-        <Form.Item style={{ margin: "16px 8px" }}>
+      <Layout style={{ backgroundColor: '#fff' }}>
+        <Form.Item style={{ margin: '16px 8px' }}>
           <StyledInput
             value={newTaskTitle}
-            placeholder="Add a new task"
+            placeholder='Add a new task'
             onKeyPress={_handleKeyPress}
             onChange={_handleChange}
             addonAfter={<AddButton onClick={_handleSubmit}>+</AddButton>}
@@ -60,28 +60,28 @@ const TaskInput = ({ type, userId }: ITaskInputProps) => {
   }
 
   function _handleKeyPress(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       createNewTask(newTaskTitle, type, userId);
     }
   }
 
   async function createNewTask(_title: string, _type: string, _userId: string): Promise<void> {
-    if (newTaskTitle === "") {
+    if (newTaskTitle === '') {
       return;
     }
 
     let newTask: Task;
     switch (_type) {
-      case "today":
+      case 'today':
         newTask = new Task({
           title: newTaskTitle,
-          attribute: "plan",
+          attribute: 'plan',
           userId: _userId,
           startAt: Date.now()
         });
         break;
-      case "inbox":
-      case "next":
+      case 'inbox':
+      case 'next':
       default:
         newTask = new Task({
           title: newTaskTitle,
@@ -90,11 +90,11 @@ const TaskInput = ({ type, userId }: ITaskInputProps) => {
         });
     }
     createTask({ task: newTask.toJson() as INewTask });
-    setTaskTitle("");
+    setTaskTitle('');
   }
 };
 
-export default inject("userStore")(
+export default inject('userStore')(
   observer(({ userStore, ...rest }) => {
     return <TaskInput userId={userStore.userId} {...rest} />;
   })

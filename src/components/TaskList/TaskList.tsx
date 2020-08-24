@@ -1,8 +1,8 @@
-import React, { memo } from "react";
-import { Droppable } from "react-beautiful-dnd";
-import TaskItem from "./TaskItem";
-import { TaskListContainer, TaskListBody } from "./style";
-import { ITask } from "src/types";
+import React, { memo } from 'react';
+import { Droppable } from 'react-beautiful-dnd';
+import TaskItem from './TaskItem';
+import { TaskListContainer, TaskListBody } from './style';
+import { ITask } from 'src/types';
 
 interface ITaskListProps {
   id: string;

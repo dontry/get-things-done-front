@@ -1,6 +1,6 @@
-import React, { ReactNode } from "react";
-import { Menu, Dropdown, Button, Icon } from "antd";
-import { SelectParam } from "antd/lib/menu";
+import React, { ReactNode } from 'react';
+import { Menu, Dropdown, Button, Icon } from 'antd';
+import { SelectParam } from 'antd/lib/menu';
 
 interface ISideDropdownProps {
   name: string;
@@ -12,7 +12,7 @@ interface ISideDropdownProps {
 const SideDropdown = ({ name, icon, options, onSelect }: ISideDropdownProps) => {
   const menu = renderMenu(options, onSelect);
   return (
-    <Dropdown overlay={menu} placement={"bottomLeft"}>
+    <Dropdown overlay={menu} placement={'bottomLeft'}>
       <Button>
         {icon} {name}
       </Button>

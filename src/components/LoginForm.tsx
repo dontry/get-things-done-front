@@ -1,8 +1,8 @@
-import React from "react";
-import { FormComponentProps } from "antd/lib/form/Form";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { FormComponentProps } from 'antd/lib/form/Form';
+import { Link } from 'react-router-dom';
 
-import { Form, Icon, Input, Button, Checkbox, message } from "antd";
+import { Form, Icon, Input, Button, Checkbox, message } from 'antd';
 
 const footerFormItemLayout = {
   wrapperCol: {
@@ -28,40 +28,40 @@ class RawLoginForm extends React.Component<IFormProps & FormComponentProps> {
     const { form } = this.props;
     const { getFieldDecorator } = form;
     return (
-      <Form onSubmit={this._handleSubmit} className="login-form">
+      <Form onSubmit={this._handleSubmit} className='login-form'>
         <Form.Item>
-          {getFieldDecorator("username", {
-            rules: [{ required: true, message: "Please input your username!" }]
+          {getFieldDecorator('username', {
+            rules: [{ required: true, message: 'Please input your username!' }]
           })(
             <Input
-              prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
-              placeholder="Username"
+              prefix={<Icon type='user' style={{ color: 'rgba(0,0,0,.25)' }} />}
+              placeholder='Username'
             />
           )}
         </Form.Item>
         <Form.Item>
-          {getFieldDecorator("password", {
-            rules: [{ required: true, message: "Please input your Password!" }]
+          {getFieldDecorator('password', {
+            rules: [{ required: true, message: 'Please input your Password!' }]
           })(
             <Input
-              prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
-              type="password"
-              placeholder="Password"
+              prefix={<Icon type='lock' style={{ color: 'rgba(0,0,0,.25)' }} />}
+              type='password'
+              placeholder='Password'
             />
           )}
-          {getFieldDecorator("remember", {
-            valuePropName: "checked",
+          {getFieldDecorator('remember', {
+            valuePropName: 'checked',
             initialValue: true
           })(<Checkbox>Remember me</Checkbox>)}
-          <a className="login-form-forgot" href="">
+          <a className='login-form-forgot' href=''>
             Forgot password
           </a>
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit" className="login-form-button">
+          <Button type='primary' htmlType='submit' className='login-form-button'>
             Log in
           </Button>
-          <span style={{ marginLeft: 15 }}>Or</span> <Link to="/register">Register now!</Link>
+          <span style={{ marginLeft: 15 }}>Or</span> <Link to='/register'>Register now!</Link>
         </Form.Item>
       </Form>
     );

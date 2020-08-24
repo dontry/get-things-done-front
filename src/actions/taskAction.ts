@@ -1,23 +1,23 @@
-import { useEffect, useRef } from "react";
-import { useMutation, usePaginatedQuery, queryCache } from "react-query";
-import requestStore from "../stores/requestStore";
-import taskStore from "../stores/taskStore";
-import api from "../api";
-import { ITask, INewTask } from "../types";
-import _ from "lodash";
+import { useEffect, useRef } from 'react';
+import { useMutation, usePaginatedQuery, queryCache } from 'react-query';
+import requestStore from '../stores/requestStore';
+import taskStore from '../stores/taskStore';
+import { apiService } from '../api';
+import { ITask, INewTask } from '../types';
+import _ from 'lodash';
 
 export function useFetchTasks(category: string, paginationParams: string = `page=1&limit=15`) {
   const queryKey = useRef([] as string[]);
-  queryKey.current = ["tasks", category, paginationParams];
+  queryKey.current = ['tasks', category, paginationParams];
   const { status, error, resolvedData } = usePaginatedQuery(
     [`tasks`, category, paginationParams],
     (key, _category, _paginationParams) =>
-      api.get(`/${key}?category=${_category}&${_paginationParams}`).then(res => res.data),
+      apiService.get(`/${key}?category=${_category}&${_paginationParams}`).then(res => res.data),
     {
       initialData: {
         items: [],
-        next: "",
-        previous: "",
+        next: '',
+        previous: '',
         pageCount: 0
       }
     }
@@ -25,7 +25,7 @@ export function useFetchTasks(category: string, paginationParams: string = `page
 
   const { items, next, previous, pageCount } = resolvedData;
   useEffect(() => {
-    if (status === "success") {
+    if (status === 'success') {
       taskStore.addTaskList(items);
       requestStore.setCurrentQueryKey(queryKey.current);
     }
@@ -40,7 +40,7 @@ interface IUpdateTaskMutationVariable {
 
 export function useUpdateTask() {
   const [updateTask, { data, error, status }] = useMutation<ITask, IUpdateTaskMutationVariable>(
-    ({ task }) => api.put(`/tasks/${task.id}`, task).then(res => res.data),
+    ({ task }) => apiService.put(`/tasks/${task.id}`, task).then(res => res.data),
     {
       onSuccess: () => {
         queryCache.invalidateQueries(requestStore.currentQueryKey);
@@ -49,7 +49,7 @@ export function useUpdateTask() {
   );
 
   useEffect(() => {
-    if (status === "success") {
+    if (status === 'success') {
       const task = data as ITask;
       taskStore.updateTask(task);
     }
@@ -64,7 +64,7 @@ interface ICreateTaskMutationVariable {
 
 export function useCreateTask() {
   const [createTask, { data, error, status }] = useMutation<ITask, ICreateTaskMutationVariable>(
-    ({ task }) => api.post(`/tasks`, task).then(res => res.data),
+    ({ task }) => apiService.post(`/tasks`, task).then(res => res.data),
     {
       onSuccess: () => {
         queryCache.invalidateQueries(requestStore.currentQueryKey);
@@ -73,7 +73,7 @@ export function useCreateTask() {
   );
 
   useEffect(() => {
-    if (status === "success") {
+    if (status === 'success') {
       const task = data as ITask;
       taskStore.addTask(task);
     }
@@ -84,11 +84,11 @@ export function useCreateTask() {
 
 export function useDeleteTaskById(id: string) {
   const [createTask, { error, status }] = useMutation(_payload =>
-    api.delete(`/tasks/${id}`).then(res => res.data)
+    apiService.delete(`/tasks/${id}`).then(res => res.data)
   );
 
   useEffect(() => {
-    if (status === "success") {
+    if (status === 'success') {
       taskStore.deleteTaskById(id);
     }
   }, [status]);
