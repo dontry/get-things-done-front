@@ -1,10 +1,9 @@
-import { observable, action, computed } from "mobx";
-// import { persist } from "mobx-persist";
-import { ITask, Attribute } from "src/types";
-import { isToday } from "date-fns";
-import mapToObject from "../lib/mapToObject";
-import _ from "lodash";
-import fp from "lodash/fp";
+import { observable, action, computed } from 'mobx';
+import { ITask, Attribute } from '../types';
+import mapToObject from '../lib/mapToObject';
+import _ from 'lodash';
+import fp from 'lodash/fp';
+import { isToday } from '../lib/date';
 
 export interface ITaskStore {
   tasks: Map<string, ITask>;
@@ -52,21 +51,21 @@ export class TaskStore implements ITaskStore {
 
   @computed
   public get inboxTasks(): ITask[] {
-    const checkInbox = checkByAttribute("inbox");
+    const checkInbox = checkByAttribute('inbox');
     const getInboxTasks = _.flow(fp.filter(checkActive), fp.filter(checkInbox));
     return getInboxTasks(this.list);
   }
 
   @computed
   public get planTasks(): ITask[] {
-    const checkPlan = checkByAttribute("plan");
+    const checkPlan = checkByAttribute('plan');
     const getPlanTasks = _.flow(fp.filter(checkActive), fp.filter(checkPlan));
     return getPlanTasks(this.list);
   }
 
   @computed
   public get nextTasks(): ITask[] {
-    const checkNext = checkByAttribute("next");
+    const checkNext = checkByAttribute('next');
     const getNextTasks = _.flow(fp.filter(checkActive), fp.filter(checkNext));
     return getNextTasks(this.list);
   }
@@ -127,6 +126,20 @@ export class TaskStore implements ITaskStore {
 
   @action
   /**
+   * updateTaskById
+   */
+  public updateTask(task: ITask) {
+    if (!task.id) {
+      return;
+    }
+
+    if (this.tasks.get(task.id)) {
+      this.tasks.set(task.id, task);
+    }
+  }
+
+  @action
+  /**
    * deleteTaskById
    */
   public deleteTaskById(id: string): void {
@@ -162,8 +175,7 @@ function checkActive(task: ITask): boolean {
 
 // get tasks created or starts today
 function checkToday(task: ITask): boolean {
-  const startDate: Date = new Date(task.startAt);
-  return isToday(startDate);
+  return isToday(task.startAt);
 }
 
 function checkByAttribute(attribute: Attribute): (task: ITask) => boolean {

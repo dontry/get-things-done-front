@@ -13,9 +13,9 @@ export default class PersistanceService {
 
   public load(type: string): void {
     switch (type) {
-      case "local":
+      case 'local':
         this.storage = window.localStorage;
-      case "session":
+      case 'session':
       default:
         this.storage = window.sessionStorage;
     }

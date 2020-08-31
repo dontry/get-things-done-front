@@ -3,7 +3,7 @@ export default function storageMock() {
 
   return {
     setItem(key: string, value: string): void {
-      storage[key] = value || "";
+      storage[key] = value || '';
     },
     getItem(key: string): string {
       return key in storage ? storage[key] : null;

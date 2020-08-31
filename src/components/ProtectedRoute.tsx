@@ -1,16 +1,10 @@
-import React from "react";
-import { Route, Redirect } from "react-router-dom";
-import { observer, inject } from "mobx-react";
-import { LOGIN } from "../constants/pathname";
-import { persistanceService } from "../classes/PersistanceService";
-import _ from "lodash";
-
-/* interface IProtectedRouteProps {
-  authenticated: boolean;
-} */
+import React from 'react';
+import { Route, Redirect } from 'react-router-dom';
+import { LOGIN } from '../constants/pathname';
+import { persistanceService } from '../classes/PersistanceService';
 
 const ProtectedRoute = ({ component: Component, ...rest }: any) => {
-  const token = persistanceService.getItem("access_token");
+  const token = persistanceService.getItem('access_token');
   return (
     <Route
       {...rest}
@@ -18,19 +12,11 @@ const ProtectedRoute = ({ component: Component, ...rest }: any) => {
         token ? (
           <Component {...props} />
         ) : (
-          <Redirect to={{ pathname: LOGIN, state: { from: props.location } }} />
-        )
+            <Redirect to={{ pathname: LOGIN, state: { from: props.location } }} />
+          )
       }
     />
   );
 };
-
-/*  
-inject("userStore")(
-  observer(({ userStore, ...rest }) => {
-    return <ProtectedRoute authenticated={} {...rest} />;
-  })
-); 
-*/
 
 export default ProtectedRoute;

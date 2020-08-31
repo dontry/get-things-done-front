@@ -1,13 +1,13 @@
-import api from "../../api";
-import { ILoginCredential } from "../../types";
-import userStore from "../../stores/userStore";
-import { persistanceService } from "../../classes/PersistanceService";
+import { apiService } from '../../api';
+import { ILoginCredential } from '../../types';
+import userStore from '../../stores/userStore';
+import { persistanceService } from '../../classes/PersistanceService';
 
 function loginUser(credential: ILoginCredential) {
-  return api.post("/auth/login", credential).then(res => {
+  return apiService.post('/auth/login', credential).then(res => {
     const { user, token } = res.data;
-    userStore.mergeUser(user);
-    persistanceService.setItem("token", token);
+    userStore.updateUser(user);
+    persistanceService.setItem('token', token);
     return;
   });
 }

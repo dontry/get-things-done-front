@@ -1,4 +1,4 @@
-import { Attribute, Priority, INewTask, INote, IRepeater, IReminder } from "../types/index";
+import { Attribute, Priority, INewTask, INote, IRepeater, IReminder, ITask } from '../types/index';
 
 class Task {
   private title: string;
@@ -18,7 +18,7 @@ class Task {
   private hidden: number;
   private tags: string[];
   private source: string;
-  private note: INote | undefined;
+  private note: INote;
   private project: string | undefined;
   private repeaters: IRepeater[];
   private reminders: IReminder[];
@@ -26,14 +26,14 @@ class Task {
 
   constructor({
     title,
-    attribute = "inbox",
+    attribute = 'inbox',
     userId,
     priority = Priority.MEDIUM,
     startAt = 0,
     endAt = 0,
     completedAt = 0,
     estimatedTime = 0,
-    context = "",
+    context = '',
     spentTime = 0,
     allDay = 1,
     hidden = 0,
@@ -42,7 +42,7 @@ class Task {
     tags = [],
     repeaters = [],
     reminders = [],
-    source = "",
+    source = '',
     note,
     project
   }: INewTask) {
@@ -60,7 +60,7 @@ class Task {
     this.completedAt = completedAt;
     this.archived = archived;
     this.tags = tags;
-    this.note = note;
+    this.note = note || { content: '' };
     this.project = project;
     this.repeaters = repeaters;
     this.reminders = reminders;
@@ -68,7 +68,7 @@ class Task {
     this.hidden = hidden;
   }
 
-  public toJson() {
+  public toJson(): INewTask {
     return {
       title: this.title,
       attribute: this.attribute,
@@ -85,7 +85,12 @@ class Task {
       archived: this.archived,
       tags: this.tags,
       note: this.note,
-      project: this.project
+      project: this.project,
+      userId: this.userId,
+      hidden: this.hidden,
+      source: this.source,
+      reminders: this.reminders,
+      repeaters: this.repeaters
     };
   }
 }

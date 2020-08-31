@@ -1,25 +1,25 @@
-import React, { PureComponent } from "react";
-import { EditorState } from "draft-js";
-import styled from "styled-components";
+import React from 'react';
+import { EditorState } from 'draft-js';
+import styled from 'styled-components';
 
 const BLOCK_TYPES = [
-  { label: "H1", style: "header-one" },
-  { label: "H2", style: "header-two" },
-  { label: "H3", style: "header-three" },
-  { label: "H4", style: "header-four" },
-  { label: "H5", style: "header-five" },
-  { label: "H6", style: "header-six" },
-  { label: "Blockquote", style: "blockquote" },
-  { label: "UL", style: "unordered-list-item" },
-  { label: "OL", style: "ordered-list-item" },
-  { label: "Code Block", style: "code-block" }
+  { label: 'H1', style: 'header-one' },
+  { label: 'H2', style: 'header-two' },
+  { label: 'H3', style: 'header-three' },
+  { label: 'H4', style: 'header-four' },
+  { label: 'H5', style: 'header-five' },
+  { label: 'H6', style: 'header-six' },
+  { label: 'Blockquote', style: 'blockquote' },
+  { label: 'UL', style: 'unordered-list-item' },
+  { label: 'OL', style: 'ordered-list-item' },
+  { label: 'Code Block', style: 'code-block' }
 ];
 
 const INLINE_STYLES = [
-  { label: "Bold", style: "BOLD" },
-  { label: "Italic", style: "ITALIC" },
-  { label: "Underline", style: "UNDERLINE" },
-  { label: "Monospace", style: "CODE" }
+  { label: 'Bold', style: 'BOLD' },
+  { label: 'Italic', style: 'ITALIC' },
+  { label: 'Underline', style: 'UNDERLINE' },
+  { label: 'Monospace', style: 'CODE' }
 ];
 
 const ControlWrapper = styled.div`
@@ -34,7 +34,7 @@ interface IStyleButtonProps {
 }
 
 const ControlButton = styled.button`
-  color: ${(props: IStyleButtonProps) => (props.active ? "#5890ff" : "#999")};
+  color: ${(props: IStyleButtonProps) => (props.active ? '#5890ff' : '#999')};
   cursor: pointer;
   margin-right: 16px;
   padding: 2px 0;
@@ -51,7 +51,7 @@ interface IControlProps {
 const BlockStyleControls = ({ editorState, onToggle }: IControlProps) => {
   // const {editorState} = props;
   const selection = editorState.getSelection();
-  const blockTyype = editorState
+  const blockType = editorState
     .getCurrentContent()
     .getBlockForKey(selection.getStartKey())
     .getType();
@@ -59,7 +59,7 @@ const BlockStyleControls = ({ editorState, onToggle }: IControlProps) => {
   return (
     <ControlWrapper>
       {BLOCK_TYPES.map(type => (
-        <ControlButton active={type.style === blockTyype} onMouseDown={() => onToggle(type.style)}>
+        <ControlButton active={type.style === blockType} onMouseDown={() => onToggle(type.style)}>
           {type.label}
         </ControlButton>
       ))}
@@ -67,9 +67,9 @@ const BlockStyleControls = ({ editorState, onToggle }: IControlProps) => {
   );
 };
 
-const InlinStyleControls = ({ editorState, onToggle }: IControlProps) => {
+const InlineStyleControls = ({ editorState, onToggle }: IControlProps) => {
   const selection = editorState.getSelection();
-  const blockTyype = editorState
+  const blockType = editorState
     .getCurrentContent()
     .getBlockForKey(selection.getStartKey())
     .getType();
@@ -77,7 +77,7 @@ const InlinStyleControls = ({ editorState, onToggle }: IControlProps) => {
   return (
     <ControlWrapper>
       {INLINE_STYLES.map(type => (
-        <ControlButton active={type.style === blockTyype} onMouseDown={() => onToggle(type.style)}>
+        <ControlButton active={type.style === blockType} onMouseDown={() => onToggle(type.style)}>
           {type.label}
         </ControlButton>
       ))}
@@ -85,4 +85,4 @@ const InlinStyleControls = ({ editorState, onToggle }: IControlProps) => {
   );
 };
 
-export { BlockStyleControls, InlinStyleControls };
+export { BlockStyleControls, InlineStyleControls };

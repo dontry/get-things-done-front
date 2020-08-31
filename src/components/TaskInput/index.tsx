@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { inject, observer } from "mobx-react";
-import styled from "styled-components";
-import { Layout, Form, Input, Button } from "antd";
-import Task from "../../classes/Task";
-import * as taskAction from "../../actions/taskAction";
-import { Attribute } from "../../types/index";
+import React, { useState, useEffect } from 'react';
+import { inject, observer } from 'mobx-react';
+import styled from 'styled-components';
+import { Layout, Form, Input, Button } from 'antd';
+import Task from '../../classes/Task';
+import * as taskAction from '../../actions/taskAction';
+import { INewTask, Category } from '../../types';
+import { getToday } from '../../lib/date';
+import { categoryToAttribute } from '../../lib/categoryToAttribute';
 
 const AddButton = styled(Button)`
   font-size: 14px;
@@ -21,78 +23,93 @@ const StyledInput = styled(Input)`
 `;
 
 const useNewTaskTitle = () => {
-  const [newTaskTitle, setTaskTitle] = useState("");
+  const [newTaskTitle, setTaskTitle] = useState('');
   return { newTaskTitle, setTaskTitle };
 };
 
 interface ITaskInputProps {
-  type: string;
+  category: Category;
   userId: string;
 }
 
-const TaskInput = ({ type, userId }: ITaskInputProps) => {
+const TaskInput = ({ category, userId }: ITaskInputProps) => {
   const { newTaskTitle, setTaskTitle } = useNewTaskTitle();
+
+  const { createTask } = taskAction.useCreateTask();
+
+  const handleFinish = () => {
+    createNewTask(newTaskTitle, category, userId);
+  }
+
+  const handleChange = (e: React.SyntheticEvent<HTMLInputElement>) => {
+    setTaskTitle(e.currentTarget.value);
+  }
   return (
-    <Form onSubmit={_handleSubmit}>
-      <Layout style={{ backgroundColor: "#fff" }}>
-        <Form.Item style={{ margin: "16px 8px" }}>
+    <Form onFinish={handleFinish}>
+      <Layout style={{ backgroundColor: '#fff' }}>
+        <Form.Item
+          name='title'
+         style={{ margin: '16px 8px' }}>
           <StyledInput
             value={newTaskTitle}
-            placeholder="Add a new task"
-            onKeyPress={_handleKeyPress}
-            onChange={_handleChange}
-            addonAfter={<AddButton onClick={_handleSubmit}>+</AddButton>}
+            placeholder='Add a new task'
+            onKeyPress={handleKeyPress}
+            onChange={handleChange}
+            addonAfter={<AddButton onClick={handleFinish}>+</AddButton>}
           />
         </Form.Item>
       </Layout>
     </Form>
   );
 
-  function _handleSubmit(e: React.SyntheticEvent) {
-    e.preventDefault();
-    createNewTask(newTaskTitle, type, userId);
-  }
 
-  function _handleChange(e: React.SyntheticEvent<HTMLInputElement>) {
-    setTaskTitle(e.currentTarget.value);
-  }
 
-  function _handleKeyPress(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.key === "Enter") {
-      createNewTask(newTaskTitle, type, userId);
+  function handleKeyPress(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === 'Enter') {
+      createNewTask(newTaskTitle, category, userId);
     }
   }
 
-  async function createNewTask(title: string, type: string, userId: string): Promise<void> {
-    if (newTaskTitle === "") {
+  async function createNewTask(_title: string, _category: Category, _userId: string): Promise<void> {
+    if (newTaskTitle === '') {
       return;
     }
-
+    const attribute = categoryToAttribute(_category);
     let newTask: Task;
-    switch (type) {
-      case "today":
+    switch (attribute as string) {
+      case 'today':
         newTask = new Task({
+          attribute,
           title: newTaskTitle,
-          attribute: "plan",
-          userId,
-          startAt: Date.now()
+          userId: _userId,
+          startAt: getToday()
         });
         break;
-      case "inbox":
-      case "next":
+      case 'tomorrow':
+        newTask = new Task({
+          attribute,
+          title: newTaskTitle,
+          userId: _userId,
+          startAt: getToday()
+        });
+        break;
+      case 'note':
+      case 'someday':
+      case 'inbox':
+      case 'next':
       default:
         newTask = new Task({
+          attribute,
           title: newTaskTitle,
-          attribute: type as Attribute,
-          userId
+          userId: _userId
         });
     }
-    await taskAction.createTask(newTask);
-    setTaskTitle("");
+    createTask({ task: newTask.toJson() as INewTask });
+    setTaskTitle('');
   }
 };
 
-export default inject("userStore")(
+export default inject('userStore')(
   observer(({ userStore, ...rest }) => {
     return <TaskInput userId={userStore.userId} {...rest} />;
   })

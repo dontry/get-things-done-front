@@ -1,5 +1,5 @@
-import { observable, action } from "mobx";
-import { FieldState } from "./components/FieldInput";
+import { observable, action } from 'mobx';
+import { FieldState } from './components/FieldInput';
 
 class AppSate {
   @observable
@@ -11,13 +11,13 @@ class AppSate {
   @action
   public addCurrentItem = () => {
     this.items = [...this.items, this.currentItem.value];
-    this.currentItem.value = "";
+    this.currentItem.value = '';
   };
 
   @action
   public reset = () => {
     this.items = [];
-    this.currentItem.onChange("");
+    this.currentItem.onChange('');
   };
 }
 
