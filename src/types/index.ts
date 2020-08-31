@@ -1,5 +1,15 @@
 // Task types
-export type Attribute = 'plan' | 'next' | 'inbox' | 'noplan' | 'reference';
+export type Attribute = 'inbox' | 'next' | 'plan' | 'noplan' | 'note';
+export type Category =
+  | 'inbox'
+  | 'next'
+  | 'today'
+  | 'tomorrow'
+  | 'scheduled'
+  | 'someday'
+  | 'note'
+  | 'deleted'
+  | 'completed';
 
 export enum Priority {
   LOWEST = 1,
@@ -72,7 +82,7 @@ export interface ITask {
   deleted: number;
   archived: number;
   tags: string[];
-  note?: INote;
+  note: INote;
   project?: string;
   pos: number;
 }
@@ -102,7 +112,7 @@ export interface INewTask {
 }
 
 export interface INote {
-  content: string;
+  content: any;
 }
 
 export enum Frequency {

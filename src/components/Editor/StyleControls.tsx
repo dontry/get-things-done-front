@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { EditorState } from 'draft-js';
 import styled from 'styled-components';
 
@@ -51,7 +51,7 @@ interface IControlProps {
 const BlockStyleControls = ({ editorState, onToggle }: IControlProps) => {
   // const {editorState} = props;
   const selection = editorState.getSelection();
-  const blockTyype = editorState
+  const blockType = editorState
     .getCurrentContent()
     .getBlockForKey(selection.getStartKey())
     .getType();
@@ -59,7 +59,7 @@ const BlockStyleControls = ({ editorState, onToggle }: IControlProps) => {
   return (
     <ControlWrapper>
       {BLOCK_TYPES.map(type => (
-        <ControlButton active={type.style === blockTyype} onMouseDown={() => onToggle(type.style)}>
+        <ControlButton active={type.style === blockType} onMouseDown={() => onToggle(type.style)}>
           {type.label}
         </ControlButton>
       ))}
@@ -67,9 +67,9 @@ const BlockStyleControls = ({ editorState, onToggle }: IControlProps) => {
   );
 };
 
-const InlinStyleControls = ({ editorState, onToggle }: IControlProps) => {
+const InlineStyleControls = ({ editorState, onToggle }: IControlProps) => {
   const selection = editorState.getSelection();
-  const blockTyype = editorState
+  const blockType = editorState
     .getCurrentContent()
     .getBlockForKey(selection.getStartKey())
     .getType();
@@ -77,7 +77,7 @@ const InlinStyleControls = ({ editorState, onToggle }: IControlProps) => {
   return (
     <ControlWrapper>
       {INLINE_STYLES.map(type => (
-        <ControlButton active={type.style === blockTyype} onMouseDown={() => onToggle(type.style)}>
+        <ControlButton active={type.style === blockType} onMouseDown={() => onToggle(type.style)}>
           {type.label}
         </ControlButton>
       ))}
@@ -85,4 +85,4 @@ const InlinStyleControls = ({ editorState, onToggle }: IControlProps) => {
   );
 };
 
-export { BlockStyleControls, InlinStyleControls };
+export { BlockStyleControls, InlineStyleControls };

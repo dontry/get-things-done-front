@@ -18,7 +18,7 @@ class Task {
   private hidden: number;
   private tags: string[];
   private source: string;
-  private note: INote | undefined;
+  private note: INote;
   private project: string | undefined;
   private repeaters: IRepeater[];
   private reminders: IReminder[];
@@ -60,7 +60,7 @@ class Task {
     this.completedAt = completedAt;
     this.archived = archived;
     this.tags = tags;
-    this.note = note;
+    this.note = note || { content: '' };
     this.project = project;
     this.repeaters = repeaters;
     this.reminders = reminders;

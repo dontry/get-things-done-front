@@ -1,10 +1,9 @@
 import { observable, action, computed } from 'mobx';
-// import { persist } from 'mobx-persist';
-import { ITask, Attribute } from 'src/types';
-import { isToday } from 'date-fns';
+import { ITask, Attribute } from '../types';
 import mapToObject from '../lib/mapToObject';
 import _ from 'lodash';
 import fp from 'lodash/fp';
+import { isToday } from '../lib/date';
 
 export interface ITaskStore {
   tasks: Map<string, ITask>;
@@ -176,8 +175,7 @@ function checkActive(task: ITask): boolean {
 
 // get tasks created or starts today
 function checkToday(task: ITask): boolean {
-  const startDate: Date = new Date(task.startAt);
-  return isToday(startDate);
+  return isToday(task.startAt);
 }
 
 function checkByAttribute(attribute: Attribute): (task: ITask) => boolean {

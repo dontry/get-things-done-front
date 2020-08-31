@@ -27,7 +27,7 @@ const TaskBoard = ({ category }: ITaskBoardProps) => {
   }, [category]);
 
   const [pageIndex, setPageIndex] = useState(1);
-  const paginationParams = useMemo(() => `page=${pageIndex}&limit=15`, [pageIndex]);
+  const paginationParams = useMemo(() => `page=${pageIndex}&limit=100`, [pageIndex]);
 
   const { status, items, pageCount } = taskAction.useFetchTasks(category, paginationParams);
 
@@ -35,7 +35,7 @@ const TaskBoard = ({ category }: ITaskBoardProps) => {
     <Container>
       {isTaskInputVisible && (
         <Form>
-          <TaskInput type={category} />
+          <TaskInput category={category} />
         </Form>
       )}
       <DragDropContext onDragEnd={onDragEnd}>

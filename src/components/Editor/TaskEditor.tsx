@@ -1,150 +1,183 @@
-import React, { useState, PureComponent, createRef } from 'react';
-import { Form, Input, Menu, Dropdown, Icon, Select, DatePicker, Calendar, Layout } from 'antd';
-import { FormComponentProps } from 'antd/lib/form';
-import { formItemLayout } from '../../constants/layout';
-
+import React, { useState, useMemo, useCallback } from 'react';
+import { Form, Select, Layout, Button, Space } from 'antd';
+import Icon from '@ant-design/icons';
 import {
   Editor,
   EditorState,
   RichUtils,
   DraftEditorCommand,
   DraftBlockType,
-  DraftInlineStyle,
   DraftInlineStyleType,
-  DraftHandleValue
+  DraftHandleValue,
+  convertToRaw,
+  ContentState,
+  convertFromRaw
 } from 'draft-js';
 import {
   EditorWrapper,
   EditorControlWrapper,
   EditorTitle,
-  SelectWrapper,
-  CalendarWrapper,
   EditorSider,
   EditorContentWrapper
 } from './style';
-import { BlockStyleControls, InlinStyleControls } from './StyleControls';
-import { ITask, Priority } from '../../types';
-import { SIDEBAR_OPTIONS, CONTEXT, TAGS } from '../../constants/misc';
-import { capitalize } from '../../lib/capitalize';
-import moment from 'moment';
+import { BlockStyleControls, InlineStyleControls } from './StyleControls';
+import { ITask, Priority, Category, Attribute } from '../../types';
+import { CONTEXT, TAGS } from '../../constants/misc';
+import { queryCache } from 'react-query';
+import { observer, inject } from 'mobx-react';
+import { useUpdateTask } from '../../actions/taskAction';
+import { History } from 'history';
+import { get } from 'lodash';
+import CategorySelect, { IUpdateCategoryPayload } from './CategorySelect';
+import { isTomorrow, isToday } from '../../lib/date';
 
-const MAX_DEPTH = 4;
 const { Content, Header } = Layout;
 
-interface ICategorySelectProps {
-  value?: string;
-  onChange(value: string): void;
+interface ITaskEditorProps {
+  task?: ITask;
+  history: History;
 }
 
-interface ICategorySelectState {
-  open: boolean;
-}
-
-class CategorySelect extends PureComponent<ICategorySelectProps, ICategorySelectState> {
-  private static defaultProps = {
-    value: SIDEBAR_OPTIONS[0]
-  };
-
-  public state = {
-    open: false
-  };
-
-  private select: Select<string> | null = null;
-
-  public _handleChange = (value: string): void => {
-    this.props.onChange(value);
-    if (value !== 'scheduled') {
-      this.setState({ open: false });
-      this.select!.blur();
-    }
-  };
-
-  public _handleFocus = () => {
-    this.setState({ open: true });
-  };
-
-  public _handleBlur = () => {
-    this.setState({ open: false });
-  };
-
-  public _handleCalendarChange = (date?: moment.Moment) => {
-    if (date) {
-      const timestamp: number = date.unix();
-      console.log('timestamp:', timestamp);
-    }
-  };
-
-  public render() {
-    const { value } = this.props;
-    const { open } = this.state;
-    console.log('value:', value);
-    return (
-      <SelectWrapper>
-        <Select
-          ref={dom => {
-            this.select = dom;
-          }}
-          defaultValue='inbox'
-          open={open}
-          onFocus={this._handleFocus}
-          onBlur={this._handleBlur}
-          onChange={this._handleChange}
-        >
-          {SIDEBAR_OPTIONS.map(option => (
-            <Select.Option value={option}>{capitalize(option)}</Select.Option>
-          ))}
-        </Select>
-        {value === 'scheduled' && (
-          <CalendarWrapper>
-            <Calendar fullscreen={false} onChange={this._handleCalendarChange} />
-          </CalendarWrapper>
-        )}
-      </SelectWrapper>
-    );
+const TaskEditor = ({ task, history }: ITaskEditorProps) => {
+  if (!task) {
+    return null;
   }
-}
-
-const TaskEditor: React.FC<ITask & FormComponentProps> = ({ title }) => {
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
-
-  const [taskCategory, setTaskCategory] = useState('inbox');
-
-  const _onEditorStateChange = (_editorState: EditorState): void => {
-    setEditorState(_editorState);
-  };
-
-  const _handleKeyCommand = (
-    command: DraftEditorCommand | string,
-    _editorState: EditorState
-  ): DraftHandleValue => {
-    const newState = RichUtils.handleKeyCommand(_editorState, command);
-    if (newState) {
-      _onEditorStateChange(_editorState);
-      return 'handled';
+  // memo
+  const contentState = useMemo(() => {
+    const content = get(task, 'note.content');
+    if (typeof content === 'string') {
+      return ContentState.createFromText(content);
     } else {
-      return 'not-handled';
-    }
-  };
-
-  const _mapKeyToEditorCommand = (e: React.KeyboardEvent<{}>) => {
-    if (e.keyCode === 9) {
-      const newEditorState: EditorState = RichUtils.onTab(e, editorState, MAX_DEPTH);
-      if (newEditorState !== editorState) {
-        _onEditorStateChange(newEditorState);
+      try {
+        return convertFromRaw(content);
+      } catch (error) {
+        return ContentState.createFromText('');
       }
     }
+  }, [get(task, 'note.content', '')]);
+
+  // state
+  const [taskAttribute, setAttribute] = useState<Attribute>(task.attribute || 'inbox');
+  const [taskTitle, setTitle] = useState(task.title);
+  const [taskStartTime, setStartTime] = useState(task.startAt);
+  const [taskPriority, setPriority] = useState(task.priority);
+  const [taskContext, setContext] = useState(task.context);
+  const [taskTags, setTags] = useState(task.tags);
+  const [editorState, setEditorState] = useState(() =>
+    contentState ? EditorState.createWithContent(contentState) : EditorState.createEmpty()
+  );
+
+  const taskCategory = useMemo((): Category => {
+    if (taskAttribute === 'next') {
+      return 'next';
+    } else if (taskAttribute === 'plan') {
+      if (isToday(taskStartTime)) {
+        return 'today';
+      } else if (isTomorrow(taskStartTime)) {
+        return 'tomorrow';
+      } else {
+        return 'scheduled';
+      }
+    } else if (taskAttribute === 'noplan') {
+      return 'someday';
+    } else {
+      return 'inbox';
+    }
+  }, [taskAttribute, taskStartTime]);
+
+  // hook
+  const { updateTask } = useUpdateTask();
+
+  const onEditorStateChange = useCallback(
+    (_editorState: EditorState): void => {
+      setEditorState(_editorState);
+    },
+    [setEditorState]
+  );
+
+  const handleKeyCommand = useCallback(
+    (command: DraftEditorCommand | string, _editorState: EditorState): DraftHandleValue => {
+      const newState = RichUtils.handleKeyCommand(_editorState, command);
+      if (newState) {
+        onEditorStateChange(_editorState);
+        return 'handled';
+      } else {
+        return 'not-handled';
+      }
+    },
+    [onEditorStateChange]
+  );
+
+  const toggleBlockType = useCallback(
+    (blockType: DraftBlockType) => {
+      onEditorStateChange(RichUtils.toggleBlockType(editorState, blockType));
+    },
+    [editorState]
+  );
+
+  const toggleInlineStyle = useCallback(
+    (inlineStyle: DraftInlineStyleType) => {
+      onEditorStateChange(RichUtils.toggleInlineStyle(editorState, inlineStyle));
+    },
+    [editorState]
+  );
+
+  const handleCategoryChange = useCallback(
+    (payload: IUpdateCategoryPayload) => {
+      setAttribute(payload.attribute);
+      setStartTime(payload.startTime);
+    },
+    [setAttribute, setStartTime]
+  );
+
+  const handleTitleChange = useCallback(
+    (value: string) => {
+      setTitle(value);
+    },
+    [setTitle]
+  );
+
+  const handlePriorityChange = useCallback(
+    (value: number) => {
+      setPriority(value);
+    },
+    [setPriority]
+  );
+
+  const handleContextChange = useCallback(
+    (value: string) => {
+      setContext(value);
+    },
+    [setContext]
+  );
+
+  const handleTagsChange = useCallback(
+    (value: string[]) => {
+      setTags(value);
+    },
+    [setTags]
+  );
+
+  const handleSave = () => {
+    const content = convertToRaw(editorState.getCurrentContent());
+    const updatedTask: ITask = {
+      ...task,
+      attribute: taskAttribute,
+      title: taskTitle,
+      startAt: taskStartTime,
+      context: taskContext,
+      priority: taskPriority,
+      tags: taskTags,
+      note: {
+        content
+      }
+    };
+    updateTask({ task: updatedTask });
+    history.goBack();
   };
 
-  const _toggleBlockType = (blockType: DraftBlockType) => {
-    _onEditorStateChange(RichUtils.toggleBlockType(editorState, blockType));
-  };
-
-  const _toggleInlinStyle = (inlineStyle: DraftInlineStyleType) => {
-    _onEditorStateChange(RichUtils.toggleInlineStyle(editorState, inlineStyle));
-  };
-
-  const _onInputChange = (value: string) => {
-    setTaskCategory(value);
+  const handleCancel = () => {
+    history.goBack();
   };
 
   return (
@@ -152,7 +185,7 @@ const TaskEditor: React.FC<ITask & FormComponentProps> = ({ title }) => {
       <Layout>
         <Header style={{ background: '#f0f2f5', height: '48px', marginTop: '10px' }}>
           <Form.Item style={{ margin: '0 auto' }}>
-            <EditorTitle value={title} />
+            <EditorTitle value={taskTitle} onChange={handleTitleChange} />
           </Form.Item>
         </Header>
         <Layout style={{ marginTop: 0 }}>
@@ -160,12 +193,12 @@ const TaskEditor: React.FC<ITask & FormComponentProps> = ({ title }) => {
             <Form.Item label='Note'>
               <EditorWrapper>
                 <EditorControlWrapper>
-                  <BlockStyleControls editorState={editorState} onToggle={_toggleBlockType} />
-                  <InlinStyleControls editorState={editorState} onToggle={_toggleInlinStyle} />
+                  <BlockStyleControls editorState={editorState} onToggle={toggleBlockType} />
+                  <InlineStyleControls editorState={editorState} onToggle={toggleInlineStyle} />
                 </EditorControlWrapper>
                 <EditorContentWrapper>
                   <Editor
-                    handleKeyCommand={_handleKeyCommand}
+                    handleKeyCommand={handleKeyCommand}
                     editorState={editorState}
                     onChange={setEditorState}
                   />
@@ -181,7 +214,11 @@ const TaskEditor: React.FC<ITask & FormComponentProps> = ({ title }) => {
                 </span>
               }
             >
-              <CategorySelect value={taskCategory} onChange={_onInputChange} />
+              <CategorySelect
+                initCategory={taskCategory}
+                startTime={taskStartTime}
+                onChange={handleCategoryChange}
+              />
             </Form.Item>
             <Form.Item
               label={
@@ -190,7 +227,7 @@ const TaskEditor: React.FC<ITask & FormComponentProps> = ({ title }) => {
                 </span>
               }
             >
-              <Select defaultValue={3}>
+              <Select defaultValue={taskPriority} onChange={handlePriorityChange}>
                 {Object.keys(Priority)
                   .filter(key => isNaN(Number(key)))
                   .map((priority, index) => (
@@ -205,9 +242,9 @@ const TaskEditor: React.FC<ITask & FormComponentProps> = ({ title }) => {
                 </span>
               }
             >
-              <Select>
+              <Select defaultValue={taskContext} onChange={handleContextChange}>
                 {CONTEXT.map(context => (
-                  <Select value={context}>{context}</Select>
+                  <Select.Option value={context}>{context}</Select.Option>
                 ))}
               </Select>
             </Form.Item>
@@ -218,13 +255,18 @@ const TaskEditor: React.FC<ITask & FormComponentProps> = ({ title }) => {
                 </span>
               }
             >
-              <Select mode='multiple' placeholder='Add label'>
+              <Select
+                mode='multiple'
+                placeholder='Add label'
+                defaultValue={taskTags}
+                onChange={handleTagsChange}
+              >
                 {TAGS.map(tag => (
                   <Select.Option value={tag}>{tag}</Select.Option>
                 ))}
               </Select>
             </Form.Item>
-            <Form.Item
+            {/* <Form.Item
               label={
                 <span>
                   <Icon type='bell' /> Reminders
@@ -232,12 +274,28 @@ const TaskEditor: React.FC<ITask & FormComponentProps> = ({ title }) => {
               }
             >
               <Input />
-            </Form.Item>
+            </Form.Item> */}
           </EditorSider>
         </Layout>
       </Layout>
+      <Layout.Footer style={{ textAlign: 'right' }}>
+        <Space>
+          <Button type='primary' onClick={handleSave}>
+            Save
+          </Button>
+          <Button onClick={handleCancel}>Cancel</Button>
+        </Space>
+      </Layout.Footer>
     </Form>
   );
 };
 
-export default TaskEditor;
+export default inject('requestStore')(
+  observer(({ requestStore, match, history }) => {
+    const taskId = match.params.id;
+    const tasksQuery = queryCache.getQueryData(requestStore.currentQueryKey) as any;
+    const tasks = tasksQuery ? tasksQuery.items : [];
+    const task = tasks.find((_task: ITask) => _task.id === taskId);
+    return <TaskEditor task={task} history={history} />;
+  })
+);

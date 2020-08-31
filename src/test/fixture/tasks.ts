@@ -18,7 +18,10 @@ export const tasks: ITask[] = [
     archived: 0,
     tags: [],
     userId: '5cced2fb1695ce1a38dbe2ac',
-    pos: 1179648
+    pos: 1179648,
+    note: {
+      content: ''
+    }
   },
   {
     id: '5cd61ee92dc12c12e69xbbed',
@@ -37,7 +40,10 @@ export const tasks: ITask[] = [
     archived: 0,
     tags: [],
     userId: '5cced2fb1695ce1a38dbe2ac',
-    pos: 3145728
+    pos: 3145728,
+    note: {
+      content: ''
+    }
   },
   {
     id: '5cd2d8831323e50c4a035f3a',
@@ -56,7 +62,10 @@ export const tasks: ITask[] = [
     archived: 0,
     tags: [],
     userId: '5cced2fb1695ce1a38dbe2ac',
-    pos: 1835008
+    pos: 1835008,
+    note: {
+      content: ''
+    }
   },
   {
     id: '5cd61d982dc12c12e692bbeb',
@@ -75,7 +84,10 @@ export const tasks: ITask[] = [
     archived: 0,
     tags: [],
     userId: '5cced2fb1695ce1a38dbe2ac',
-    pos: 3014656
+    pos: 3014656,
+    note: {
+      content: ''
+    }
   },
   {
     id: '5cd61d982dc12c12e692bbgb',
@@ -94,6 +106,9 @@ export const tasks: ITask[] = [
     archived: 0,
     tags: [],
     userId: '5cced2fb1695ce1a38dbe2ac',
-    pos: 3014656
+    pos: 3014656,
+    note: {
+      content: ''
+    }
   }
 ];
