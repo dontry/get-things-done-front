@@ -2,12 +2,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { logout } from '../actions/authAction';
 import routerStore from '../stores/routerStore';
-import { Avatar, Menu, Dropdown, Icon } from 'antd';
+import { Avatar, Menu, Dropdown } from 'antd';
+import { UserOutlined } from '@ant-design/icons'
+import { PROFILE, HOME } from '../constants/pathname';
 
 const UserIcon = () => {
   return (
     <Dropdown overlay={menu}>
-      <Avatar size='large' icon='user' />
+      <Avatar size='large' icon={<UserOutlined />} />
     </Dropdown>
   );
 };
@@ -20,10 +22,10 @@ const menu = (() => {
   return (
     <Menu>
       <Menu.Item>
-        <Link to='/home/inbox'>Home</Link>
+        <Link to={`${HOME}/inbox`}>Home</Link>
       </Menu.Item>
       <Menu.Item>
-        <Link to='/profile'>Profile</Link>
+        <Link to={PROFILE}>Profile</Link>
       </Menu.Item>
       <Menu.Item onClick={handleLogout}>
         <span>Logout</span>

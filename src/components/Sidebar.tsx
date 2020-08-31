@@ -1,6 +1,20 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Layout, Menu, Icon } from 'antd';
+import { Layout, Menu } from 'antd';
+import {
+  InboxOutlined,
+  StarOutlined,
+  SelectOutlined,
+  ScheduleOutlined,
+  CalendarOutlined,
+  FileDoneOutlined,
+  ExclamationCircleOutlined,
+  EnvironmentOutlined,
+  CheckSquareOutlined,
+  DeleteOutlined,
+  RightSquareOutlined,
+  BookOutlined,
+} from '@ant-design/icons';
 const { Sider } = Layout;
 const { Item, SubMenu } = Menu;
 
@@ -20,49 +34,51 @@ const Sidebar: React.FC<any> = () => {
       <Menu mode='inline' defaultSelectedKeys={['inbox']}>
         <Item key='inbox'>
           <Link to='/home/inbox'>
-            <Icon type='inbox' />
+            <InboxOutlined />
             <span>Inbox</span>
           </Link>
         </Item>
         <Item key='today'>
           <Link to='/home/today'>
-            <Icon type='star' />
+            <StarOutlined />
             <span>Today</span>
+          </Link>
+        </Item>
+        <Item key='tomorrow'>
+          <Link to='/home/tomorrow'>
+            <RightSquareOutlined />
+            <span>Tomorrow</span>
           </Link>
         </Item>
         <Item key='next'>
           <Link to='/home/next'>
-            <Icon type='select' />
+            <SelectOutlined />
             <span>Next</span>
           </Link>
         </Item>
-        {/* <Item key='tomorrow'>
-          <Icon type='' />
-          Tomorrow
-        </Item> */}
         <Item key='scheduled'>
           <Link to='/home/scheduled'>
-            <Icon type='schedule' />
+            <ScheduleOutlined />
             <span>Scheduled</span>
           </Link>
         </Item>
         <Item key='someday'>
           <Link to='/home/someday'>
-            <Icon type='calendar' />
+            <CalendarOutlined />
             <span>Someday</span>
           </Link>
         </Item>
-        <Item key='references'>
-          <Link to='/home/references'>
-            <Icon type='database' />
-            <span> References</span>
+        <Item key='note'>
+          <Link to='/home/note'>
+            <BookOutlined />
+            <span> Notes</span>
           </Link>
         </Item>
         <SubMenu
           key='projects'
           title={
             <span>
-              <Icon type='file-done' />
+              <FileDoneOutlined />
               <span>Projects</span>
             </span>
           }
@@ -74,7 +90,7 @@ const Sidebar: React.FC<any> = () => {
           key='goals'
           title={
             <span>
-              <Icon type='exclamation-circle' />
+              <ExclamationCircleOutlined />
               <span>Goals</span>
             </span>
           }
@@ -86,7 +102,8 @@ const Sidebar: React.FC<any> = () => {
           key='context'
           title={
             <span>
-              <Icon type='environment' /> <span>Context</span>
+              <EnvironmentOutlined />
+              <span>Context</span>
             </span>
           }
         >
@@ -94,13 +111,13 @@ const Sidebar: React.FC<any> = () => {
         </SubMenu>
         <Item key='completed'>
           <Link to='/home/completed'>
-            <Icon type='check-square' />
+            <CheckSquareOutlined />
             <span>Completed</span>
           </Link>
         </Item>
         <Item key='Trash'>
           <Link to='/home/deleted'>
-            <Icon type='delete' />
+            <DeleteOutlined />
             <span>Trash</span>
           </Link>
         </Item>

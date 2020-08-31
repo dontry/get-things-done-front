@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, Select, InputNumber } from 'antd';
-import Icon from '@ant-design/icons';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { formItemLayout, footerFormItemLayout } from '../constants/layout';
 import { useForm } from 'antd/lib/form/Form';
 const { Option } = Select;
@@ -50,7 +50,7 @@ const RegisterForm = ({ onSubmit }: IFormProps) => {
         rules={[{ required: true, message: 'Please input your username!' }]}
       >
         <Input
-          prefix={<Icon type='user' style={{ color: 'rgba(0,0,0,.25)' }} />}
+          prefix={<UserOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
           placeholder='Username'
         />
       </Form.Item>
@@ -73,7 +73,7 @@ const RegisterForm = ({ onSubmit }: IFormProps) => {
         ]}
       >
         <Input
-          prefix={<Icon type='lock' style={{ color: 'rgba(0,0,0,.25)' }} />}
+          prefix={<LockOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
           type='password'
           onBlur={handleConfirmBlur}
         />
@@ -87,7 +87,7 @@ const RegisterForm = ({ onSubmit }: IFormProps) => {
         ]}
       >
         <Input
-          prefix={<Icon type='lock' style={{ color: 'rgba(0,0,0,.25)' }} />}
+          prefix={<LockOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
           type='password'
         />
       </Form.Item>

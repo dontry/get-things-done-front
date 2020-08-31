@@ -1,6 +1,12 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { Form, Select, Layout, Button, Space } from 'antd';
-import Icon from '@ant-design/icons';
+import {
+  BarsOutlined,
+  EnvironmentOutlined,
+  ArrowUpOutlined,
+  TagOutlined,
+  BellOutlined,
+} from '@ant-design/icons';
 import {
   Editor,
   EditorState,
@@ -210,7 +216,7 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
             <Form.Item
               label={
                 <span>
-                  <Icon type='bars' /> Category
+                  <BarsOutlined /> Category
                 </span>
               }
             >
@@ -223,7 +229,7 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
             <Form.Item
               label={
                 <span>
-                  <Icon type='arrow-up' /> Priority
+                  <ArrowUpOutlined /> Priority
                 </span>
               }
             >
@@ -238,7 +244,7 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
             <Form.Item
               label={
                 <span>
-                  <Icon type='environment' /> Context
+                  <EnvironmentOutlined /> Context
                 </span>
               }
             >
@@ -251,7 +257,7 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
             <Form.Item
               label={
                 <span>
-                  <Icon type='tag' /> Tags
+                  <TagOutlined /> Tags
                 </span>
               }
             >
@@ -269,7 +275,7 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
             {/* <Form.Item
               label={
                 <span>
-                  <Icon type='bell' /> Reminders
+                  <BellOutlined /> Reminders
                 </span>
               }
             >

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { Form, Input, Button, Checkbox } from 'antd';
-import Icon from '@ant-design/icons';
+import {UserOutlined, LockOutlined } from '@ant-design/icons';
 
 const footerFormItemLayout = {
   wrapperCol: {
@@ -39,7 +39,7 @@ const LoginForm = ({ onSubmit }: IFormProps) => {
         ]}
       >
         <Input
-          prefix={<Icon type='user' style={{ color: 'rgba(0,0,0,.25)' }} />}
+          prefix={<UserOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
           placeholder='Username'
         />
       </Form.Item>
@@ -51,7 +51,7 @@ const LoginForm = ({ onSubmit }: IFormProps) => {
         ]}
       >
         <Input
-          prefix={<Icon type='lock' style={{ color: 'rgba(0,0,0,.25)' }} />}
+          prefix={<LockOutlined  style={{ color: 'rgba(0,0,0,.25)' }} />}
           type='password'
           placeholder='Password'
         />

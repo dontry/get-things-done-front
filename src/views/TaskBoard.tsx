@@ -47,13 +47,13 @@ const TaskBoard = ({ category }: ITaskBoardProps) => {
           <TaskList id={category} category={category} tasks={items} />
         )}
       </DragDropContext>
-      {pageCount > 0 && (
+      {/* {pageCount > 0 && (
         <Pagination
           defaultCurrent={1}
           total={pageCount}
           onChange={handlePaginationChange}
         ></Pagination>
-      )}
+      )} */}
     </Container>
   );
 
