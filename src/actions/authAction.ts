@@ -14,8 +14,7 @@ export function register(profile: IRegisterProfile) {
 export function login(credential: ILoginCredential) {
   return apiService.post('/login', credential).then(res => {
     const { data } = res;
-    const { user, access_token, access_token_expires_at } = data;
-    userStore.mergeUser(user);
+    const { access_token, access_token_expires_at } = data;
     persistanceService.setItem('access_token', access_token);
     persistanceService.setItem('access_token_expires_at', access_token_expires_at);
     routerStore.push('/home/inbox');

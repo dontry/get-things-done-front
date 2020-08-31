@@ -1,16 +1,15 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
-import { inject, observer } from 'mobx-react';
 import { Layout, Avatar } from 'antd';
 import { IUser } from '../types';
 import ProfileForm from '../components/ProfileForm';
 import UserIcon from '../components/UserIcon';
-import { register } from '../actions/authAction';
+import { useFetchProfile, useUpdateProfile } from '../actions/userAction';
 
 const { Header, Content, Footer } = Layout;
 
 interface IProfileProps {
-  user: IUser;
+  history: History;
 }
 
 const FormWrapper = styled.div`
@@ -21,14 +20,30 @@ const FormWrapper = styled.div`
   width: 100vw;
 `;
 
-const Profile = ({ user }: IProfileProps) => {
+const Profile = ({ history }: IProfileProps) => {
+  const { user } = useFetchProfile();
+  const { updateProfile } = useUpdateProfile();
+
+  const handleSubmit = useCallback(
+    (_user: IUser) => {
+      updateProfile({ user: _user });
+      window.history.back();
+    }, [])
+
+  const handleCancel = useCallback(
+    () => {
+      window.history.back();
+    }, [])
+
   return (
     <Layout style={{ height: '100vh' }}>
       <Header>
         <UserIcon />
       </Header>
       <Content>
-        <FormWrapper>{/* <ProfileForm onSubmit={register} user={user} /> */}</FormWrapper>
+        <FormWrapper>
+          {user && <ProfileForm user={user} onSubmit={handleSubmit} onCancel={handleCancel} />}
+        </FormWrapper>
       </Content>
       <Footer
         style={{ textAlign: 'center' }}
@@ -37,8 +52,4 @@ const Profile = ({ user }: IProfileProps) => {
   );
 };
 
-export default inject('userStore')(
-  observer(({ userStore }) => {
-    return <Profile user={userStore.user} />;
-  })
-);
+export default Profile;

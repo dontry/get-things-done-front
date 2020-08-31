@@ -18,8 +18,10 @@ class UserStore {
   }
 
   @action
-  public mergeUser(user: IUser): void {
-    this.user = user;
+  public updateUser(user?: IUser): void {
+    if (user) {
+      this.user = user;
+    }
   }
 
   @action

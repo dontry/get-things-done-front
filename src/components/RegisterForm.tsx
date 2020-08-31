@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { FormComponentProps } from 'antd/lib/form/Form';
-import { Form, Icon, Input, Button, Select, InputNumber } from 'antd';
+import { Form, Input, Button, Select, InputNumber } from 'antd';
+import Icon from '@ant-design/icons';
 import { formItemLayout, footerFormItemLayout } from '../constants/layout';
+import { useForm } from 'antd/lib/form/Form';
 const { Option } = Select;
 
 interface IFormProps {
@@ -9,124 +10,108 @@ interface IFormProps {
 }
 
 // https://ant.design/components/form/?locale=en-US#components-form-demo-register
-const RawRegisterForm: React.FC<IFormProps & FormComponentProps> = props => {
-  const { getFieldDecorator } = props.form;
+const RegisterForm = ({ onSubmit }: IFormProps) => {
   const [confirmDirty, setConfirmDirty] = useState(false);
+  const [form] = useForm();
 
-  const _handleSubmit = (e: React.SyntheticEvent) => {
-    e.preventDefault();
-    props.form.validateFields((err: Error, values: []) => {
-      if (!err) {
-        console.log('Received values of form: ', values);
-      }
-      props.onSubmit(values);
-    });
+  const handleFinish = (values: any) => {
+    onSubmit(values);
   };
 
-  const _handleConfirmBlur = (e: React.SyntheticEvent<HTMLInputElement>) => {
+  const handleConfirmBlur = (e: React.SyntheticEvent<HTMLInputElement>) => {
     const value = e.currentTarget.value;
     setConfirmDirty(confirmDirty || !!value);
   };
 
-  const _compareToFirstPassword = (rule: any, value: string, callback: (s?: string) => void) => {
-    if (value && value !== props.form.getFieldValue('password')) {
-      callback('The password you entered is not the same.');
-    } else {
-      callback();
+  const compareToFirstPassword = (rule: any, value: string) => {
+    if (value && value !== form.getFieldValue('password')) {
+      throw new Error('The password you entered is not the same.');
     }
   };
 
-  const _validateAge = (rule: any, value: number, callback: (s?: string) => void) => {
+  const validateAge = (rule: any, value: number) => {
     if (value < 18) {
-      callback('Your age should not be under 18.');
-    } else {
-      callback();
+      throw new Error('Your age should not be under 18.');
     }
   };
 
-  const _validateToNextPassword = (rule: any, value: string, callback: (s?: string) => void) => {
+  const validateToNextPassword = (rule: any, value: string, callback: (s?: string) => void) => {
     if (value && confirmDirty) {
-      props.form.validateFields(['confirm'], { force: true });
+      form.validateFields(['confirm']);
     }
     callback();
   };
 
   return (
-    <Form onSubmit={_handleSubmit} className='login-form'>
-      <Form.Item {...formItemLayout} label='Username'>
-        {getFieldDecorator('username', {
-          rules: [{ required: true, message: 'Please input your username!' }]
-        })(
-          <Input
-            prefix={<Icon type='user' style={{ color: 'rgba(0,0,0,.25)' }} />}
-            placeholder='Username'
-          />
-        )}
+    <Form onFinish={handleFinish} className='login-form'>
+      <Form.Item {...formItemLayout}
+        name='username'
+        label='Username'
+        rules={[{ required: true, message: 'Please input your username!' }]}
+      >
+        <Input
+          prefix={<Icon type='user' style={{ color: 'rgba(0,0,0,.25)' }} />}
+          placeholder='Username'
+        />
       </Form.Item>
-      <Form.Item {...formItemLayout} label='E-mail'>
-        {getFieldDecorator('email', {
-          rules: [
-            {
-              type: 'email',
-              message: 'The input is not a valid E-mail.'
-            },
-            {
-              required: true,
-              message: 'Please input your E-mail.'
-            }
-          ]
-        })(<Input placeholder='john.doe@xmail.com' />)}
+      <Form.Item {...formItemLayout}
+        name='email'
+        label='E-mail'
+        rules={[
+          { type: 'email', message: 'The input is not a valid E-mail.' },
+          { required: true, message: 'Please input your E-mail.' }
+        ]}
+      >
+        <Input placeholder='john.doe@xmail.com' />
       </Form.Item>
-      <Form.Item {...formItemLayout} label='Password'>
-        {getFieldDecorator('password', {
-          rules: [
-            { required: true, message: 'Please input your Password!' },
-            { validator: _validateToNextPassword }
-          ]
-        })(
-          <Input
-            prefix={<Icon type='lock' style={{ color: 'rgba(0,0,0,.25)' }} />}
-            type='password'
-            onBlur={_handleConfirmBlur}
-          />
-        )}
+      <Form.Item {...formItemLayout}
+        name='password'
+        label='Password'
+        rules={[
+          { required: true, message: 'Please input your Password!' },
+          { validator: validateToNextPassword }
+        ]}
+      >
+        <Input
+          prefix={<Icon type='lock' style={{ color: 'rgba(0,0,0,.25)' }} />}
+          type='password'
+          onBlur={handleConfirmBlur}
+        />
       </Form.Item>
-      <Form.Item {...formItemLayout} label='Confirm Password'>
-        {getFieldDecorator('confirm', {
-          rules: [
-            { required: true, message: 'Please confirm your Password!' },
-            {
-              validator: _compareToFirstPassword
-            }
-          ]
-        })(
-          <Input
-            prefix={<Icon type='lock' style={{ color: 'rgba(0,0,0,.25)' }} />}
-            type='password'
-          />
-        )}
+      <Form.Item {...formItemLayout}
+        name='confirm'
+        label='Confirm Password'
+        rules={[
+          { required: true, message: 'Please confirm your Password!' },
+          { validator: compareToFirstPassword }
+        ]}
+      >
+        <Input
+          prefix={<Icon type='lock' style={{ color: 'rgba(0,0,0,.25)' }} />}
+          type='password'
+        />
       </Form.Item>
-      <Form.Item {...formItemLayout} label='Age'>
-        {getFieldDecorator('age', {
-          rules: [
-            { required: true, message: 'Input your age.' },
-            {
-              validator: _validateAge
-            }
-          ]
-        })(<InputNumber />)}
+      <Form.Item {...formItemLayout}
+        name='age'
+        label='Age'
+        rules={[
+          { required: true, message: 'Input your age.' },
+          { validator: validateAge }
+        ]}
+      >
+        <InputNumber />
       </Form.Item>
-      <Form.Item {...formItemLayout} label='Sex'>
-        {getFieldDecorator('sex', {
-          initialValue: ''
-        })(
-          <Select>
-            <Option value='' />
-            <Option value='MALE'>Male</Option>
-            <Option value='FEMALE'>Female</Option>
-            <Option value='OTHER'>Other</Option>
-          </Select>
-        )}
+      <Form.Item {...formItemLayout}
+        name='sex'
+        label='Sex'
+        initialValue=''
+      >
+        <Select>
+          <Option value='' >''</Option>
+          <Option value='MALE'>Male</Option>
+          <Option value='FEMALE'>Female</Option>
+          <Option value='OTHER'>Other</Option>
+        </Select>
       </Form.Item>
       <Form.Item {...footerFormItemLayout}>
         <Button type='primary' htmlType='submit' className='login-form-button'>
@@ -136,7 +121,5 @@ const RawRegisterForm: React.FC<IFormProps & FormComponentProps> = props => {
     </Form>
   );
 };
-
-const RegisterForm = Form.create()(RawRegisterForm);
 
 export default RegisterForm;

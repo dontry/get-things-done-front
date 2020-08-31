@@ -6,7 +6,7 @@ import { persistanceService } from '../../classes/PersistanceService';
 function loginUser(credential: ILoginCredential) {
   return apiService.post('/auth/login', credential).then(res => {
     const { user, token } = res.data;
-    userStore.mergeUser(user);
+    userStore.updateUser(user);
     persistanceService.setItem('token', token);
     return;
   });
