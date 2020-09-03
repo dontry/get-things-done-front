@@ -24,11 +24,12 @@ const Title = Editable('h2');
 
 export const EditorTitle = styled(Title)`
   width: 100%;
-  text-align: center;
+  text-align: ${(props: any) => props.align || 'center'} ;
   margin: 0 auto;
   &:focus {
     background: #fff;
   }
+  padding: 0 0.5em;
 `;
 
 export const SelectWrapper = styled.div`

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
 import {
@@ -15,21 +15,26 @@ import {
   RightSquareOutlined,
   BookOutlined,
 } from '@ant-design/icons';
+import { useFetchProjects } from '../actions/projectAction';
+import { IProject } from 'src/types';
+import { PROJECT, HOME } from '../constants/pathname';
 const { Sider } = Layout;
 const { Item, SubMenu } = Menu;
 
-const Sidebar: React.FC<any> = () => {
+const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const _handleCollapse = (_collapsed: boolean): void => {
+  const handleCollapse = useCallback((_collapsed: boolean): void => {
     setCollapsed(_collapsed);
-  };
+  }, [setCollapsed]);
+
+  const { projects } = useFetchProjects();
 
   return (
     <Sider
       style={{ height: '100%', background: '#fff', overflow: 'auto' }}
       collapsible
       collapsed={collapsed}
-      onCollapse={_handleCollapse}
+      onCollapse={handleCollapse}
     >
       <Menu mode='inline' defaultSelectedKeys={['inbox']}>
         <Item key='inbox'>
@@ -83,8 +88,9 @@ const Sidebar: React.FC<any> = () => {
             </span>
           }
         >
-          <Item>xx</Item>
-          <Item>yy</Item>
+          {projects && projects.map((project: IProject) => <Item>
+            <Link to={`${HOME}${PROJECT}/${project.id}`}>{project.title}</Link>
+          </Item>)}
         </SubMenu>
         <SubMenu
           key='goals'

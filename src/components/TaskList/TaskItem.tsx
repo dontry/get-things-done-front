@@ -5,6 +5,7 @@ import { TaskItemContainer, TitleWrapper, CloseButton } from './style';
 import { ITask } from 'src/types';
 import * as taskAction from '../../actions/taskAction';
 import { Link } from 'react-router-dom';
+import { TASK, HOME } from '../../constants/pathname';
 
 interface ITaskItemProps {
   type: string;
@@ -95,7 +96,7 @@ const CompletedTask = ({ task, handleCheck }: ITaskProps) => (
 );
 
 const TaskLink = ({ task }: { task: ITask }) => (
-  <Link to={`/home/editor/${task.id}`}>{task.title}</Link>
+  <Link to={`${HOME}${TASK}/${task.id}`}>{task.title}</Link>
 );
 
 export default TaskItem;

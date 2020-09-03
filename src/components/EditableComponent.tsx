@@ -2,6 +2,7 @@ import React, { Component, SyntheticEvent, createRef, ComponentClass } from 'rea
 
 interface IEditableProps {
   value: string;
+  align?: string;
   isAllowedEmpty?: boolean;
   editOnClick?: boolean;
   onChange?(value: string): void;

@@ -1,25 +1,28 @@
 import { useEffect, useRef } from 'react';
-import { useMutation, usePaginatedQuery, queryCache } from 'react-query';
+import { useMutation, usePaginatedQuery, queryCache, useQuery } from 'react-query';
 import requestStore from '../stores/requestStore';
 import taskStore from '../stores/taskStore';
 import { apiService } from '../api';
 import { ITask, INewTask } from '../types';
 import _ from 'lodash';
 
-export function useFetchTasks(category: string, paginationParams: string = `page=1&limit=15`) {
-  const queryKey = useRef([] as string[]);
-  queryKey.current = ['tasks', category, paginationParams];
-  const { status, error, resolvedData } = usePaginatedQuery(
-    [`tasks`, category, paginationParams],
-    (key, _category, _paginationParams) =>
-      apiService.get(`/${key}?category=${_category}&${_paginationParams}`).then(res => res.data),
+const initialFetchTasksData = {
+  items: [],
+  next: '',
+  previous: '',
+  pageCount: 0
+};
+
+export function useFetchTasksByCategory(category: string, paginationParams: string = `page=1&limit=15`) {
+  const currentQueryKey = ['tasks', category, paginationParams];
+  const { status, error, resolvedData, isFetching } = usePaginatedQuery(
+    ['tasks', category, paginationParams],
+    (key, _category, _paginationParams) => {
+      return apiService.get(`/${key}?category=${_category}&${_paginationParams}`).then(res => res.data);
+    },
     {
-      initialData: {
-        items: [],
-        next: '',
-        previous: '',
-        pageCount: 0
-      }
+      initialData: initialFetchTasksData,
+      initialStale: () => !queryCache.getQueryData(['tasks', category, paginationParams]),
     }
   );
 
@@ -27,11 +30,40 @@ export function useFetchTasks(category: string, paginationParams: string = `page
   useEffect(() => {
     if (status === 'success') {
       taskStore.addTaskList(items);
-      requestStore.setCurrentQueryKey(queryKey.current);
+      requestStore.setCurrentQueryKey(currentQueryKey);
     }
   }, [status, items]);
 
-  return { items, next, previous, pageCount, status, error };
+  return { items, next, previous, pageCount, status, error, isFetching };
+}
+
+export function useFetchTasksByProjectId(projectId: string, paginationParams: string = `page=1&limit=100`) {
+  const { status, error, isFetching, resolvedData } = usePaginatedQuery(
+    [`tasks`, projectId, paginationParams],
+    (key, _projectId, _paginationParams) => {
+      return apiService.get(`/${key}/project/${_projectId}?${_paginationParams}`).then(res => res.data);
+    },
+    {
+      initialData: initialFetchTasksData,
+      initialStale: () => !queryCache.getQueryData(projectId),
+    }
+  );
+
+  const { items, next, previous, pageCount } = resolvedData || {
+    items: [],
+    next: '',
+    previous: '',
+    pageCount: 0
+  };
+
+  useEffect(() => {
+    if (status === 'success') {
+      taskStore.addTaskList(items);
+      requestStore.setCurrentQueryKey(projectId);
+    }
+  }, [status, items]);
+
+  return { items, next, previous, pageCount, status, error, isFetching };
 }
 
 interface IUpdateTaskMutationVariable {

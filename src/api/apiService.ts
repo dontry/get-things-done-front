@@ -1,4 +1,4 @@
-import axios, { Canceler, AxiosResponse, AxiosRequestConfig } from 'axios';
+import axios, { Canceler, AxiosResponse, AxiosRequestConfig, AxiosProxyConfig } from 'axios';
 import { routerStore, messageStore } from '../stores';
 import { MessageType } from '../types';
 import { persistanceService } from '../classes/PersistanceService';
@@ -75,13 +75,19 @@ export const apiService = {
 };
 
 const options: AxiosRequestConfig = {
-  baseURL: `${process.env.BASE_URL}`,
+  baseURL: process.env.BASE_URL,
   headers: { 'X-Requested-With': 'XMLHttpRequest' },
   timeout: 10000,
   withCredentials: true
 };
 
+
 const httpClient = axios.create(options);
+
+httpClient.defaults.proxy = {
+  host: 'http://localhost',
+  port: 3000,
+}
 
 httpClient.interceptors.request.use(
   (config: any) => {

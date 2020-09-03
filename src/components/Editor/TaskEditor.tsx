@@ -296,12 +296,10 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
   );
 };
 
-export default inject('requestStore')(
-  observer(({ requestStore, match, history }) => {
+export default inject('taskStore')(
+  observer(({ taskStore, match, history }) => {
     const taskId = match.params.id;
-    const tasksQuery = queryCache.getQueryData(requestStore.currentQueryKey) as any;
-    const tasks = tasksQuery ? tasksQuery.items : [];
-    const task = tasks.find((_task: ITask) => _task.id === taskId);
+    const task = taskStore.getTaskById(taskId);
     return <TaskEditor task={task} history={history} />;
   })
 );

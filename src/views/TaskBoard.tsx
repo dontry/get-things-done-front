@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef, memo } from 'react';
 import { Form, Input, Spin, Pagination } from 'antd';
 import styled from 'styled-components';
 import { DragDropContext } from 'react-beautiful-dnd';
@@ -21,15 +21,14 @@ interface ITaskBoardProps {
   category: string;
 }
 
-const TaskBoard = ({ category }: ITaskBoardProps) => {
+const TaskBoard = memo(({ category }: ITaskBoardProps) => {
   const isTaskInputVisible = useMemo(() => {
     return inputVisibleType.includes(category);
   }, [category]);
 
   const [pageIndex, setPageIndex] = useState(1);
   const paginationParams = useMemo(() => `page=${pageIndex}&limit=100`, [pageIndex]);
-
-  const { status, items, pageCount } = taskAction.useFetchTasks(category, paginationParams);
+  const { status, items, isFetching } = taskAction.useFetchTasksByCategory(category, paginationParams);
 
   return (
     <Container>
@@ -39,13 +38,13 @@ const TaskBoard = ({ category }: ITaskBoardProps) => {
         </Form>
       )}
       <DragDropContext onDragEnd={onDragEnd}>
-        {status === 'loading' ? (
+        {isFetching ? (
           <Mask>
             <Spin size='large' />
           </Mask>
         ) : (
-          <TaskList id={category} category={category} tasks={items} />
-        )}
+            <TaskList id={category} category={category} tasks={items} />
+          )}
       </DragDropContext>
       {/* {pageCount > 0 && (
         <Pagination
@@ -78,6 +77,6 @@ const TaskBoard = ({ category }: ITaskBoardProps) => {
       setPageIndex(page);
     }, [page]);
   }
-};
+});
 
 export default inject()(observer(({ match }) => <TaskBoard category={match.params.type} />));

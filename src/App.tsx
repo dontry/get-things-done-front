@@ -12,6 +12,8 @@ import { ReactQueryDevtools } from 'react-query-devtools';
 import './App.css';
 import { ReactQueryConfigProvider } from 'react-query';
 import TaskEditor from './components/Editor/TaskEditor';
+import ProjectEditor from './components/Editor/ProjectEditor';
+import AddButton from './components/AddButton';
 
 const { Header, Content, Footer } = Layout;
 
@@ -21,11 +23,14 @@ const App: React.FC<any> = props => {
   const { match } = props;
   const TaskboardWithMessagePopup = WithMessagePopup(TaskBoard, MessageType.NETWORK);
   const TaskEditorWithMessagePopup = WithMessagePopup(TaskEditor, MessageType.NETWORK);
+  const ProjectEditorWithMessagePopup = WithMessagePopup(ProjectEditor, MessageType.NETWORK);
+
   return (
     <ReactQueryConfigProvider config={queryConfig}>
       <Layout style={{ height: '100vh' }}>
-        <Header>
+        <Header style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
           <UserIcon />
+          <AddButton />
         </Header>
         <Layout>
           <Sidebar />
@@ -33,10 +38,20 @@ const App: React.FC<any> = props => {
             <Content>
               <Switch>
                 <ProtectedRoute
-                  path={`${match.url}/editor/:id`}
+                  exact
+                  path={`${match.url}/task/:id`}
                   component={TaskEditorWithMessagePopup}
                 />
-                <ProtectedRoute path={`${match.url}/:type`} component={TaskboardWithMessagePopup} />
+                <ProtectedRoute
+                  exact
+                  path={`${match.url}/project/:id`}
+                  component={ProjectEditorWithMessagePopup}
+                />
+                <ProtectedRoute
+                  exact
+                  path={`${match.url}/:type`}
+                  component={TaskboardWithMessagePopup}
+                />
               </Switch>
             </Content>
             <Footer

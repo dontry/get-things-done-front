@@ -19,7 +19,7 @@ class Task {
   private tags: string[];
   private source: string;
   private note: INote;
-  private project: string | undefined;
+  private projectId: string | undefined;
   private repeaters: IRepeater[];
   private reminders: IReminder[];
   private pos: string | undefined;
@@ -44,7 +44,7 @@ class Task {
     reminders = [],
     source = '',
     note,
-    project
+    projectId
   }: INewTask) {
     this.title = title;
     this.attribute = attribute;
@@ -61,7 +61,7 @@ class Task {
     this.archived = archived;
     this.tags = tags;
     this.note = note || { content: '' };
-    this.project = project;
+    this.projectId = projectId;
     this.repeaters = repeaters;
     this.reminders = reminders;
     this.source = source;
@@ -85,7 +85,7 @@ class Task {
       archived: this.archived,
       tags: this.tags,
       note: this.note,
-      project: this.project,
+      projectId: this.projectId,
       userId: this.userId,
       hidden: this.hidden,
       source: this.source,

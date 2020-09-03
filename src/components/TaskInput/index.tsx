@@ -28,17 +28,18 @@ const useNewTaskTitle = () => {
 };
 
 interface ITaskInputProps {
-  category: Category;
+  category?: Category;
+  projectId?: string;
   userId: string;
 }
 
-const TaskInput = ({ category, userId }: ITaskInputProps) => {
+const TaskInput = ({ category, projectId, userId }: ITaskInputProps) => {
   const { newTaskTitle, setTaskTitle } = useNewTaskTitle();
 
   const { createTask } = taskAction.useCreateTask();
 
   const handleFinish = () => {
-    createNewTask(newTaskTitle, category, userId);
+    createNewTaskByCategory(newTaskTitle, userId, category, projectId);
   }
 
   const handleChange = (e: React.SyntheticEvent<HTMLInputElement>) => {
@@ -49,7 +50,7 @@ const TaskInput = ({ category, userId }: ITaskInputProps) => {
       <Layout style={{ backgroundColor: '#fff' }}>
         <Form.Item
           name='title'
-         style={{ margin: '16px 8px' }}>
+          style={{ margin: '16px 8px' }}>
           <StyledInput
             value={newTaskTitle}
             placeholder='Add a new task'
@@ -66,11 +67,16 @@ const TaskInput = ({ category, userId }: ITaskInputProps) => {
 
   function handleKeyPress(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === 'Enter') {
-      createNewTask(newTaskTitle, category, userId);
+      createNewTaskByCategory(newTaskTitle, userId, category, projectId);
     }
   }
 
-  async function createNewTask(_title: string, _category: Category, _userId: string): Promise<void> {
+  async function createNewTaskByCategory(
+    _title: string,
+    _userId: string,
+    _category: Category = 'inbox',
+    _projectId?: string
+  ): Promise<void> {
     if (newTaskTitle === '') {
       return;
     }
@@ -82,7 +88,8 @@ const TaskInput = ({ category, userId }: ITaskInputProps) => {
           attribute,
           title: newTaskTitle,
           userId: _userId,
-          startAt: getToday()
+          startAt: getToday(),
+          projectId: _projectId,
         });
         break;
       case 'tomorrow':
@@ -90,7 +97,8 @@ const TaskInput = ({ category, userId }: ITaskInputProps) => {
           attribute,
           title: newTaskTitle,
           userId: _userId,
-          startAt: getToday()
+          startAt: getToday(),
+          projectId: _projectId,
         });
         break;
       case 'note':
@@ -101,7 +109,8 @@ const TaskInput = ({ category, userId }: ITaskInputProps) => {
         newTask = new Task({
           attribute,
           title: newTaskTitle,
-          userId: _userId
+          userId: _userId,
+          projectId: _projectId,
         });
     }
     createTask({ task: newTask.toJson() as INewTask });

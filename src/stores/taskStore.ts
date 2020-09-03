@@ -22,17 +22,6 @@ export class TaskStore implements ITaskStore {
     this.tasks = observable.map();
   }
 
-  // public getTasksByAttribute(attribute: string) {
-  //   if (this.tasksByAttributeCache.has(attribute)) {
-  //     return this.tasksByAttributeCache.get(attribute).get();
-  //   }
-  //   const result = computed(() => {
-  //       const computedFilter = this.tasks.filter(task => task.attribute === attribute))
-  //       return arrayToObject(computedFilter);
-  //   };
-  //   this.tasksByAttributeCache.set(attribute, result); // Q: when do we remove items from the cache? Never? When user is unloaded?
-  //   return this.tasksByAttributeCache.get(attribute);
-  // }
   @computed
   public get json(): object {
     return mapToObject<ITask>(this.tasks);
@@ -105,9 +94,6 @@ export class TaskStore implements ITaskStore {
   }
 
   @action
-  /**
-   * addTaskById
-   */
   public addTask(task: ITask): void {
     if (task.id) {
       this.tasks.set(task.id, task);

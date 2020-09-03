@@ -83,7 +83,7 @@ export interface ITask {
   archived: number;
   tags: string[];
   note: INote;
-  project?: string;
+  projectId?: string;
   pos: number;
 }
 
@@ -108,7 +108,22 @@ export interface INewTask {
   note?: INote;
   reminders?: IReminder[];
   repeaters?: IRepeater[];
-  project?: string;
+  projectId?: string;
+}
+export interface IProject {
+  id?: string;
+  title: string;
+  userId: string;
+  createdAt: number;
+  completedAt?: number;
+  allDay: number;
+  deleted: number;
+  archived: number;
+  hidden?: string;
+  note: INote;
+  source?: string;
+  status: number;
+  pos: number;
 }
 
 export interface INote {
