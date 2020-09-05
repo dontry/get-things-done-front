@@ -1,5 +1,4 @@
 import React from 'react';
-import { useForm } from 'antd/lib/form/Form';
 import { IUser } from '../types';
 import { formItemLayout, footerFormItemLayout } from '../constants/layout';
 import { Form, Input, Button, Select, InputNumber, Space } from 'antd';
@@ -20,31 +19,22 @@ const ProfileForm = ({ user, onSubmit, onCancel }: IFormProps) => {
   const handleFinish = (values: any) => {
     const updatedUser = merge(user, values);
     onSubmit(updatedUser);
-  }
+  };
 
   const handleCancel = () => {
     onCancel();
-  }
+  };
 
   return (
-    <Form
-      onFinish={handleFinish}
-    >
-      <Form.Item {...formItemLayout}
-        name='username'
-        label='Username'
-        initialValue={username}
-      >
+    <Form onFinish={handleFinish}>
+      <Form.Item {...formItemLayout} name='username' label='Username' initialValue={username}>
         <Input disabled />
       </Form.Item>
-      <Form.Item {...formItemLayout}
-        name='email'
-        label='E-mail'
-        initialValue={email}
-      >
+      <Form.Item {...formItemLayout} name='email' label='E-mail' initialValue={email}>
         <Input disabled />
       </Form.Item>
-      <Form.Item {...formItemLayout}
+      <Form.Item
+        {...formItemLayout}
         name={['fullName', 'firstName']}
         label='First Name'
         initialValue={firstName}
@@ -52,7 +42,8 @@ const ProfileForm = ({ user, onSubmit, onCancel }: IFormProps) => {
       >
         <Input type='string' />
       </Form.Item>
-      <Form.Item {...formItemLayout}
+      <Form.Item
+        {...formItemLayout}
         name={['fullName', 'lastName']}
         label='Last Name'
         initialValue={lastName}
@@ -60,21 +51,16 @@ const ProfileForm = ({ user, onSubmit, onCancel }: IFormProps) => {
       >
         <Input type='string' />
       </Form.Item>
-      <Form.Item {...formItemLayout}
+      <Form.Item
+        {...formItemLayout}
         name='age'
         label='Age'
         initialValue={age}
-        rules={[
-          { required: true, message: 'Input your age.' },
-        ]}
+        rules={[{ required: true, message: 'Input your age.' }]}
       >
         <InputNumber />
       </Form.Item>
-      <Form.Item {...formItemLayout}
-        name='sex'
-        label='Sex'
-        initialValue={sex}
-      >
+      <Form.Item {...formItemLayout} name='sex' label='Sex' initialValue={sex}>
         <Select>
           <Option value=''> </Option>
           <Option value='MALE'>Male</Option>
@@ -86,11 +72,10 @@ const ProfileForm = ({ user, onSubmit, onCancel }: IFormProps) => {
         <Space>
           <Button type='primary' htmlType='submit' className='login-form-button'>
             Save
-            </Button>
-          <Button type='default' htmlType='reset' className='login-form-button'
-            onClick={onCancel}>
+          </Button>
+          <Button type='default' htmlType='reset' className='login-form-button' onClick={onCancel}>
             Cancel
-            </Button>
+          </Button>
         </Space>
       </Form.Item>
     </Form>

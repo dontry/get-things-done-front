@@ -113,17 +113,18 @@ export interface INewTask {
 export interface IProject {
   id?: string;
   title: string;
-  userId: string;
-  createdAt: number;
+  userId?: string;
+  createdAt?: number;
   completedAt?: number;
-  allDay: number;
-  deleted: number;
-  archived: number;
-  hidden?: string;
-  note: INote;
+  allDay?: number;
+  deleted?: number;
+  archived?: number;
+  hidden?: number;
+  tags?: string[];
+  note?: INote;
   source?: string;
-  status: number;
-  pos: number;
+  active?: number;
+  pos?: number;
 }
 
 export interface INote {
@@ -147,4 +148,10 @@ export interface IRepeater {
 export interface IReminder {
   frequency: number;
   count: number;
+}
+
+export interface IContext {
+  id?: string;
+  name: string;
+  userId?: string;
 }

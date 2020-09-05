@@ -1,12 +1,13 @@
-import React, { useState, useEffect, useMemo, useCallback, useRef, memo } from 'react';
-import { Form, Input, Spin, Pagination } from 'antd';
+import React, { useState, useMemo, memo } from 'react';
+import { Form, Spin } from 'antd';
 import styled from 'styled-components';
 import { DragDropContext } from 'react-beautiful-dnd';
 import TaskList from '../components/TaskList/TaskList';
-import TaskInput from '../components/TaskInput';
+import { CategoryTaskInput } from '../components/TaskInput';
 import * as taskAction from '../actions/taskAction';
 import Mask from '../components/Mask';
 import { inject, observer } from 'mobx-react';
+import { Category } from 'src/types';
 
 const Container = styled.div`
   position: relative;
@@ -18,23 +19,24 @@ const Container = styled.div`
 const inputVisibleType = ['inbox', 'today', 'next', 'scheduled', 'someday', 'reference'];
 
 interface ITaskBoardProps {
+  userId: string;
   category: string;
 }
 
-const TaskBoard = memo(({ category }: ITaskBoardProps) => {
+const TaskBoard = memo(({ category, userId }: ITaskBoardProps) => {
   const isTaskInputVisible = useMemo(() => {
     return inputVisibleType.includes(category);
   }, [category]);
 
-  const [pageIndex, setPageIndex] = useState(1);
+  const [pageIndex] = useState(1);
   const paginationParams = useMemo(() => `page=${pageIndex}&limit=100`, [pageIndex]);
-  const { status, items, isFetching } = taskAction.useFetchTasksByCategory(category, paginationParams);
+  const { items, isFetching } = taskAction.useFetchTasksByCategory(category, paginationParams);
 
   return (
     <Container>
       {isTaskInputVisible && (
         <Form>
-          <TaskInput category={category} />
+          <CategoryTaskInput category={category as Category} userId={userId} />
         </Form>
       )}
       <DragDropContext onDragEnd={onDragEnd}>
@@ -43,21 +45,14 @@ const TaskBoard = memo(({ category }: ITaskBoardProps) => {
             <Spin size='large' />
           </Mask>
         ) : (
-            <TaskList id={category} category={category} tasks={items} />
-          )}
+          <TaskList id={category} type={category} tasks={items} />
+        )}
       </DragDropContext>
-      {/* {pageCount > 0 && (
-        <Pagination
-          defaultCurrent={1}
-          total={pageCount}
-          onChange={handlePaginationChange}
-        ></Pagination>
-      )} */}
     </Container>
   );
 
   function onDragEnd(result: object): void {
-    const { destination, source, draggableId, type }: any = result;
+    const { destination, source }: any = result;
     // If destination is not a droppable area
     if (!destination) {
       return;
@@ -71,12 +66,10 @@ const TaskBoard = memo(({ category }: ITaskBoardProps) => {
     // list.splice(destination.index, 0, draggableId);
     // setList(list);
   }
-
-  function handlePaginationChange(page: number) {
-    useCallback(() => {
-      setPageIndex(page);
-    }, [page]);
-  }
 });
 
-export default inject()(observer(({ match }) => <TaskBoard category={match.params.type} />));
+export default inject('userStore')(
+  observer(({ userStore, match }) => (
+    <TaskBoard category={match.params.type} userId={userStore.userId} />
+  ))
+);

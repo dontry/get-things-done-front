@@ -8,15 +8,15 @@ interface ITaskListProps {
   id: string;
   tasks: ITask[];
   index?: number;
-  category: string;
+  type: string;
 }
 
-const TaskList = ({ id, tasks, category }: ITaskListProps) => {
+const TaskList = ({ id, tasks, type }: ITaskListProps) => {
   return (
-    <Droppable droppableId={id} type={category}>
+    <Droppable droppableId={id} type={type}>
       {provided => (
         <TaskListContainer {...provided.droppableProps} ref={provided.innerRef}>
-          <InnerList category={category} tasks={tasks} />
+          <InnerList type={type} tasks={tasks} />
         </TaskListContainer>
       )}
     </Droppable>
@@ -24,11 +24,11 @@ const TaskList = ({ id, tasks, category }: ITaskListProps) => {
 };
 
 interface IInnerListProps {
-  category: string;
+  type: string;
   tasks: ITask[];
 }
 
-const InnerList = memo(({ tasks, category: type }: IInnerListProps) => {
+const InnerList = memo(({ tasks, type }: IInnerListProps) => {
   return (
     <TaskListBody>
       {tasks.map((task, index) => (

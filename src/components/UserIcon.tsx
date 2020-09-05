@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { logout } from '../actions/authAction';
 import routerStore from '../stores/routerStore';
 import { Avatar, Menu, Dropdown } from 'antd';
-import { UserOutlined } from '@ant-design/icons'
+import { UserOutlined } from '@ant-design/icons';
 import { PROFILE, HOME } from '../constants/pathname';
 
 const UserIcon = () => {
@@ -22,10 +22,10 @@ const menu = (() => {
   return (
     <Menu>
       <Menu.Item>
-        <Link to={`${HOME}/inbox`}>Home</Link>
+        <Link to='home/inbox'>Home</Link>
       </Menu.Item>
       <Menu.Item>
-        <Link to={PROFILE}>Profile</Link>
+        <Link to='profile'>Profile</Link>
       </Menu.Item>
       <Menu.Item onClick={handleLogout}>
         <span>Logout</span>

@@ -13,16 +13,21 @@ const initialFetchTasksData = {
   pageCount: 0
 };
 
-export function useFetchTasksByCategory(category: string, paginationParams: string = `page=1&limit=15`) {
+export function useFetchTasksByCategory(
+  category: string,
+  paginationParams: string = `page=1&limit=15`
+) {
   const currentQueryKey = ['tasks', category, paginationParams];
   const { status, error, resolvedData, isFetching } = usePaginatedQuery(
     ['tasks', category, paginationParams],
-    (key, _category, _paginationParams) => {
-      return apiService.get(`/${key}?category=${_category}&${_paginationParams}`).then(res => res.data);
+    (_, _category, _paginationParams) => {
+      return apiService
+        .get(`/tasks?category=${_category}&${_paginationParams}`)
+        .then(res => res.data);
     },
     {
       initialData: initialFetchTasksData,
-      initialStale: () => !queryCache.getQueryData(['tasks', category, paginationParams]),
+      initialStale: () => !queryCache.getQueryData(['tasks', category, paginationParams])
     }
   );
 
@@ -37,15 +42,21 @@ export function useFetchTasksByCategory(category: string, paginationParams: stri
   return { items, next, previous, pageCount, status, error, isFetching };
 }
 
-export function useFetchTasksByProjectId(projectId: string, paginationParams: string = `page=1&limit=100`) {
+export function useFetchTasksByProjectId(
+  projectId: string,
+  paginationParams: string = `page=1&limit=100`
+) {
+  const currentQueryKey = [`project`, projectId, paginationParams];
   const { status, error, isFetching, resolvedData } = usePaginatedQuery(
-    [`tasks`, projectId, paginationParams],
+    [`project`, projectId, paginationParams],
     (key, _projectId, _paginationParams) => {
-      return apiService.get(`/${key}/project/${_projectId}?${_paginationParams}`).then(res => res.data);
+      return apiService
+        .get(`/tasks/${key}/${_projectId}?${_paginationParams}`)
+        .then(res => res.data);
     },
     {
       initialData: initialFetchTasksData,
-      initialStale: () => !queryCache.getQueryData(projectId),
+      initialStale: () => !queryCache.getQueryData(projectId)
     }
   );
 
@@ -59,9 +70,44 @@ export function useFetchTasksByProjectId(projectId: string, paginationParams: st
   useEffect(() => {
     if (status === 'success') {
       taskStore.addTaskList(items);
-      requestStore.setCurrentQueryKey(projectId);
+      requestStore.setCurrentQueryKey(currentQueryKey);
     }
-  }, [status, items]);
+  }, [status, items, currentQueryKey]);
+
+  return { items, next, previous, pageCount, status, error, isFetching };
+}
+
+export function useFetchTasksByContextId(
+  contextId: string,
+  paginationParams: string = `page=1&limit=100`
+) {
+  const currentQueryKey = [`context`, contextId, paginationParams];
+  const { status, error, isFetching, resolvedData } = usePaginatedQuery(
+    [`context`, contextId, paginationParams],
+    (key, _contextId, _paginationParams) => {
+      return apiService
+        .get(`/tasks/${key}/${_contextId}?${_paginationParams}`)
+        .then(res => res.data);
+    },
+    {
+      initialData: initialFetchTasksData,
+      initialStale: () => !queryCache.getQueryData(contextId)
+    }
+  );
+
+  const { items, next, previous, pageCount } = resolvedData || {
+    items: [],
+    next: '',
+    previous: '',
+    pageCount: 0
+  };
+
+  useEffect(() => {
+    if (status === 'success') {
+      taskStore.addTaskList(items);
+      requestStore.setCurrentQueryKey(currentQueryKey);
+    }
+  }, [status, items, currentQueryKey]);
 
   return { items, next, previous, pageCount, status, error, isFetching };
 }
@@ -98,9 +144,7 @@ export function useCreateTask() {
   const [createTask, { data, error, status }] = useMutation<ITask, ICreateTaskMutationVariable>(
     ({ task }) => apiService.post(`/tasks`, task).then(res => res.data),
     {
-      onSuccess: () => {
-        queryCache.invalidateQueries(requestStore.currentQueryKey);
-      }
+      onSuccess: () => queryCache.invalidateQueries(requestStore.currentQueryKey)
     }
   );
 

@@ -13,21 +13,25 @@ import {
   CheckSquareOutlined,
   DeleteOutlined,
   RightSquareOutlined,
-  BookOutlined,
+  BookOutlined
 } from '@ant-design/icons';
 import { useFetchProjects } from '../actions/projectAction';
-import { IProject } from 'src/types';
-import { PROJECT, HOME } from '../constants/pathname';
+import { IProject, IContext } from 'src/types';
+import { useFetchContext } from '../actions/contextAction';
 const { Sider } = Layout;
 const { Item, SubMenu } = Menu;
 
 const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const handleCollapse = useCallback((_collapsed: boolean): void => {
-    setCollapsed(_collapsed);
-  }, [setCollapsed]);
+  const handleCollapse = useCallback(
+    (_collapsed: boolean): void => {
+      setCollapsed(_collapsed);
+    },
+    [setCollapsed]
+  );
 
   const { projects } = useFetchProjects();
+  const { context } = useFetchContext();
 
   return (
     <Sider
@@ -88,21 +92,12 @@ const Sidebar = () => {
             </span>
           }
         >
-          {projects && projects.map((project: IProject) => <Item>
-            <Link to={`${HOME}${PROJECT}/${project.id}`}>{project.title}</Link>
-          </Item>)}
-        </SubMenu>
-        <SubMenu
-          key='goals'
-          title={
-            <span>
-              <ExclamationCircleOutlined />
-              <span>Goals</span>
-            </span>
-          }
-        >
-          <Item>goal1</Item>
-          <Item>goal2</Item>
+          {projects &&
+            projects.map((project: IProject) => (
+              <Item>
+                <Link to={`/home/project/${project.id}`}>{project.title}</Link>
+              </Item>
+            ))}
         </SubMenu>
         <SubMenu
           key='context'
@@ -113,7 +108,12 @@ const Sidebar = () => {
             </span>
           }
         >
-          <Item>context1</Item>
+          {context &&
+            context.map((cxt: IContext) => (
+              <Item>
+                <Link to={`/home/context/${cxt.id}}`}>{cxt.name}</Link>
+              </Item>
+            ))}
         </SubMenu>
         <Item key='completed'>
           <Link to='/home/completed'>

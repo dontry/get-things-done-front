@@ -1,31 +1,31 @@
 import { match as Match } from 'react-router';
 import { queryCache } from 'react-query';
 import { IProject } from 'src/types';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import React from 'react';
 import { Form, Layout, Spin, Checkbox, Space } from 'antd';
-import { EditorTitle } from './style';
-import { useValueChange } from './hooks/useValueChange';
+import { EditorTitle } from '../Editor/style';
+import { useValueChange } from '../Editor/hooks/useValueChange';
 import Mask from '../Mask';
 import TaskList from '../TaskList';
 import * as taskAction from '../../actions/taskAction';
 import { DragDropContext } from 'react-beautiful-dnd';
-import TaskInput from '../TaskInput';
-import styled from 'styled-components';
+import { CategoryTaskInput } from '../TaskInput';
+import { inject, observer } from 'mobx-react';
 
-const { Content, Header } = Layout;
+const { Header } = Layout;
 
 interface IProjectEditorProps {
   match: Match<{ id: string }>;
-  history: History;
+  userId: string;
 }
 
-const ProjectEditor = ({ match }: IProjectEditorProps) => {
+export const ProjectBoard = ({ match, userId }: IProjectEditorProps) => {
   const projectId = match.params.id;
   const project = useMemo(() => {
-    const projects = queryCache.getQueryData('projects') as IProject[] || [];
+    const projects = (queryCache.getQueryData('projects') as IProject[]) || [];
     return projects.find(_project => _project.id === projectId);
-  }, [projectId])
+  }, [projectId]);
 
   if (!project) {
     return null;
@@ -61,18 +61,16 @@ const ProjectEditor = ({ match }: IProjectEditorProps) => {
           </Form.Item>
         </div>
       </Header>
-      <TaskInput projectId={projectId} />
+      <CategoryTaskInput category='inbox' projectId={projectId} userId={userId} />
       <DragDropContext onDragEnd={onDragEnd}>
         {isFetching ? (
           <Mask>
             <Spin size='large' />
           </Mask>
         ) : (
-            <TaskList id={projectId} category={projectId} tasks={items} />
-          )}
+          <TaskList id={projectId} type={projectId} tasks={items} />
+        )}
       </DragDropContext>
     </Layout>
-  )
-}
-
-export default ProjectEditor;
+  );
+};

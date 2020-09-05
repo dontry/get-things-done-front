@@ -1,6 +1,6 @@
 import { Attribute, Priority, INewTask, INote, IRepeater, IReminder, ITask } from '../types/index';
 
-class Task {
+export class Task {
   private title: string;
   private attribute: Attribute;
   private userId: string;
@@ -22,7 +22,6 @@ class Task {
   private projectId: string | undefined;
   private repeaters: IRepeater[];
   private reminders: IReminder[];
-  private pos: string | undefined;
 
   constructor({
     title,
@@ -94,5 +93,3 @@ class Task {
     };
   }
 }
-
-export default Task;

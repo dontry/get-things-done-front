@@ -5,7 +5,7 @@ import {
   EnvironmentOutlined,
   ArrowUpOutlined,
   TagOutlined,
-  BellOutlined,
+  BellOutlined
 } from '@ant-design/icons';
 import {
   Editor,
@@ -27,7 +27,7 @@ import {
   EditorContentWrapper
 } from './style';
 import { BlockStyleControls, InlineStyleControls } from './StyleControls';
-import { ITask, Priority, Category, Attribute } from '../../types';
+import { ITask, Priority, Category, Attribute, IContext } from '../../types';
 import { CONTEXT, TAGS } from '../../constants/misc';
 import { queryCache } from 'react-query';
 import { observer, inject } from 'mobx-react';
@@ -72,6 +72,7 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
   const [editorState, setEditorState] = useState(() =>
     contentState ? EditorState.createWithContent(contentState) : EditorState.createEmpty()
   );
+  const context = queryCache.getQueryData<IContext[]>('context');
 
   const taskCategory = useMemo((): Category => {
     if (taskAttribute === 'next') {
@@ -249,9 +250,10 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
               }
             >
               <Select defaultValue={taskContext} onChange={handleContextChange}>
-                {CONTEXT.map(context => (
-                  <Select.Option value={context}>{context}</Select.Option>
-                ))}
+                {context &&
+                  context.map((cxt: IContext) => (
+                    <Select.Option value={cxt.id || ''}>{cxt.name}</Select.Option>
+                  ))}
               </Select>
             </Form.Item>
             <Form.Item
