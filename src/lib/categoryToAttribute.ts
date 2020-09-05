@@ -6,12 +6,12 @@ export function categoryToAttribute(_category: Category): Attribute {
       return 'inbox';
     case 'next':
       return 'next';
+    case 'note':
+      return 'note';
     case 'today':
     case 'tomorrow':
     case 'scheduled':
       return 'plan';
-    case 'note':
-      return 'note';
     case 'someday':
       return 'noplan';
     default:

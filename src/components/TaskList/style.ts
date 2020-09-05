@@ -1,5 +1,5 @@
 import { DroppableProvided } from 'react-beautiful-dnd';
-import styled, { StyledFunction } from 'styled-components';
+import styled from 'styled-components';
 
 interface ITaskItemContainerProps extends DroppableProvided {
   isDragging: boolean;

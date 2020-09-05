@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react';
-import { inject, observer } from 'mobx-react';
 import { Task } from '../../classes';
 import { INewTask, Category } from '../../types';
 import { getToday } from '../../lib/date';

@@ -1,16 +1,16 @@
 import { match as Match } from 'react-router';
 import { queryCache } from 'react-query';
-import { IProject } from 'src/types';
+import { IProject, ITask } from 'src/types';
 import { useMemo } from 'react';
 import React from 'react';
 import { Form, Layout, Spin, Checkbox, Space } from 'antd';
 import { EditorTitle } from './Editor/style';
 import { useValueChange } from '../hooks/useValueChange';
 import Mask from './Mask';
-import TaskList from './TaskList';
 import * as taskAction from '../hooks/taskHooks';
-import { DragDropContext } from 'react-beautiful-dnd';
 import { CategoryTaskInput } from './TaskInput';
+import TaskListGroup, { ITaskListGroup } from './TaskListGroup';
+import { groupTasksByCategory } from '../lib/groupTasksByCategory';
 
 const { Header } = Layout;
 
@@ -33,20 +33,7 @@ const ProjectBoard = ({ match, userId }: IProjectEditorProps) => {
   const [title, handleTitleChange] = useValueChange(project ? project.title : '');
   const { items, isFetching } = taskAction.useFetchTasksByProjectId(projectId);
 
-  function onDragEnd(result: object): void {
-    const { destination, source, draggableId, type }: any = result;
-    // If destination is not a droppable area
-    if (!destination) {
-      return;
-    }
-    // If the draggable object not move
-    if (destination.droppableId === source.droppableId && destination.index === source.index) {
-      return;
-    }
-    // TODO: reorder list
-    // list.splice(source.index, 1);
-    // list.splice(destination.index, 0, draggableId);
-  }
+  const taskListGroups = groupTasksByCategory(items) as ITaskListGroup[];
 
   return (
     <Layout style={{ background: '#fff', height: '100%', overflow: 'auto' }}>
@@ -61,15 +48,15 @@ const ProjectBoard = ({ match, userId }: IProjectEditorProps) => {
         </div>
       </Header>
       <CategoryTaskInput category='inbox' projectId={projectId} userId={userId} />
-      <DragDropContext onDragEnd={onDragEnd}>
+      <>
         {isFetching ? (
           <Mask>
             <Spin size='large' />
           </Mask>
         ) : (
-          <TaskList id={projectId} type={projectId} tasks={items} />
+          <TaskListGroup groups={taskListGroups} />
         )}
-      </DragDropContext>
+      </>
     </Layout>
   );
 };

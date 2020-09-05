@@ -1,5 +1,4 @@
 import React from 'react';
-import { Draggable } from 'react-beautiful-dnd';
 import { Checkbox } from 'antd';
 import { TaskItemContainer, TitleWrapper, CloseButton } from './style';
 import { ITask } from 'src/types';
@@ -8,30 +7,17 @@ import { useUpdateTask } from '../../hooks/taskHooks';
 
 interface ITaskItemProps {
   type: string;
-  index: number;
   task: ITask;
+  isDragging?: boolean;
 }
 
-const TaskItem = React.memo(({ type, task, index }: ITaskItemProps) => {
+const TaskItem = React.memo(({ type, task, isDragging }: ITaskItemProps) => {
   if (!task.id) {
     return null;
   }
   const { updateTask } = useUpdateTask();
 
-  return (
-    <Draggable draggableId={task.id} index={index}>
-      {(provided, snapshot) => (
-        <TaskItemContainer
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-          ref={provided.innerRef}
-          isDragging={snapshot.isDragging}
-        >
-          {_renderTask(task, type)}
-        </TaskItemContainer>
-      )}
-    </Draggable>
-  );
+  return <TaskItemContainer isDragging={isDragging}>{_renderTask(task, type)}</TaskItemContainer>;
 
   function _renderTask(_task: ITask, _type: string) {
     switch (_type) {

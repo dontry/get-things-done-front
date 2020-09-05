@@ -1,8 +1,7 @@
 import React, { useState, useMemo, memo } from 'react';
 import { Form, Spin } from 'antd';
 import styled from 'styled-components';
-import { DragDropContext } from 'react-beautiful-dnd';
-import TaskList from '../components/TaskList/TaskList';
+import { TaskList } from '../components/TaskList';
 import { CategoryTaskInput } from '../components/TaskInput';
 import Mask from '../components/Mask';
 import { inject, observer } from 'mobx-react';
@@ -39,15 +38,15 @@ const TaskBoard = memo(({ category, userId }: ITaskBoardProps) => {
           <CategoryTaskInput category={category as Category} userId={userId} />
         </Form>
       )}
-      <DragDropContext onDragEnd={onDragEnd}>
+      <>
         {isFetching ? (
           <Mask>
             <Spin size='large' />
           </Mask>
         ) : (
-          <TaskList id={category} type={category} tasks={items} />
+          <TaskList type={category} tasks={items} />
         )}
-      </DragDropContext>
+      </>
     </Container>
   );
 
