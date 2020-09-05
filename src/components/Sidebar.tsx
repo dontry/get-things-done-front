@@ -8,16 +8,15 @@ import {
   ScheduleOutlined,
   CalendarOutlined,
   FileDoneOutlined,
-  ExclamationCircleOutlined,
   EnvironmentOutlined,
   CheckSquareOutlined,
   DeleteOutlined,
   RightSquareOutlined,
   BookOutlined
 } from '@ant-design/icons';
-import { useFetchProjects } from '../actions/projectAction';
+import { useFetchProjects } from '../hooks/projectHooks';
 import { IProject, IContext } from 'src/types';
-import { useFetchContext } from '../actions/contextAction';
+import { useFetchContext } from '../hooks/contexHooks';
 const { Sider } = Layout;
 const { Item, SubMenu } = Menu;
 

@@ -24,10 +24,17 @@ const Title = Editable('h2');
 
 export const EditorTitle = styled(Title)`
   width: 100%;
-  text-align: ${(props: any) => props.align || 'center'} ;
+  text-align: ${(props: any) => props.align || 'center'};
   margin: 0 auto;
   &:focus {
     background: #fff;
+    border-color: #40a9ff;
+    border-width: 1px;
+    border-right-width: 1px !important;
+    outline-width: 0;
+    outline-offset: 0;
+    outline-color: rgba(0, 0, 0, 0.85);
+    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
   }
   padding: 0 0.5em;
 `;

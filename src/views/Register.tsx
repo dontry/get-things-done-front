@@ -1,6 +1,6 @@
 import React from 'react';
 import RegisterForm from '../components/RegisterForm';
-import { register } from '../actions/authAction';
+import { register } from '../hooks/authHooks';
 import { MessageType } from '../types';
 import { CenterContainer, CenterWrapper } from './style';
 import WithMessagePopup from '../components/WithMessagePopup';

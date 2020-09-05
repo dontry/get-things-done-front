@@ -1,7 +1,7 @@
-import TaskBoard from '../components/TaskBoard/TaskBoard';
+import TaskBoard from '../components/TaskBoard';
 import React, { useMemo } from 'react';
 import { inject, observer } from 'mobx-react';
-import { useFetchTasksByCategory } from '../actions/taskAction';
+import { useFetchTasksByCategory } from '../hooks/taskHooks';
 import { CategoryTaskInput } from '../components/TaskInput';
 import { Category } from 'src/types';
 

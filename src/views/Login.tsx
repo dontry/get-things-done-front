@@ -1,6 +1,6 @@
 import React from 'react';
 import LoginForm, { ILoginFormValues } from '../components/LoginForm';
-import { login } from '../actions/authAction';
+import { login } from '../hooks/authHooks';
 import WithMessagePopup from '../components/WithMessagePopup';
 import { MessageType } from '../types';
 import { CenterContainer, CenterWrapper } from './style';

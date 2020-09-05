@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Task } from '../../classes';
 import { INewTask, Category } from '../../types';
-import { useCreateTask } from '../../actions/taskAction';
+import { useCreateTask } from '../../hooks/taskHooks';
 import TaskInput from './TaskInput';
 
 interface IContextTaskInputProps {

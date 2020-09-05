@@ -3,8 +3,8 @@ import { Draggable } from 'react-beautiful-dnd';
 import { Checkbox } from 'antd';
 import { TaskItemContainer, TitleWrapper, CloseButton } from './style';
 import { ITask } from 'src/types';
-import * as taskAction from '../../actions/taskAction';
 import { Link } from 'react-router-dom';
+import { useUpdateTask } from '../../hooks/taskHooks';
 
 interface ITaskItemProps {
   type: string;
@@ -16,7 +16,7 @@ const TaskItem = React.memo(({ type, task, index }: ITaskItemProps) => {
   if (!task.id) {
     return null;
   }
-  const { updateTask } = taskAction.useUpdateTask();
+  const { updateTask } = useUpdateTask();
 
   return (
     <Draggable draggableId={task.id} index={index}>

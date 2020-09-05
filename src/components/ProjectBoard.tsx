@@ -4,14 +4,13 @@ import { IProject } from 'src/types';
 import { useMemo } from 'react';
 import React from 'react';
 import { Form, Layout, Spin, Checkbox, Space } from 'antd';
-import { EditorTitle } from '../Editor/style';
-import { useValueChange } from '../Editor/hooks/useValueChange';
-import Mask from '../Mask';
-import TaskList from '../TaskList';
-import * as taskAction from '../../actions/taskAction';
+import { EditorTitle } from './Editor/style';
+import { useValueChange } from '../hooks/useValueChange';
+import Mask from './Mask';
+import TaskList from './TaskList';
+import * as taskAction from '../hooks/taskHooks';
 import { DragDropContext } from 'react-beautiful-dnd';
-import { CategoryTaskInput } from '../TaskInput';
-import { inject, observer } from 'mobx-react';
+import { CategoryTaskInput } from './TaskInput';
 
 const { Header } = Layout;
 
@@ -20,7 +19,7 @@ interface IProjectEditorProps {
   userId: string;
 }
 
-export const ProjectBoard = ({ match, userId }: IProjectEditorProps) => {
+const ProjectBoard = ({ match, userId }: IProjectEditorProps) => {
   const projectId = match.params.id;
   const project = useMemo(() => {
     const projects = (queryCache.getQueryData('projects') as IProject[]) || [];
@@ -32,7 +31,7 @@ export const ProjectBoard = ({ match, userId }: IProjectEditorProps) => {
   }
 
   const [title, handleTitleChange] = useValueChange(project ? project.title : '');
-  const { status, items, isFetching } = taskAction.useFetchTasksByProjectId(projectId);
+  const { items, isFetching } = taskAction.useFetchTasksByProjectId(projectId);
 
   function onDragEnd(result: object): void {
     const { destination, source, draggableId, type }: any = result;
@@ -74,3 +73,5 @@ export const ProjectBoard = ({ match, userId }: IProjectEditorProps) => {
     </Layout>
   );
 };
+
+export default ProjectBoard;

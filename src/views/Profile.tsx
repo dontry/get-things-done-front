@@ -4,7 +4,7 @@ import { Layout, Avatar } from 'antd';
 import { IUser } from '../types';
 import ProfileForm from '../components/ProfileForm';
 import UserIcon from '../components/UserIcon';
-import { useFetchProfile, useUpdateProfile } from '../actions/userAction';
+import { useFetchProfile, useUpdateProfile } from '../hooks/userHooks';
 
 const { Header, Content, Footer } = Layout;
 
@@ -24,16 +24,14 @@ const Profile = ({ history }: IProfileProps) => {
   const { user } = useFetchProfile();
   const { updateProfile } = useUpdateProfile();
 
-  const handleSubmit = useCallback(
-    (_user: IUser) => {
-      updateProfile({ user: _user });
-      window.history.back();
-    }, [])
+  const handleSubmit = useCallback((_user: IUser) => {
+    updateProfile({ user: _user });
+    window.history.back();
+  }, []);
 
-  const handleCancel = useCallback(
-    () => {
-      window.history.back();
-    }, [])
+  const handleCancel = useCallback(() => {
+    window.history.back();
+  }, []);
 
   return (
     <Layout style={{ height: '100vh' }}>

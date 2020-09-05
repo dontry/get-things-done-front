@@ -10,5 +10,5 @@ export function useValueChange<T>(initialValue: T): [T, (value: T) => void] {
     [setValue]
   );
 
-  return [value, handleValueChange]
+  return [value, handleValueChange];
 }

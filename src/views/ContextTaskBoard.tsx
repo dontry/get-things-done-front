@@ -1,7 +1,7 @@
-import TaskBoard from '../components/TaskBoard/TaskBoard';
+import TaskBoard from '../components/TaskBoard';
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { useFetchTasksByContextId } from '../actions/taskAction';
+import { useFetchTasksByContextId } from '../hooks/taskHooks';
 import { ContextTaskInput } from '../components/TaskInput';
 
 interface IContextTaskBoard {

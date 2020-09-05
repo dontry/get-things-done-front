@@ -1,12 +1,6 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { Form, Select, Layout, Button, Space } from 'antd';
-import {
-  BarsOutlined,
-  EnvironmentOutlined,
-  ArrowUpOutlined,
-  TagOutlined,
-  BellOutlined
-} from '@ant-design/icons';
+import { BarsOutlined, EnvironmentOutlined, ArrowUpOutlined, TagOutlined } from '@ant-design/icons';
 import {
   Editor,
   EditorState,
@@ -28,10 +22,11 @@ import {
 } from './style';
 import { BlockStyleControls, InlineStyleControls } from './StyleControls';
 import { ITask, Priority, Category, Attribute, IContext } from '../../types';
-import { CONTEXT, TAGS } from '../../constants/misc';
+import { TAGS } from '../../constants/misc';
 import { queryCache } from 'react-query';
 import { observer, inject } from 'mobx-react';
-import { useUpdateTask } from '../../actions/taskAction';
+import { useUpdateTask } from '../../hooks/taskHooks';
+import { useValueChange } from '../../hooks/useValueChange';
 import { History } from 'history';
 import { get } from 'lodash';
 import CategorySelect, { IUpdateCategoryPayload } from './CategorySelect';
@@ -66,9 +61,9 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
   const [taskAttribute, setAttribute] = useState<Attribute>(task.attribute || 'inbox');
   const [taskTitle, setTitle] = useState(task.title);
   const [taskStartTime, setStartTime] = useState(task.startAt);
-  const [taskPriority, setPriority] = useState(task.priority);
-  const [taskContext, setContext] = useState(task.context);
-  const [taskTags, setTags] = useState(task.tags);
+  const [taskPriority, handlePriorityChange] = useValueChange(task.priority);
+  const [taskContext, handleContextChange] = useValueChange(task.context);
+  const [taskTags, handleTagsChange] = useValueChange(task.tags);
   const [editorState, setEditorState] = useState(() =>
     contentState ? EditorState.createWithContent(contentState) : EditorState.createEmpty()
   );
@@ -144,27 +139,6 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
     [setTitle]
   );
 
-  const handlePriorityChange = useCallback(
-    (value: number) => {
-      setPriority(value);
-    },
-    [setPriority]
-  );
-
-  const handleContextChange = useCallback(
-    (value: string) => {
-      setContext(value);
-    },
-    [setContext]
-  );
-
-  const handleTagsChange = useCallback(
-    (value: string[]) => {
-      setTags(value);
-    },
-    [setTags]
-  );
-
   const handleSave = () => {
     const content = convertToRaw(editorState.getCurrentContent());
     const updatedTask: ITask = {
@@ -189,14 +163,14 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
 
   return (
     <Form>
-      <Layout>
+      <Layout style={{ padding: '1rem' }}>
         <Header style={{ background: '#f0f2f5', height: '48px', marginTop: '10px' }}>
           <Form.Item style={{ margin: '0 auto' }}>
             <EditorTitle value={taskTitle} onChange={handleTitleChange} />
           </Form.Item>
         </Header>
         <Layout style={{ marginTop: 0 }}>
-          <Content style={{ padding: '0 10px', marginTop: '8px' }}>
+          <Content style={{ marginTop: '8px' }}>
             <Form.Item label='Note'>
               <EditorWrapper>
                 <EditorControlWrapper>

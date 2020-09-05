@@ -2,8 +2,8 @@ import React, { memo, ReactNode } from 'react';
 import { Form, Spin } from 'antd';
 import styled from 'styled-components';
 import { DragDropContext } from 'react-beautiful-dnd';
-import TaskList from '../TaskList/TaskList';
-import Mask from '../Mask';
+import TaskList from './TaskList/TaskList';
+import Mask from './Mask';
 import { ITask } from 'src/types';
 
 const Container = styled.div`

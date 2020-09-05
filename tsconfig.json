@@ -19,10 +19,10 @@
     "strictNullChecks": true,
     "experimentalDecorators": true,
     "paths": {
-      "@actions/*": ["src/actions/*"],
-      "@constants/*": ["src/constants/*"],
-      "@stores/*": ["src/stores/*"],
-      "@views/*": ["src/views/*"]
+      // "@actions/*": ["src/actions/*"],
+      // "@constants/*": ["src/constants/*"],
+      // "@stores/*": ["src/stores/*"],
+      // "@views/*": ["src/views/*"]
       // "@types/*": ["src/types/*"]
     },
 

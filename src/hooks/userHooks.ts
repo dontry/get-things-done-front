@@ -5,15 +5,14 @@ import { useQuery, useMutation, queryCache } from 'react-query';
 import { useEffect } from 'react';
 
 export function useFetchProfile() {
-  const { status, error, data } = useQuery(
-    'profile',
-    () => apiService.get('/users/profile').then(res => res.data)
-  )
+  const { status, error, data } = useQuery('profile', () =>
+    apiService.get('/users/profile').then(res => res.data)
+  );
   useEffect(() => {
     if (status === 'success') {
       userStore.updateUser(data);
     }
-  }, [status, data])
+  }, [status, data]);
 
   return { status, error, user: data };
 }
@@ -34,7 +33,7 @@ export function useUpdateProfile() {
 
   useEffect(() => {
     if (status === 'success') {
-      userStore.updateUser(data)
+      userStore.updateUser(data);
     }
   }, [status, data]);
 

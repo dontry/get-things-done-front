@@ -4,10 +4,10 @@ import styled from 'styled-components';
 import { DragDropContext } from 'react-beautiful-dnd';
 import TaskList from '../components/TaskList/TaskList';
 import { CategoryTaskInput } from '../components/TaskInput';
-import * as taskAction from '../actions/taskAction';
 import Mask from '../components/Mask';
 import { inject, observer } from 'mobx-react';
 import { Category } from 'src/types';
+import { useFetchTasksByCategory } from '../hooks/taskHooks';
 
 const Container = styled.div`
   position: relative;
@@ -30,7 +30,7 @@ const TaskBoard = memo(({ category, userId }: ITaskBoardProps) => {
 
   const [pageIndex] = useState(1);
   const paginationParams = useMemo(() => `page=${pageIndex}&limit=100`, [pageIndex]);
-  const { items, isFetching } = taskAction.useFetchTasksByCategory(category, paginationParams);
+  const { items, isFetching } = useFetchTasksByCategory(category, paginationParams);
 
   return (
     <Container>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { logout } from '../actions/authAction';
+import { logout } from '../hooks/authHooks';
 import routerStore from '../stores/routerStore';
 import { Avatar, Menu, Dropdown } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
