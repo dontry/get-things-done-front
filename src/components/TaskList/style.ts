@@ -17,9 +17,34 @@ export const TaskItemContainer = styled.div<any>`
   background-color: #fff;
 `;
 
-export const TitleWrapper = styled.span`
-  margin-left: 5px;
+export const TaskWrapper = styled.span<any>`
+  width: 100%;
+  margin-left: 0.75rem;
   margin-right: auto;
+  a {
+    text-decoration: ${props => (props.deleted ? 'line-through' : 'none')};
+  }
+  * {
+    color: ${props => (props.deleted ? '#acacac' : '#1890ff')};
+  }
+`;
+
+export const TagWrapper = styled.span`
+  margin-left: 1rem;
+  font-size: 0.8em;
+  color: #acacac;
+  a {
+    color: #acacac;
+    &:hover {
+      color: #777;
+    }
+  }
+`;
+
+export const TaskContentWrapper = styled.div`
+  display: flex;
+  align-items: baseline;
+  padding-right: 1rem;
 `;
 
 export const CloseButton = styled.button`

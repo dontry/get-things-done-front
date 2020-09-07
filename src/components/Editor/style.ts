@@ -45,8 +45,8 @@ export const SelectWrapper = styled.div`
 
 export const CalendarWrapper = styled.div`
   position: absolute;
-  left: 122px;
-  top: 0;
+  right: 114px;
+  top: 32px;
   width: 300px;
   border: 1px solid #d9d9d9;
   border-radius: 4px;
@@ -54,6 +54,7 @@ export const CalendarWrapper = styled.div`
   .ant-select {
     width: auto;
   }
+  z-index: 100;
 `;
 
 export const EditorContentWrapper = styled.div`

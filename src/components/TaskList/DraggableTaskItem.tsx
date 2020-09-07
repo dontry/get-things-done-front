@@ -2,7 +2,7 @@ import React from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import { ITask } from 'src/types';
 import TaskItem from './TaskItem';
-import { DraggableTaskItemContainer } from './style';
+import { TaskItemContainer } from './style';
 
 interface ITaskItemProps {
   type: string;
@@ -18,13 +18,13 @@ const DraggableTaskItem = React.memo(({ type, task, index }: ITaskItemProps) => 
   return (
     <Draggable draggableId={task.id} index={index}>
       {(provided, snapshot) => (
-        <DraggableTaskItemContainer
+        <TaskItemContainer
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}
         >
           <TaskItem type={type} task={task} isDragging={snapshot.isDragging} />
-        </DraggableTaskItemContainer>
+        </TaskItemContainer>
       )}
     </Draggable>
   );
