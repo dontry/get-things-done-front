@@ -5,7 +5,7 @@ import { useFetchTasksByCategory } from '../hooks/taskHooks';
 import { CategoryTaskInput } from '../components/TaskInput';
 import { Category } from 'src/types';
 
-const inputVisibleType = ['inbox', 'today', 'next', 'scheduled', 'someday', 'reference'];
+const inputVisibleType = ['inbox', 'today', 'tomorrow', 'next', 'someday', 'note'];
 
 interface ICategoryTaskBoard {
   type: string;

@@ -22,10 +22,10 @@ const menu = (() => {
   return (
     <Menu>
       <Menu.Item>
-        <Link to='home/inbox'>Home</Link>
+        <Link to='/home/inbox'>Home</Link>
       </Menu.Item>
       <Menu.Item>
-        <Link to='profile'>Profile</Link>
+        <Link to='/profile'>Profile</Link>
       </Menu.Item>
       <Menu.Item onClick={handleLogout}>
         <span>Logout</span>

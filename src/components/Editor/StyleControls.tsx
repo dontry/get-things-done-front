@@ -59,7 +59,11 @@ const BlockStyleControls = ({ editorState, onToggle }: IControlProps) => {
   return (
     <ControlWrapper>
       {BLOCK_TYPES.map(type => (
-        <ControlButton active={type.style === blockType} onMouseDown={() => onToggle(type.style)}>
+        <ControlButton
+          key={type.label}
+          active={type.style === blockType}
+          onMouseDown={() => onToggle(type.style)}
+        >
           {type.label}
         </ControlButton>
       ))}
@@ -77,7 +81,7 @@ const InlineStyleControls = ({ editorState, onToggle }: IControlProps) => {
   return (
     <ControlWrapper>
       {INLINE_STYLES.map(type => (
-        <ControlButton active={type.style === blockType} onMouseDown={() => onToggle(type.style)}>
+        <ControlButton key={type.label} active={type.style === blockType} onMouseDown={() => onToggle(type.style)}>
           {type.label}
         </ControlButton>
       ))}

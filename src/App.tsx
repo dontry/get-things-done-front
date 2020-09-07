@@ -43,21 +43,25 @@ const App: React.FC<any> = props => {
             <Content>
               <Switch>
                 <ProtectedRoute
+                  key='task'
                   exact
                   path={`${match.url}/task/:id`}
                   component={TaskEditorWithMessagePopup}
                 />
                 <ProtectedRoute
+                  key='project'
                   exact
                   path={`${match.url}/project/:id`}
                   component={ProjectBoardWithMessagePopup}
                 />
                 <ProtectedRoute
+                  key='context'
                   exact
                   path={`${match.url}/context/:id`}
                   component={ContextTaskboardWithMessagePopup}
                 />
                 <ProtectedRoute
+                  key='category'
                   exact
                   path={`${match.url}/:type`}
                   component={CategoryTaskboardWithMessagePopup}

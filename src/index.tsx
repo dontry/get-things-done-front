@@ -32,20 +32,21 @@ const queryConfig = { queries: { refetchOnWindowFocus: true } };
       <ReactQueryConfigProvider config={queryConfig}>
         <Router history={history}>
           <Switch>
-            <Redirect exact path='/' to={HOME} />
-            <Route exact path={LOGIN} component={Login} />
-            <Route exact path={REGISTER} component={Register} />
-            <ProtectedRoute path={HOME} component={App} />
-            <ProtectedRoute path={PROFILE} component={Profile} />
-            <Route path='/404' component={NotFound} />
-            <Route path='*' component={NotFound} />
+            <Redirect key='root' exact path='/' to={HOME} />
+            <Route key='login' exact path={LOGIN} component={Login} />
+            <Route key='register' exact path={REGISTER} component={Register} />
+            <ProtectedRoute key='home' path={HOME} component={App} />
+            <ProtectedRoute key='profile' path={PROFILE} component={Profile} />
+            <Route key='not-found' path='/404' component={NotFound} />
+            <Route key='default' path='*' component={NotFound} />
           </Switch>
         </Router>
-        {process.env.NODE_ENV !== 'production' &&
+        {process.env.NODE_ENV !== 'production' && (
           <>
             <MobxDevTools />
             <ReactQueryDevtools initialIsOpen />
-          </>}
+          </>
+        )}
       </ReactQueryConfigProvider>
     </Provider>,
     rootEl

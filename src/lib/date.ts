@@ -12,6 +12,22 @@ export function isTomorrow(timestamp: number): boolean {
   return tomorrow.isSame(moment(timestamp), 'day');
 }
 
+export function isThisMonth(timestamp: number): boolean {
+  const thisMonth = moment().startOf('month');
+  return thisMonth.isSame(moment(timestamp), 'month');
+}
+
+export function isAfterThisMonth(timestamp: number): boolean {
+  const thisMonth = moment().startOf('month');
+  return thisMonth.isBefore(moment(timestamp), 'month');
+}
+
+export function isBeforeThisMonth(timestamp: number): boolean {
+  const thisMonth = moment().startOf('month');
+  return thisMonth.isAfter(moment(timestamp), 'month');
+}
+
+// milliseconds
 export function getToday(): number {
   return (
     moment()
@@ -20,6 +36,7 @@ export function getToday(): number {
   );
 }
 
+// milliseconds
 export function getTomorrow(): number {
   return (
     moment()
