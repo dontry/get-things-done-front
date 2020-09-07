@@ -12,7 +12,7 @@ export class Task {
   private context: string;
   private spentTime: number;
   private allDay: number;
-  private deleted: number;
+  private deletedAt: number;
   private completedAt: number;
   private archived: number;
   private hidden: number;
@@ -36,7 +36,7 @@ export class Task {
     spentTime = 0,
     allDay = 1,
     hidden = 0,
-    deleted = 0,
+    deletedAt = 0,
     archived = 0,
     tags = [],
     repeaters = [],
@@ -55,7 +55,7 @@ export class Task {
     this.estimatedTime = estimatedTime;
     this.context = context;
     this.spentTime = spentTime;
-    (this.allDay = allDay), (this.deleted = deleted);
+    (this.allDay = allDay), (this.deletedAt = deletedAt);
     this.completedAt = completedAt;
     this.archived = archived;
     this.tags = tags;
@@ -79,7 +79,7 @@ export class Task {
       context: this.context,
       spentTime: this.spentTime,
       allDay: this.allDay,
-      deleted: this.deleted,
+      deletedAt: this.deletedAt,
       completedAt: this.completedAt,
       archived: this.archived,
       tags: this.tags,

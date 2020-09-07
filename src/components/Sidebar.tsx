@@ -93,7 +93,7 @@ const Sidebar = () => {
         >
           {projects &&
             projects.map((project: IProject) => (
-              <Item>
+              <Item key={project.id}>
                 <Link to={`/home/project/${project.id}`}>{project.title}</Link>
               </Item>
             ))}
@@ -109,8 +109,8 @@ const Sidebar = () => {
         >
           {context &&
             context.map((cxt: IContext) => (
-              <Item>
-                <Link to={`/home/context/${cxt.id}}`}>{cxt.name}</Link>
+              <Item key={cxt.id}>
+                <Link to={`/home/context/${cxt.id}`}>{cxt.name}</Link>
               </Item>
             ))}
         </SubMenu>
@@ -120,7 +120,7 @@ const Sidebar = () => {
             <span>Completed</span>
           </Link>
         </Item>
-        <Item key='Trash'>
+        <Item key='deleted'>
           <Link to='/home/deleted'>
             <DeleteOutlined />
             <span>Trash</span>

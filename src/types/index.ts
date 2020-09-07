@@ -11,6 +11,8 @@ export type Category =
   | 'deleted'
   | 'completed';
 
+export type TimeBasedProperty = 'completedAt' | 'deletedAt' | 'endAt';
+
 export enum Priority {
   LOWEST = 1,
   LOW,
@@ -79,7 +81,7 @@ export interface ITask {
   context?: string;
   spentTime?: number;
   allDay: number;
-  deleted: number;
+  deletedAt: number;
   archived: number;
   tags: string[];
   note: INote;
@@ -100,7 +102,7 @@ export interface INewTask {
   spentTime?: number;
   allDay?: number;
   hidden?: number;
-  deleted?: number;
+  deletedAt?: number;
   completedAt?: number;
   archived?: number;
   source?: string;
@@ -117,7 +119,7 @@ export interface IProject {
   createdAt?: number;
   completedAt?: number;
   allDay?: number;
-  deleted?: number;
+  deletedAt?: number;
   archived?: number;
   hidden?: number;
   tags?: string[];

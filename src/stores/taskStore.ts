@@ -155,8 +155,8 @@ function getTasksByAttribute(tasks: Map<string, ITask>, attribute: Attribute): I
 const taskStore = new TaskStore();
 
 function checkActive(task: ITask): boolean {
-  const { archived, deleted, completedAt } = task;
-  return archived === 0 && deleted === 0 && completedAt === 0;
+  const { archived, deletedAt, completedAt } = task;
+  return archived === 0 && deletedAt === 0 && completedAt === 0;
 }
 
 // get tasks created or starts today
@@ -169,7 +169,7 @@ function checkByAttribute(attribute: Attribute): (task: ITask) => boolean {
 }
 
 function checkDeleted(task: ITask): boolean {
-  return task.deleted > 0;
+  return task.deletedAt > 0;
 }
 
 function checkCompleted(task: ITask): boolean {

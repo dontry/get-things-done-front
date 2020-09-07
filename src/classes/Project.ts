@@ -1,19 +1,10 @@
-import {
-  Attribute,
-  Priority,
-  INewTask,
-  INote,
-  IRepeater,
-  IReminder,
-  ITask,
-  IProject
-} from '../types/index';
+import { INote, IProject } from '../types/index';
 
 export class Project {
   private title: string;
   private createdAt: number;
   private allDay: number;
-  private deleted: number;
+  private deletedAt: number;
   private completedAt: number;
   private archived: number;
   private source: string;
@@ -27,7 +18,7 @@ export class Project {
     title,
     completedAt = 0,
     allDay = 1,
-    deleted = 0,
+    deletedAt = 0,
     archived = 0,
     source = '',
     note,
@@ -38,7 +29,7 @@ export class Project {
   }: IProject) {
     this.title = title;
     this.createdAt = Date.now();
-    (this.allDay = allDay), (this.deleted = deleted);
+    (this.allDay = allDay), (this.deletedAt = deletedAt);
     this.completedAt = completedAt;
     this.archived = archived;
     this.note = note || { content: '' };
@@ -54,7 +45,7 @@ export class Project {
       title: this.title,
       createdAt: this.createdAt,
       allDay: this.allDay,
-      deleted: this.deleted,
+      deletedAt: this.deletedAt,
       completedAt: this.completedAt,
       archived: this.archived,
       note: this.note,

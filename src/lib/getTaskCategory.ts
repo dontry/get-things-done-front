@@ -5,7 +5,7 @@ export function getTaskCategory(task: ITask): Category {
   const attribute: Attribute = task.attribute;
   const startAt: number = task.startAt;
   const completedAt: number = task.completedAt;
-  const deleted: number = task.deleted;
+  const deleted: number = task.deletedAt;
 
   if (deleted) {
     return 'deleted';
