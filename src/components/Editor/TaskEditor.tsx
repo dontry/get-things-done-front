@@ -1,6 +1,12 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { Form, Select, Layout, Button, Space } from 'antd';
-import { BarsOutlined, EnvironmentOutlined, ArrowUpOutlined, TagOutlined } from '@ant-design/icons';
+import {
+  BarsOutlined,
+  EnvironmentOutlined,
+  ArrowUpOutlined,
+  TagOutlined,
+  ProjectOutlined
+} from '@ant-design/icons';
 import {
   Editor,
   EditorState,
@@ -21,14 +27,14 @@ import {
   EditorContentWrapper
 } from './style';
 import { BlockStyleControls, InlineStyleControls } from './StyleControls';
-import { ITask, Priority, Category, Attribute, IContext } from '../../types';
+import { ITask, Priority, Category, Attribute, IContext, IProject } from '../../types';
 import { TAGS } from '../../constants/misc';
 import { queryCache } from 'react-query';
 import { observer, inject } from 'mobx-react';
 import { useUpdateTask } from '../../hooks/taskHooks';
 import { useValueChange } from '../../hooks/useValueChange';
 import { History } from 'history';
-import { get } from 'lodash';
+import { get, truncate } from 'lodash';
 import CategorySelect, { IUpdateCategoryPayload } from './CategorySelect';
 import { isTomorrow, isToday } from '../../lib/date';
 
@@ -62,12 +68,15 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
   const [taskTitle, setTitle] = useState(task.title);
   const [taskStartTime, setStartTime] = useState(task.startAt);
   const [taskPriority, handlePriorityChange] = useValueChange(task.priority);
+  const [taskProject, handleProjectChange] = useValueChange(task.projectId);
   const [taskContext, handleContextChange] = useValueChange(task.context);
   const [taskTags, handleTagsChange] = useValueChange(task.tags);
   const [editorState, setEditorState] = useState(() =>
     contentState ? EditorState.createWithContent(contentState) : EditorState.createEmpty()
   );
-  const context = queryCache.getQueryData<IContext[]>('context');
+  const projects = queryCache.getQueryData<IProject[]>('projects');
+  const contexts = queryCache.getQueryData<IContext[]>('context');
+  const editor = useRef(null);
 
   const taskCategory = useMemo((): Category => {
     if (taskAttribute === 'next') {
@@ -148,7 +157,9 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
       startAt: taskStartTime,
       context: taskContext,
       priority: taskPriority,
+      projectId: taskProject,
       tags: taskTags,
+      deletedAt: task.deletedAt || 0,
       note: {
         content
       }
@@ -161,6 +172,17 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
     history.goBack();
   };
 
+  const focusEditor = useCallback(() => {
+    if (editor.current) {
+      // @ts-ignore next-line
+      editor.current.focus();
+    }
+  }, []);
+
+  useEffect(() => {
+    focusEditor();
+  }, []);
+
   return (
     <Form>
       <Layout style={{ padding: '1rem' }}>
@@ -170,8 +192,8 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
           </Form.Item>
         </Header>
         <Layout style={{ marginTop: 0 }}>
-          <Content style={{ marginTop: '8px' }}>
-            <Form.Item label='Note'>
+          <Content style={{ marginTop: '8px' }} onClick={focusEditor}>
+            <Form.Item name='note' label='Note'>
               <EditorWrapper>
                 <EditorControlWrapper>
                   <BlockStyleControls editorState={editorState} onToggle={toggleBlockType} />
@@ -179,6 +201,7 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
                 </EditorControlWrapper>
                 <EditorContentWrapper>
                   <Editor
+                    ref={editor}
                     handleKeyCommand={handleKeyCommand}
                     editorState={editorState}
                     onChange={setEditorState}
@@ -189,9 +212,11 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
           </Content>
           <EditorSider style={{ background: '#f0f2f5', margin: '34px 10px 0 5px' }}>
             <Form.Item
+              name='category'
               label={
                 <span>
-                  <BarsOutlined /> Category
+                  {' '}
+                  <BarsOutlined /> Category{' '}
                 </span>
               }
             >
@@ -202,47 +227,72 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
               />
             </Form.Item>
             <Form.Item
+              name='priority'
               label={
                 <span>
                   <ArrowUpOutlined /> Priority
                 </span>
               }
+              initialValue={taskPriority}
             >
-              <Select defaultValue={taskPriority} onChange={handlePriorityChange}>
+              <Select onChange={handlePriorityChange}>
                 {Object.keys(Priority)
                   .filter(key => isNaN(Number(key)))
                   .map((priority, index) => (
-                    <Select.Option value={index + 1}>{priority}</Select.Option>
+                    <Select.Option key={priority} value={index + 1}>
+                      {priority}
+                    </Select.Option>
+                  ))}
+              </Select>
+            </Form.Item>
+
+            <Form.Item
+              name='project'
+              label={
+                <span>
+                  {' '}
+                  <ProjectOutlined /> Project{' '}
+                </span>
+              }
+              initialValue={taskProject}
+            >
+              <Select onChange={value => handleProjectChange(value as string)}>
+                {projects &&
+                  projects.map(project => (
+                    <Select.Option title={project.title} value={project.id || ''}>
+                      {truncate(project.title, { length: 10 })}
+                    </Select.Option>
                   ))}
               </Select>
             </Form.Item>
             <Form.Item
+              name='context'
               label={
                 <span>
-                  <EnvironmentOutlined /> Context
+                  {' '}
+                  <EnvironmentOutlined /> Context{' '}
                 </span>
               }
+              initialValue={taskContext}
             >
-              <Select defaultValue={taskContext} onChange={handleContextChange}>
-                {context &&
-                  context.map((cxt: IContext) => (
+              <Select onChange={value => handleContextChange(value as string)}>
+                {contexts &&
+                  contexts.map((cxt: IContext) => (
                     <Select.Option value={cxt.id || ''}>{cxt.name}</Select.Option>
                   ))}
               </Select>
             </Form.Item>
             <Form.Item
+              name='tags'
               label={
                 <span>
-                  <TagOutlined /> Tags
+                  {' '}
+                  <TagOutlined /> Tags{' '}
                 </span>
               }
+              initialValue={taskTags}
             >
-              <Select
-                mode='multiple'
-                placeholder='Add label'
-                defaultValue={taskTags}
-                onChange={handleTagsChange}
-              >
+              <Select mode='multiple' placeholder='Add label' onChange={handleTagsChange}>
                 {TAGS.map(tag => (
                   <Select.Option value={tag}>{tag}</Select.Option>
                 ))}

@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import { Select, Calendar } from 'antd';
+import React, { useState, useRef, useCallback } from 'react';
+import { Select, Calendar, Button } from 'antd';
 import { SelectWrapper, CalendarWrapper } from './style';
 import { CATEGORY_OPTIONS } from '../../constants/misc';
 import { capitalize } from '../../lib/capitalize';
@@ -21,21 +21,28 @@ interface ICategorySelectProps {
 
 const CategorySelect = ({ initCategory, startTime, onChange }: ICategorySelectProps) => {
   const [open, setOpen] = useState(false);
+  const [calendarOpen, setCalendarOpen] = useState(false);
+  const [startAt, setStartAt] = useState(startTime);
   const [category, setCategory] = useState(initCategory);
   const selectRef = useRef<Select<string>>(null);
 
-  const handleCategoryChange = (value: string): void => {
+  const onCategorySelect = (value: string): void => {
     const _category = value as Category;
     if (_category !== 'scheduled') {
+      if (_category === category) {
+        selectRef.current!.blur();
+      }
       const attribute = categoryToAttribute(_category);
       const _startTime = getStartTimeByCategory(_category);
       onChange({ attribute, startTime: _startTime });
       selectRef.current!.blur();
+    } else {
+      setCalendarOpen(true);
     }
     setCategory(_category);
   };
 
-  const handleFocus = () => {
+  const onFocus = () => {
     setOpen(true);
   };
 
@@ -43,14 +50,20 @@ const CategorySelect = ({ initCategory, startTime, onChange }: ICategorySelectPr
     setOpen(false);
   };
 
-  const handleCalendarChange = (date?: Moment) => {
-    if (date) {
-      const _startTime: number = date.unix();
-      onChange({ attribute: 'plan', startTime: _startTime });
-      setOpen(false);
-      selectRef.current!.blur();
-    }
-  };
+  const onDateChange = useCallback(
+    (_date?: Moment) => {
+      if (_date) {
+        setStartAt(_date.unix() * 1000);
+      }
+    },
+    [setStartAt]
+  );
+
+  const onConfirmDate = useCallback(() => {
+    onChange({ attribute: 'plan', startTime: startAt || 0 });
+    setCalendarOpen(false);
+    setOpen(false);
+  }, [onChange, setCalendarOpen, setOpen, startAt]);
 
   const getStartTimeByCategory = (_category: Category): number => {
     switch (_category) {
@@ -69,21 +82,38 @@ const CategorySelect = ({ initCategory, startTime, onChange }: ICategorySelectPr
         ref={selectRef}
         defaultValue={initCategory}
         open={open}
-        onFocus={handleFocus}
+        onFocus={onFocus}
         onBlur={handleBlur}
-        onChange={handleCategoryChange}
+        onSelect={onCategorySelect}
       >
         {CATEGORY_OPTIONS.map(option => (
-          <Select.Option value={option}>{capitalize(option)}</Select.Option>
+          <Select.Option key={option} title={getCategoryText(option, startTime)} value={option}>
+            {capitalize(option)}
+          </Select.Option>
         ))}
       </Select>
-      {category === 'scheduled' && (
+      {calendarOpen && (
         <CalendarWrapper>
-          <Calendar fullscreen={false} onChange={handleCalendarChange} value={moment(startTime)} />
+          <Calendar
+            fullscreen={false}
+            onSelect={onDateChange}
+            defaultValue={startTime === 0 ? moment() : moment(startTime)}
+          />
+          <Button type='primary' style={{ width: '100%' }} onClick={onConfirmDate}>
+            OK
+          </Button>
         </CalendarWrapper>
       )}
     </SelectWrapper>
   );
+
+  function getCategoryText(_category: string, _startTime: number = 0) {
+    if (_category === 'scheduled' && _startTime > 0) {
+      return moment(_startTime).format('DD/MM/YYYY');
+    } else {
+      return capitalize(_category);
+    }
+  }
 };
 
 export default CategorySelect;
