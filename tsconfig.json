@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": "dist",
-    "target": "es5",
+    "target": "es2017",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -13,10 +13,13 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": false,
+    "sourceMap": true,
     "noEmit": true,
     "jsx": "react",
     "forceConsistentCasingInFileNames": true,
+    "removeComments": true,
     "strictNullChecks": true,
+    "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "paths": {
       // "@actions/*": ["src/actions/*"],
@@ -25,7 +28,6 @@
       // "@views/*": ["src/views/*"]
       // "@types/*": ["src/types/*"]
     },
-
     "downlevelIteration": true
   }
 }
