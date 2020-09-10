@@ -193,10 +193,5 @@
       "pre-commit": "npm run validate-staged"
     }
   },
-  "babel": {
-    "presets": [
-      "react-app"
-    ]
-  },
   "proxy": "http://localhost:3000"
 }

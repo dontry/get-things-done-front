@@ -1,4 +1,13 @@
-import React, { Component, ComponentClass, createRef, SyntheticEvent } from 'react';
+import React, {
+  Component,
+  ComponentClass,
+  createRef,
+  SyntheticEvent,
+  useRef,
+  useCallback,
+  useState,
+  useMemo,
+} from 'react';
 
 interface IEditableProps {
   value: string;
@@ -8,85 +17,75 @@ interface IEditableProps {
   onChange?(value: string): void;
 }
 
-interface IEditableState {
-  editing: boolean;
-}
-
 // https://stackoverflow.com/questions/31815633/what-does-the-error-jsx-element-type-does-not-have-any-construct-or-call
-const Editable = (WrappedComponent: ComponentClass<any> | string) => class E extends Component<IEditableProps, IEditableState> {
-  public state = {
-    editing: false
-  };
-  // https://medium.com/@martin_hotell/react-refs-with-typescript-a32d56c4d315
-  private editableRef = createRef<HTMLElement>();
+const Editable = (WrappedComponent: ComponentClass<any> | string) => {
+  return ({ value, isAllowedEmpty, editOnClick, onChange, ...rest }: IEditableProps) => {
+    const [editing, setEditing] = useState(false);
+    // https://medium.com/@martin_hotell/react-refs-with-typescript-a32d56c4d315
+    const editableRef = useRef<HTMLElement>(null);
 
-  public edit = (e: SyntheticEvent) => {
-    e.stopPropagation();
-    this.setState({ editing: true }, () => {
-      const node = this.editableRef.current!;
-      node.focus();
-    });
-  };
+    const edit = useCallback(
+      (e: SyntheticEvent) => {
+        e.stopPropagation();
+        setEditing(true);
+        editableRef.current?.focus();
+      },
+      [setEditing, editableRef],
+    );
 
-  public save = () => {
-    this.setState({ editing: false }, () => {
-      const { onChange, value, isAllowedEmpty } = this.props;
-      const node = this.editableRef.current!;
-      const textContent = node.textContent!;
-      if (onChange && this.isValueChanged()) {
+    const save = useCallback(() => {
+      setEditing(false);
+
+      const node = editableRef.current;
+      const textContent = node?.textContent!;
+      if (onChange && isValueChanged) {
         if (textContent === '' && isAllowedEmpty === false) {
           alert('Title cannot be empty.');
           onChange(value);
-          node.textContent = this.props.value;
+          node!.textContent = value;
         } else {
           onChange(textContent);
         }
       }
-    });
-  };
+    }, [onChange, editableRef]);
 
-  public cancel = (): void => {
-    this.setState({ editing: false });
-  };
+    const cancel = useCallback((): void => {
+      setEditing(false);
+    }, [setEditing]);
 
-  public isValueChanged = (): boolean => {
-    const node = this.editableRef.current!;
-    return this.props.value !== node.textContent;
-  };
+    const isValueChanged = useMemo((): boolean => {
+      return value !== editableRef.current?.textContent;
+    }, [editableRef]);
 
-  public handleKeyDown = (e: KeyboardEvent) => {
-    switch (e.key) {
-      case 'Enter':
-      case 'Escape':
-        this.save();
-        break;
-      default:
-        break;
-    }
-  };
+    const onKeyDown = useCallback(
+      (e: KeyboardEvent) => {
+        switch (e.key) {
+          case 'Enter':
+          case 'Escape':
+            save();
+            break;
+          default:
+            break;
+        }
+      },
+      [save],
+    );
 
-  public render() {
-    let editOnClick = true;
-    const { editing } = this.state;
-    const { ...componentProps } = this.props;
-    if (this.props.editOnClick != null) {
-      editOnClick = this.props.editOnClick;
-    }
     return (
       <WrappedComponent
         className={editing ? 'editing' : ''}
-        onClick={editOnClick ? this.edit : null}
-        onSelect={editOnClick ? this.edit : null}
+        onClick={edit}
+        onSelect={edit}
         contentEditable={editing}
-        ref={this.editableRef}
-        onBlur={this.save}
-        onKeyDown={this.handleKeyDown}
-        {...componentProps}
+        ref={editableRef}
+        onBlur={save}
+        onKeyDown={onKeyDown}
+        {...rest}
       >
-        {this.props.value || 'Title'}
+        {value || 'Title'}
       </WrappedComponent>
     );
-  }
+  };
 };
 
 export default Editable;
