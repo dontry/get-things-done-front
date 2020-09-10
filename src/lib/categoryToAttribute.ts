@@ -1,4 +1,4 @@
-import { Category, Attribute } from 'src/types';
+import { Attribute, Category } from 'src/types';
 
 export function categoryToAttribute(_category: Category): Attribute {
   switch (_category) {

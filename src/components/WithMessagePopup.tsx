@@ -1,13 +1,13 @@
-import React from 'react';
-import { inject, observer } from 'mobx-react';
 import { message } from 'antd';
+import { inject, observer } from 'mobx-react';
+import React from 'react';
+
 import { MessageType } from '../types';
 
 const REGEX = /^@(info|warning|error)/i;
 
 // https://stackoverflow.com/questions/31815633/what-does-the-error-jsx-element-type-does-not-have-any-construct-or-call
-const WithMessagePopup = (WrappedComponent: any, messageType: MessageType) => {
-  return inject('messageStore')(
+const WithMessagePopup = (WrappedComponent: any, messageType: MessageType) => inject('messageStore')(
     observer(({ messageStore, ...props }) => {
       const error = messageStore.messages.get(messageType);
       return (
@@ -38,6 +38,5 @@ const WithMessagePopup = (WrappedComponent: any, messageType: MessageType) => {
       }
     })
   );
-};
 
 export default WithMessagePopup;

@@ -1,4 +1,5 @@
-import { observable, action, computed } from 'mobx';
+import { action, computed, observable } from 'mobx';
+
 import { RequestType } from '../types';
 
 const CURRENT_QUERY_KEY = 'currentQueryKey';

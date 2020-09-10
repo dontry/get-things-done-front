@@ -1,9 +1,7 @@
-import { userStore, routerStore } from '../stores';
-import { ILoginCredential, RequestType, IRegisterProfile } from '../types';
-import { persistanceService } from '../classes/PersistanceService';
 import { apiService } from '../api';
-
-const requestType = RequestType.USER;
+import { persistanceService } from '../classes/PersistanceService';
+import { routerStore, userStore } from '../stores';
+import { ILoginCredential, IRegisterProfile } from '../types';
 
 export function register(profile: IRegisterProfile) {
   return apiService.post('/register', profile).then(() => {

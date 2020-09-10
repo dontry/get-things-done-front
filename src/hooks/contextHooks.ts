@@ -1,7 +1,8 @@
-import { useQuery, useMutation, queryCache } from 'react-query';
-import { apiService } from '../api';
-import { IContext } from 'src/types';
 import { isNil } from 'lodash';
+import { queryCache, useMutation, useQuery } from 'react-query';
+import { IContext } from 'src/types';
+
+import { apiService } from '../api';
 
 export function useFetchContext() {
   const { status, error, data } = useQuery('context', () =>
@@ -43,7 +44,7 @@ export function useCreateContext() {
   const [createContext, { data, error, status, isSuccess }] = useMutation<
     IContext,
     IContextMutationVariable
-  >(({ context }) => apiService.post(`/context`, context).then(res => res.data), {
+  >(({ context }) => apiService.post('/context', context).then(res => res.data), {
     onSuccess: () => {
       queryCache.invalidateQueries('context');
     }

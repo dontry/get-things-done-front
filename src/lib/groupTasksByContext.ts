@@ -1,7 +1,7 @@
-import { ITask, IContext } from 'src/types';
-import { queryCache } from 'react-query';
-import { flow, groupBy, map } from 'lodash/fp';
 import { toPairs } from 'lodash';
+import { flow, groupBy, map } from 'lodash/fp';
+import { queryCache } from 'react-query';
+import { IContext, ITask } from 'src/types';
 
 export function groupTasksByContext(tasks: ITask[]) {
   const pipeline = flow(

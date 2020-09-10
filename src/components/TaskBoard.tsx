@@ -1,11 +1,12 @@
-import React, { memo, ReactNode, useCallback } from 'react';
 import { Form, Spin } from 'antd';
-import styled from 'styled-components';
-import { TaskList } from './TaskList';
-import Mask from './Mask';
+import React, { memo, ReactNode, useCallback } from 'react';
 import { ITask } from 'src/types';
-import TaskListGroup, { ITaskListGroup } from './TaskListGroup';
+import styled from 'styled-components';
+
 import { groupTasksByContext } from '../lib/groupTasksByContext';
+import Mask from './Mask';
+import { TaskList } from './TaskList';
+import TaskListGroup, { ITaskListGroup } from './TaskListGroup';
 import { TimeLineTaskListGroup } from './TimeLineTaskListGroup';
 
 const Container = styled.div`

@@ -1,7 +1,7 @@
 import { apiService } from '../../api';
-import { ILoginCredential } from '../../types';
-import userStore from '../../stores/userStore';
 import { persistanceService } from '../../classes/PersistanceService';
+import userStore from '../../stores/userStore';
+import { ILoginCredential } from '../../types';
 
 function loginUser(credential: ILoginCredential) {
   return apiService.post('/auth/login', credential).then(res => {

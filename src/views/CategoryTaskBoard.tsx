@@ -1,9 +1,10 @@
-import TaskBoard from '../components/TaskBoard';
-import React, { useMemo } from 'react';
 import { inject, observer } from 'mobx-react';
-import { useFetchTasksByCategory } from '../hooks/taskHooks';
-import { CategoryTaskInput } from '../components/TaskInput';
+import React, { useMemo } from 'react';
 import { Category } from 'src/types';
+
+import TaskBoard from '../components/TaskBoard';
+import { CategoryTaskInput } from '../components/TaskInput';
+import { useFetchTasksByCategory } from '../hooks/taskHooks';
 
 const inputVisibleType = ['inbox', 'today', 'tomorrow', 'next', 'someday', 'note'];
 
@@ -13,9 +14,7 @@ interface ICategoryTaskBoard {
 }
 
 const BaseCategoryTaskBoard = ({ type, userId }: ICategoryTaskBoard) => {
-  const isTaskInputVisible = useMemo(() => {
-    return inputVisibleType.includes(type);
-  }, [type]);
+  const isTaskInputVisible = useMemo(() => inputVisibleType.includes(type), [type]);
 
   const { items, isFetching } = useFetchTasksByCategory(type, 'page=1&limit=100');
 
@@ -32,7 +31,5 @@ const BaseCategoryTaskBoard = ({ type, userId }: ICategoryTaskBoard) => {
 };
 
 export default inject('userStore')(
-  observer(({ userStore, match }) => {
-    return <BaseCategoryTaskBoard type={match.params.type} userId={userStore.userId} />;
-  })
+  observer(({ userStore, match }) => <BaseCategoryTaskBoard type={match.params.type} userId={userStore.userId} />)
 );

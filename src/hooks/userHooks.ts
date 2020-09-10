@@ -1,8 +1,9 @@
-import { userStore, requestStore } from '../stores';
-import { IUser } from '../types';
-import { apiService } from '../api';
-import { useQuery, useMutation, queryCache } from 'react-query';
 import { useEffect } from 'react';
+import { queryCache, useMutation, useQuery } from 'react-query';
+
+import { apiService } from '../api';
+import { requestStore, userStore } from '../stores';
+import { IUser } from '../types';
 
 export function useFetchProfile() {
   const { status, error, data } = useQuery('profile', () =>
@@ -23,7 +24,7 @@ interface IUpdateUserMutationVariable {
 
 export function useUpdateProfile() {
   const [updateProfile, { data, error, status }] = useMutation<IUser, IUpdateUserMutationVariable>(
-    ({ user }) => apiService.put(`/users/profile`, user).then(res => res.data),
+    ({ user }) => apiService.put('/users/profile', user).then(res => res.data),
     {
       onSuccess: () => {
         queryCache.invalidateQueries(requestStore.currentQueryKey);

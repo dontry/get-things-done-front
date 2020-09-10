@@ -1,12 +1,10 @@
 export default function mockStorage() {
-  sessionStorage.getItem = jest.fn((key: string): string => {
-    return 'token';
-  });
+  sessionStorage.getItem = jest.fn((): string => 'token');
   sessionStorage.setItem = jest.fn((key: string, payload: string) => {
     console.debug(`sessionStorage setItem: ${key}: ${payload}`);
   });
 
-  sessionStorage.removeItem = jest.fn((key: string) => {
+  sessionStorage.removeItem = jest.fn(() => {
     console.debug('sessionStorage removeItem');
   });
 
@@ -14,14 +12,12 @@ export default function mockStorage() {
     console.debug('sessionStorage clear');
   });
 
-  localStorage.getItem = jest.fn((key: string): string => {
-    return 'token';
-  });
+  localStorage.getItem = jest.fn((): string => 'token');
   localStorage.setItem = jest.fn((key: string, payload: string) => {
     console.debug(`localStorage setItem: ${key}: ${payload}`);
   });
 
-  localStorage.removeItem = jest.fn((key: string) => {
+  localStorage.removeItem = jest.fn(() => {
     console.debug('localStorage removeItem');
   });
 

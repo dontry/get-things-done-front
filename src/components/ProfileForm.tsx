@@ -1,8 +1,9 @@
-import React from 'react';
-import { IUser } from '../types';
-import { formItemLayout, footerFormItemLayout } from '../constants/layout';
-import { Form, Input, Button, Select, InputNumber, Space } from 'antd';
+import { Button, Form, Input, InputNumber, Select, Space } from 'antd';
 import { merge } from 'lodash';
+import React, { useCallback } from 'react';
+
+import { footerFormItemLayout, formItemLayout } from '../constants/layout';
+import { IUser } from '../types';
 
 const { Option } = Select;
 
@@ -12,21 +13,21 @@ interface IFormProps {
   onCancel(): void;
 }
 
-const ProfileForm = ({ user, onSubmit, onCancel }: IFormProps) => {
+const ProfileForm = ({ user, onSubmit, onCancel: _onCancel }: IFormProps) => {
   const { username, email, fullName, age, sex } = user;
   const { firstName, lastName } = fullName || {};
 
-  const handleFinish = (values: any) => {
+  const onFinish = useCallback((values: any) => {
     const updatedUser = merge(user, values);
     onSubmit(updatedUser);
-  };
+  }, [user, onSubmit]);
 
-  const handleCancel = () => {
-    onCancel();
-  };
+  const onCancel = useCallback(() => {
+    _onCancel();
+  }, [_onCancel]);
 
   return (
-    <Form onFinish={handleFinish}>
+    <Form onFinish={onFinish}>
       <Form.Item {...formItemLayout} name='username' label='Username' initialValue={username}>
         <Input disabled />
       </Form.Item>

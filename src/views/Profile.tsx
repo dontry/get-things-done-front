@@ -1,16 +1,15 @@
+import { Layout } from 'antd';
+import { History } from 'history';
 import React, { useCallback } from 'react';
 import styled from 'styled-components';
-import { Layout, Avatar } from 'antd';
-import { IUser } from '../types';
+
 import ProfileForm from '../components/ProfileForm';
 import UserIcon from '../components/UserIcon';
 import { useFetchProfile, useUpdateProfile } from '../hooks/userHooks';
+import { IUser } from '../types';
 
 const { Header, Content, Footer } = Layout;
 
-interface IProfileProps {
-  history: History;
-}
 
 const FormWrapper = styled.div`
   display: flex;
@@ -20,18 +19,22 @@ const FormWrapper = styled.div`
   width: 100vw;
 `;
 
+interface IProfileProps {
+  history: History;
+}
+
 const Profile = ({ history }: IProfileProps) => {
   const { user } = useFetchProfile();
   const { updateProfile } = useUpdateProfile();
 
   const handleSubmit = useCallback((_user: IUser) => {
     updateProfile({ user: _user });
-    window.history.back();
-  }, []);
+    history.goBack();
+  }, [history, updateProfile]);
 
   const handleCancel = useCallback(() => {
-    window.history.back();
-  }, []);
+    history.goBack();
+  }, [history]);
 
   return (
     <Layout style={{ height: '100vh' }}>

@@ -1,4 +1,5 @@
-import { Category, ITask, Attribute } from 'src/types';
+import { Attribute, Category, ITask } from 'src/types';
+
 import { isToday, isTomorrow } from './date';
 
 export function getTaskCategory(task: ITask): Category {

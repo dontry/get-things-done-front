@@ -1,7 +1,8 @@
-import styled from 'styled-components';
-import Editable from '../EditableComponent';
-import { Select, Form, Layout } from 'antd';
+import { Form, Layout, Select } from 'antd';
 import { Editor } from 'draft-js';
+import styled from 'styled-components';
+
+import Editable from '../EditableComponent';
 
 export const EditorWrapper = styled.div`
   border: 1px solid #ccc;

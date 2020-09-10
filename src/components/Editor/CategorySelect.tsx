@@ -1,12 +1,13 @@
-import React, { useState, useRef, useCallback } from 'react';
-import { Select, Calendar, Button } from 'antd';
-import { SelectWrapper, CalendarWrapper } from './style';
-import { CATEGORY_OPTIONS } from '../../constants/misc';
-import { capitalize } from '../../lib/capitalize';
+import { Button,Calendar, Select } from 'antd';
+import { capitalize } from 'lodash';
 import moment, { Moment } from 'moment';
-import { Category, Attribute } from 'src/types';
-import { getToday, getTomorrow } from '../../lib/date';
+import React, { useCallback,useRef, useState } from 'react';
+import { Attribute,Category } from 'src/types';
+
+import { CATEGORY_OPTIONS } from '../../constants/misc';
 import { categoryToAttribute } from '../../lib/categoryToAttribute';
+import { getToday, getTomorrow } from '../../lib/date';
+import { CalendarWrapper,SelectWrapper } from './style';
 
 export interface IUpdateCategoryPayload {
   attribute: Attribute;

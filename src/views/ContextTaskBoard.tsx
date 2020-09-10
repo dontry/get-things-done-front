@@ -1,11 +1,12 @@
-import React from 'react';
+import { Spin } from 'antd';
 import { inject, observer } from 'mobx-react';
+import React from 'react';
+import styled from 'styled-components';
+
+import Mask from '../components/Mask';
+import TaskListGroup, { ITaskListGroup } from '../components/TaskListGroup';
 import { useFetchTasksByContextId } from '../hooks/taskHooks';
 import { groupTasksByCategory } from '../lib/groupTasksByCategory';
-import TaskListGroup, { ITaskListGroup } from '../components/TaskListGroup';
-import styled from 'styled-components';
-import Mask from '../components/Mask';
-import { Spin } from 'antd';
 
 const Container = styled.div`
   position: relative;
@@ -37,7 +38,5 @@ const ContextTaskBoard = ({ contextId }: IContextTaskBoard) => {
 };
 
 export default inject('userStore')(
-  observer(({ userStore, match }) => {
-    return <ContextTaskBoard contextId={match.params.id} userId={userStore.userId} />;
-  })
+  observer(({ userStore, match }) => <ContextTaskBoard contextId={match.params.id} userId={userStore.userId} />)
 );

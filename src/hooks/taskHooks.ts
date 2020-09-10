@@ -1,10 +1,10 @@
-import { useEffect, useRef } from 'react';
-import { useMutation, usePaginatedQuery, queryCache, useQuery } from 'react-query';
+import { useEffect, useMemo } from 'react';
+import { queryCache, useMutation, usePaginatedQuery } from 'react-query';
+
+import { apiService } from '../api';
 import requestStore from '../stores/requestStore';
 import taskStore from '../stores/taskStore';
-import { apiService } from '../api';
-import { ITask, INewTask } from '../types';
-import _ from 'lodash';
+import { INewTask, ITask } from '../types';
 
 const initialFetchTasksData = {
   items: [],
@@ -15,16 +15,14 @@ const initialFetchTasksData = {
 
 export function useFetchTasksByCategory(
   category: string,
-  paginationParams: string = `page=1&limit=15`
+  paginationParams = 'page=1&limit=15'
 ) {
-  const currentQueryKey = ['tasks', category, paginationParams];
+  const currentQueryKey = useMemo(() => ['tasks', category, paginationParams], [category, paginationParams]);
   const { status, error, resolvedData, isFetching } = usePaginatedQuery(
     ['tasks', category, paginationParams],
-    (_, _category, _paginationParams) => {
-      return apiService
-        .get(`/tasks?category=${_category}&${_paginationParams}`)
-        .then(res => res.data);
-    },
+    (_, _category, _paginationParams) => apiService
+      .get(`/tasks?category=${_category}&${_paginationParams}`)
+      .then(res => res.data),
     {
       initialData: initialFetchTasksData,
       initialStale: () => !queryCache.getQueryData(['tasks', category, paginationParams])
@@ -37,23 +35,21 @@ export function useFetchTasksByCategory(
       taskStore.addTaskList(items);
       requestStore.setCurrentQueryKey(currentQueryKey);
     }
-  }, [status, items]);
+  }, [status, items, currentQueryKey]);
 
   return { items, next, previous, pageCount, status, error, isFetching };
 }
 
 export function useFetchTasksByProjectId(
   projectId: string,
-  paginationParams: string = `page=1&limit=100`
+  paginationParams = 'page=1&limit=100'
 ) {
-  const currentQueryKey = [`project`, projectId, paginationParams];
+  const currentQueryKey = useMemo(() => ['project', projectId, paginationParams], [projectId, paginationParams]);
   const { status, error, isFetching, resolvedData } = usePaginatedQuery(
-    [`project`, projectId, paginationParams],
-    (key, _projectId, _paginationParams) => {
-      return apiService
-        .get(`/tasks/${key}/${_projectId}?${_paginationParams}`)
-        .then(res => res.data);
-    },
+    ['project', projectId, paginationParams],
+    (key, _projectId, _paginationParams) => apiService
+      .get(`/tasks/${key}/${_projectId}?${_paginationParams}`)
+      .then(res => res.data),
     {
       initialData: initialFetchTasksData,
       initialStale: () => !queryCache.getQueryData(projectId)
@@ -79,16 +75,14 @@ export function useFetchTasksByProjectId(
 
 export function useFetchTasksByContextId(
   contextId: string,
-  paginationParams: string = `page=1&limit=100`
+  paginationParams = 'page=1&limit=100'
 ) {
-  const currentQueryKey = [`context`, contextId, paginationParams];
+  const currentQueryKey = useMemo(() => ['context', contextId, paginationParams], [contextId, paginationParams]);
   const { status, error, isFetching, resolvedData } = usePaginatedQuery(
-    [`context`, contextId, paginationParams],
-    (key, _contextId, _paginationParams) => {
-      return apiService
-        .get(`/tasks/${key}/${_contextId}?${_paginationParams}`)
-        .then(res => res.data);
-    },
+    ['context', contextId, paginationParams],
+    (key, _contextId, _paginationParams) => apiService
+      .get(`/tasks/${key}/${_contextId}?${_paginationParams}`)
+      .then(res => res.data),
     {
       initialData: initialFetchTasksData,
       initialStale: () => !queryCache.getQueryData(contextId)
@@ -142,7 +136,7 @@ interface ICreateTaskMutationVariable {
 
 export function useCreateTask() {
   const [createTask, { data, error, status }] = useMutation<ITask, ICreateTaskMutationVariable>(
-    ({ task }) => apiService.post(`/tasks`, task).then(res => res.data),
+    ({ task }) => apiService.post('/tasks', task).then(res => res.data),
     {
       onSuccess: () => queryCache.invalidateQueries(requestStore.currentQueryKey)
     }
@@ -159,7 +153,7 @@ export function useCreateTask() {
 }
 
 export function useDeleteTaskById(id: string) {
-  const [createTask, { error, status }] = useMutation(_payload =>
+  const [createTask, { error, status }] = useMutation(() =>
     apiService.delete(`/tasks/${id}`).then(res => res.data)
   );
 
@@ -167,7 +161,7 @@ export function useDeleteTaskById(id: string) {
     if (status === 'success') {
       taskStore.deleteTaskById(id);
     }
-  }, [status]);
+  }, [status, id]);
 
   return { createTask, status, error };
 }

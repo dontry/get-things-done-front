@@ -29,7 +29,8 @@ export class Project {
   }: IProject) {
     this.title = title;
     this.createdAt = Date.now();
-    (this.allDay = allDay), (this.deletedAt = deletedAt);
+    this.allDay = allDay;
+    this.deletedAt = deletedAt;
     this.completedAt = completedAt;
     this.archived = archived;
     this.note = note || { content: '' };

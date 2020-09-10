@@ -1,12 +1,12 @@
-import { ITask, TimeBasedProperty } from 'src/types';
-import { groupBy, flow, sortBy, reverse, toPairs, map } from 'lodash/fp';
+import { flow, groupBy, map, reverse, sortBy, toPairs } from 'lodash/fp';
 import moment from 'moment';
 import { ITaskListGroup } from 'src/components/TaskListGroup';
+import { ITask, TimeBasedProperty } from 'src/types';
 
 export function groupTasksByDate(tasks: ITask[], property: TimeBasedProperty) {
   const pipeline = flow(
     groupBy((task: ITask) => {
-      const date = moment(task.startAt);
+      const date = moment(task[property]);
       return date.format('YYYY/MM/DD');
     }),
     toPairs,

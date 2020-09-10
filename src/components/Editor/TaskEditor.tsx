@@ -1,57 +1,55 @@
-import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react';
-import { Form, Select, Layout, Button, Space } from 'antd';
 import {
+  ArrowUpOutlined,
   BarsOutlined,
   EnvironmentOutlined,
-  ArrowUpOutlined,
-  TagOutlined,
-  ProjectOutlined
+  ProjectOutlined,
+  TagOutlined
 } from '@ant-design/icons';
+import { Button, Form, Layout, Select, Space } from 'antd';
 import {
+  ContentState,
+  convertFromRaw,
+  convertToRaw,
+  DraftBlockType,
+  DraftEditorCommand,
+  DraftHandleValue,
+  DraftInlineStyleType,
   Editor,
   EditorState,
-  RichUtils,
-  DraftEditorCommand,
-  DraftBlockType,
-  DraftInlineStyleType,
-  DraftHandleValue,
-  convertToRaw,
-  ContentState,
-  convertFromRaw
+  RichUtils
 } from 'draft-js';
-import {
-  EditorWrapper,
-  EditorControlWrapper,
-  EditorTitle,
-  EditorSider,
-  EditorContentWrapper
-} from './style';
-import { BlockStyleControls, InlineStyleControls } from './StyleControls';
-import { ITask, Priority, Category, Attribute, IContext, IProject } from '../../types';
-import { TAGS } from '../../constants/misc';
-import { queryCache } from 'react-query';
-import { observer, inject } from 'mobx-react';
-import { useUpdateTask } from '../../hooks/taskHooks';
-import { useValueChange } from '../../hooks/useValueChange';
 import { History } from 'history';
 import { get, truncate } from 'lodash';
+import { inject, observer } from 'mobx-react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { queryCache } from 'react-query';
+
+import { TAGS } from '../../constants/misc';
+import { useUpdateTask } from '../../hooks/taskHooks';
+import { useValueChange } from '../../hooks/useValueChange';
+import { isToday, isTomorrow } from '../../lib/date';
+import { Attribute, Category, IContext, IProject, ITask, Priority } from '../../types';
 import CategorySelect, { IUpdateCategoryPayload } from './CategorySelect';
-import { isTomorrow, isToday } from '../../lib/date';
+import {
+  EditorContentWrapper,
+  EditorControlWrapper,
+  EditorSider,
+  EditorTitle,
+  EditorWrapper
+} from './style';
+import { BlockStyleControls, InlineStyleControls } from './StyleControls';
 
 const { Content, Header } = Layout;
 
 interface ITaskEditorProps {
-  task?: ITask;
+  task: ITask;
   history: History;
 }
 
 const TaskEditor = ({ task, history }: ITaskEditorProps) => {
-  if (!task) {
-    return null;
-  }
   // memo
+  const content = get(task, 'note.content');
   const contentState = useMemo(() => {
-    const content = get(task, 'note.content');
     if (typeof content === 'string') {
       return ContentState.createFromText(content);
     } else {
@@ -61,16 +59,16 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
         return ContentState.createFromText('');
       }
     }
-  }, [get(task, 'note.content', '')]);
+  }, [content]);
 
   // state
   const [taskAttribute, setAttribute] = useState<Attribute>(task.attribute || 'inbox');
   const [taskTitle, setTitle] = useState(task.title);
   const [taskStartTime, setStartTime] = useState(task.startAt);
-  const [taskPriority, handlePriorityChange] = useValueChange(task.priority);
-  const [taskProject, handleProjectChange] = useValueChange(task.projectId);
-  const [taskContext, handleContextChange] = useValueChange(task.context);
-  const [taskTags, handleTagsChange] = useValueChange(task.tags);
+  const [taskPriority, onPriorityChange] = useValueChange(task.priority);
+  const [taskProject, onProjectChange] = useValueChange(task.projectId);
+  const [taskContext, onContextChange] = useValueChange(task.context);
+  const [taskTags, onTagsChange] = useValueChange(task.tags);
   const [editorState, setEditorState] = useState(() =>
     contentState ? EditorState.createWithContent(contentState) : EditorState.createEmpty()
   );
@@ -96,7 +94,7 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
     }
   }, [taskAttribute, taskStartTime]);
 
-  // hook
+  // hooks
   const { updateTask } = useUpdateTask();
 
   const onEditorStateChange = useCallback(
@@ -123,17 +121,17 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
     (blockType: DraftBlockType) => {
       onEditorStateChange(RichUtils.toggleBlockType(editorState, blockType));
     },
-    [editorState]
+    [editorState, onEditorStateChange]
   );
 
   const toggleInlineStyle = useCallback(
     (inlineStyle: DraftInlineStyleType) => {
       onEditorStateChange(RichUtils.toggleInlineStyle(editorState, inlineStyle));
     },
-    [editorState]
+    [editorState, onEditorStateChange]
   );
 
-  const handleCategoryChange = useCallback(
+  const onCategoryChange = useCallback(
     (payload: IUpdateCategoryPayload) => {
       setAttribute(payload.attribute);
       setStartTime(payload.startTime);
@@ -148,8 +146,8 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
     [setTitle]
   );
 
-  const handleSave = () => {
-    const content = convertToRaw(editorState.getCurrentContent());
+  const onSave = () => {
+    const noteContent = convertToRaw(editorState.getCurrentContent());
     const updatedTask: ITask = {
       ...task,
       attribute: taskAttribute,
@@ -161,7 +159,7 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
       tags: taskTags,
       deletedAt: task.deletedAt || 0,
       note: {
-        content
+        content: noteContent
       }
     };
     updateTask({ task: updatedTask });
@@ -181,7 +179,11 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
 
   useEffect(() => {
     focusEditor();
-  }, []);
+  }, [focusEditor]);
+
+  if (!task) {
+    return null;
+  }
 
   return (
     <Form>
@@ -223,7 +225,7 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
               <CategorySelect
                 initCategory={taskCategory}
                 startTime={taskStartTime}
-                onChange={handleCategoryChange}
+                onChange={onCategoryChange}
               />
             </Form.Item>
             <Form.Item
@@ -235,7 +237,7 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
               }
               initialValue={taskPriority}
             >
-              <Select onChange={handlePriorityChange}>
+              <Select onChange={onPriorityChange}>
                 {Object.keys(Priority)
                   .filter(key => isNaN(Number(key)))
                   .map((priority, index) => (
@@ -256,7 +258,7 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
               }
               initialValue={taskProject}
             >
-              <Select onChange={value => handleProjectChange(value as string)}>
+              <Select onChange={value => onProjectChange(value as string)}>
                 {projects &&
                   projects.map(project => (
                     <Select.Option title={project.title} value={project.id || ''}>
@@ -275,7 +277,7 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
               }
               initialValue={taskContext}
             >
-              <Select onChange={value => handleContextChange(value as string)}>
+              <Select onChange={value => onContextChange(value as string)}>
                 {contexts &&
                   contexts.map((cxt: IContext) => (
                     <Select.Option value={cxt.id || ''}>{cxt.name}</Select.Option>
@@ -292,7 +294,7 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
               }
               initialValue={taskTags}
             >
-              <Select mode='multiple' placeholder='Add label' onChange={handleTagsChange}>
+              <Select mode='multiple' placeholder='Add label' onChange={onTagsChange}>
                 {TAGS.map(tag => (
                   <Select.Option value={tag}>{tag}</Select.Option>
                 ))}
@@ -312,7 +314,7 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
       </Layout>
       <Layout.Footer style={{ textAlign: 'right' }}>
         <Space>
-          <Button type='primary' onClick={handleSave}>
+          <Button type='primary' onClick={onSave}>
             Save
           </Button>
           <Button onClick={handleCancel}>Cancel</Button>

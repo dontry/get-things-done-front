@@ -1,5 +1,5 @@
-import React from 'react';
 import { EditorState } from 'draft-js';
+import React from 'react';
 import styled from 'styled-components';
 
 const BLOCK_TYPES = [

@@ -1,8 +1,9 @@
 import React from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import { ITask } from 'src/types';
-import TaskItem from './TaskItem';
+
 import { TaskItemContainer } from './style';
+import TaskItem from './TaskItem';
 
 interface ITaskItemProps {
   type: string;

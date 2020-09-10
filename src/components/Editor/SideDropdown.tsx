@@ -1,5 +1,5 @@
+import { Button,Dropdown, Menu } from 'antd';
 import React, { ReactNode } from 'react';
-import { Menu, Dropdown, Button } from 'antd';
 
 interface ISideDropdownProps {
   name: string;

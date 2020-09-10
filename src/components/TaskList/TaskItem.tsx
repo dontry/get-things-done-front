@@ -1,18 +1,19 @@
-import React from 'react';
 import { Checkbox } from 'antd';
+import { isNil } from 'lodash';
+import moment from 'moment';
+import React, { useCallback } from 'react';
+import { queryCache } from 'react-query';
+import { Link } from 'react-router-dom';
+import { IContext, IProject, ITask } from 'src/types';
+
+import { useUpdateTask } from '../../hooks/taskHooks';
 import {
-  TaskItemContainer,
-  TaskWrapper,
   CloseButton,
   TagWrapper,
-  TaskContentWrapper
+  TaskContentWrapper,
+  TaskItemContainer,
+  TaskWrapper
 } from './style';
-import { ITask, IContext, IProject } from 'src/types';
-import { Link } from 'react-router-dom';
-import { useUpdateTask } from '../../hooks/taskHooks';
-import { isNil } from 'lodash';
-import { queryCache } from 'react-query';
-import moment from 'moment';
 
 interface ITaskItemProps {
   type: string;
@@ -21,50 +22,53 @@ interface ITaskItemProps {
 }
 
 const TaskItem = React.memo(({ type, task, isDragging }: ITaskItemProps) => {
-  if (!task.id) {
-    return null;
-  }
   const { updateTask } = useUpdateTask();
 
-  return <TaskItemContainer isDragging={isDragging}>{_renderTask(task, type)}</TaskItemContainer>;
+  const onCheck = useCallback(
+    (_task: ITask) => {
+      if (_task.completedAt === 0) {
+        _task.completedAt = Date.now();
+      } else {
+        _task.completedAt = 0;
+      }
+      if (_task.id) {
+        updateTask({ task: _task });
+      }
+    }, [updateTask])
 
-  function _renderTask(_task: ITask, _type: string) {
+  const onDelete = useCallback(
+    (_task: ITask) => {
+      _task.deletedAt = 1;
+      if (_task.id) {
+        updateTask({ task: _task });
+      }
+    }, [updateTask])
+
+  const renderTask = useCallback((_task: ITask, _type: string) => {
     switch (_type) {
       case 'deleted':
         return <DeletedTask task={_task} />;
       case 'completed':
-        return <CompletedTask task={_task} handleCheck={_handleCheck} />;
+        return <CompletedTask task={_task} onCheck={onCheck} />;
       default:
-        return <TodoTask task={_task} handleCheck={_handleCheck} handleDelete={_handleDelete} />;
+        return <TodoTask task={_task} onCheck={onCheck} onDelete={onDelete} />;
     }
-  }
+  }, [onCheck, onDelete])
 
-  async function _handleCheck(_task: ITask) {
-    if (_task.completedAt === 0) {
-      _task.completedAt = Date.now();
-    } else {
-      _task.completedAt = 0;
-    }
-    if (_task.id) {
-      updateTask({ task: _task });
-    }
-  }
-
-  async function _handleDelete(_task: ITask) {
-    _task.deletedAt = 1;
-    if (_task.id) {
-      updateTask({ task: _task });
-    }
-  }
+  return (
+    <TaskItemContainer isDragging={isDragging}>
+      {renderTask(task, type)}
+    </TaskItemContainer>
+  );
 });
 
 interface ITaskProps {
   task: ITask;
-  handleCheck?: (task: ITask) => void;
-  handleDelete?: (task: ITask) => void;
+  onCheck?: (task: ITask) => void;
+  onDelete?: (task: ITask) => void;
 }
 
-const TodoTask = ({ task, handleCheck, handleDelete }: ITaskProps) => (
+const TodoTask = ({ task, onCheck: handleCheck, onDelete: handleDelete }: ITaskProps) => (
   <>
     <Checkbox onChange={() => handleCheck && handleCheck(task)} />
     <TaskWrapper>
@@ -80,7 +84,7 @@ const DeletedTask = ({ task }: ITaskProps) => (
   </TaskWrapper>
 );
 
-const CompletedTask = ({ task, handleCheck }: ITaskProps) => (
+const CompletedTask = ({ task, onCheck: handleCheck }: ITaskProps) => (
   <>
     <Checkbox checked={true} onChange={() => handleCheck && handleCheck(task)} />
     <TaskWrapper>
@@ -98,23 +102,23 @@ const TaskContent = ({ task }: { task: ITask }) => {
   const contextTag = isNil(context) ? (
     ''
   ) : (
-    <TagWrapper>
-      <Link to={`/home/context/${context.id}`}>@{context.name}</Link>
-    </TagWrapper>
-  );
+      <TagWrapper>
+        <Link to={`/home/context/${context.id}`}>@{context.name}</Link>
+      </TagWrapper>
+    );
   const projectTag = isNil(project) ? (
     ''
   ) : (
-    <TagWrapper>
-      <Link to={`/home/project/${project.id}`}>#{project.title}</Link>
-    </TagWrapper>
-  );
+      <TagWrapper>
+        <Link to={`/home/project/${project.id}`}>#{project.title}</Link>
+      </TagWrapper>
+    );
   const dateTag =
     task.startAt === 0 ? (
       ''
     ) : (
-      <TagWrapper style={{ marginLeft: 'auto' }}>{moment(task.startAt).format('DD/MM')}</TagWrapper>
-    );
+        <TagWrapper style={{ marginLeft: 'auto' }}>{moment(task.startAt).format('DD/MM')}</TagWrapper>
+      );
 
   return (
     <TaskContentWrapper>

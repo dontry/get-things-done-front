@@ -1,4 +1,4 @@
-import { Attribute, Priority, INewTask, INote, IRepeater, IReminder, ITask } from '../types/index';
+import { Attribute, INewTask, INote, IReminder, IRepeater, Priority } from '../types/index';
 
 export class Task {
   private title: string;
@@ -55,7 +55,8 @@ export class Task {
     this.estimatedTime = estimatedTime;
     this.context = context;
     this.spentTime = spentTime;
-    (this.allDay = allDay), (this.deletedAt = deletedAt);
+    this.allDay = allDay;
+    this.deletedAt = deletedAt;
     this.completedAt = completedAt;
     this.archived = archived;
     this.tags = tags;

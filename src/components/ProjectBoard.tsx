@@ -1,16 +1,17 @@
-import { match as Match } from 'react-router';
-import { queryCache } from 'react-query';
-import { IProject, ITask } from 'src/types';
+import { Checkbox, Form, Layout, Space,Spin } from 'antd';
 import { useMemo } from 'react';
 import React from 'react';
-import { Form, Layout, Spin, Checkbox, Space } from 'antd';
-import { EditorTitle } from './Editor/style';
-import { useValueChange } from '../hooks/useValueChange';
-import Mask from './Mask';
+import { queryCache } from 'react-query';
+import { match as Match } from 'react-router';
+import { IProject } from 'src/types';
+
 import * as taskAction from '../hooks/taskHooks';
+import { useValueChange } from '../hooks/useValueChange';
+import { groupTasksByCategory } from '../lib/groupTasksByCategory';
+import { EditorTitle } from './Editor/style';
+import Mask from './Mask';
 import { CategoryTaskInput } from './TaskInput';
 import TaskListGroup, { ITaskListGroup } from './TaskListGroup';
-import { groupTasksByCategory } from '../lib/groupTasksByCategory';
 
 const { Header } = Layout;
 
@@ -25,15 +26,13 @@ const ProjectBoard = ({ match, userId }: IProjectEditorProps) => {
     const projects = (queryCache.getQueryData('projects') as IProject[]) || [];
     return projects.find(_project => _project.id === projectId);
   }, [projectId]);
-
+  const [title, onTitleChange] = useValueChange(project ? project.title : '');
+  const { items, isFetching } = taskAction.useFetchTasksByProjectId(projectId);
+  const taskListGroups = groupTasksByCategory(items) as ITaskListGroup[];
+  
   if (!project) {
     return null;
   }
-
-  const [title, handleTitleChange] = useValueChange(project ? project.title : '');
-  const { items, isFetching } = taskAction.useFetchTasksByProjectId(projectId);
-
-  const taskListGroups = groupTasksByCategory(items) as ITaskListGroup[];
 
   return (
     <Layout style={{ background: '#fff', height: '100%', overflow: 'auto' }}>
@@ -42,7 +41,7 @@ const ProjectBoard = ({ match, userId }: IProjectEditorProps) => {
           <Form.Item style={{ marginBottom: '1rem' }}>
             <Space>
               <Checkbox />
-              <EditorTitle value={title} onChange={handleTitleChange} align='left' />
+              <EditorTitle value={title} onChange={onTitleChange} align='left' />
             </Space>
           </Form.Item>
         </div>

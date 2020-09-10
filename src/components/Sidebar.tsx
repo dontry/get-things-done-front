@@ -16,7 +16,7 @@ import {
 } from '@ant-design/icons';
 import { useFetchProjects } from '../hooks/projectHooks';
 import { IProject, IContext } from 'src/types';
-import { useFetchContext } from '../hooks/contexHooks';
+import { useFetchContext } from '../hooks/contextHooks';
 const { Sider } = Layout;
 const { Item, SubMenu } = Menu;
 

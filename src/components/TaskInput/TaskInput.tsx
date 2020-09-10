@@ -1,8 +1,8 @@
-import React, { useCallback } from 'react';
-import { inject, observer } from 'mobx-react';
-import styled from 'styled-components';
-import { Layout, Form, Input, Button } from 'antd';
+import { Button,Form, Input, Layout } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
+import { inject, observer } from 'mobx-react';
+import React, { useCallback } from 'react';
+import styled from 'styled-components';
 
 const AddButton = styled(Button)`
   font-size: 14px;
@@ -34,7 +34,7 @@ export const TaskInput = ({ onCreateTask }: ITaskInputProps) => {
       .finally(() => {
         form.resetFields();
       });
-  }, [onCreateTask]);
+  }, [onCreateTask, form]);
 
   return (
     <Form onFinish={onFinish} form={form}>
@@ -52,7 +52,5 @@ export const TaskInput = ({ onCreateTask }: ITaskInputProps) => {
 };
 
 export default inject('userStore')(
-  observer(({ userStore, ...rest }) => {
-    return <TaskInput userId={userStore.userId} {...rest} />;
-  })
+  observer(({ userStore, ...rest }) => <TaskInput userId={userStore.userId} {...rest} />)
 );

@@ -1,7 +1,8 @@
-import axios, { Canceler, AxiosResponse, AxiosRequestConfig, AxiosProxyConfig } from 'axios';
-import { routerStore, messageStore } from '../stores';
-import { MessageType } from '../types';
+import axios, { AxiosProxyConfig, AxiosRequestConfig, AxiosResponse, Canceler } from 'axios';
+
 import { persistanceService } from '../classes/PersistanceService';
+import { messageStore, routerStore } from '../stores';
+import { MessageType } from '../types';
 
 let cancel: Canceler;
 const promiseArray: any = {};
@@ -104,9 +105,7 @@ httpClient.interceptors.request.use(
     }
     return config;
   },
-  error => {
-    return Promise.reject(error);
-  }
+  error => Promise.reject(error)
 );
 
 httpClient.interceptors.response.use(

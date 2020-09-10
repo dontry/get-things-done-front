@@ -1,7 +1,8 @@
-import { useQuery, useMutation, queryCache } from 'react-query';
-import { apiService } from '../api';
-import { IProject } from 'src/types';
 import { isNil } from 'lodash';
+import { queryCache, useMutation, useQuery } from 'react-query';
+import { IProject } from 'src/types';
+
+import { apiService } from '../api';
 
 export function useFetchProjects() {
   const { status, error, data } = useQuery('projects', () =>
@@ -43,7 +44,7 @@ export function useCreateProject() {
   const [createProject, { data, error, status, isSuccess }] = useMutation<
     IProject,
     IProjectMutationVariable
-  >(({ project }) => apiService.post(`/projects`, project).then(res => res.data), {
+  >(({ project }) => apiService.post('/projects', project).then(res => res.data), {
     onSuccess: () => {
       queryCache.invalidateQueries('projects');
     }

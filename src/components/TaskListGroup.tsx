@@ -1,8 +1,9 @@
-import React, { memo } from 'react';
-import { Collapse, Space } from 'antd';
-import { ITask } from 'src/types';
-import { TaskList } from './TaskList';
+import { Collapse } from 'antd';
 import { capitalize } from 'lodash';
+import React, { memo } from 'react';
+import { ITask } from 'src/types';
+
+import { TaskList } from './TaskList';
 
 const { Panel } = Collapse;
 

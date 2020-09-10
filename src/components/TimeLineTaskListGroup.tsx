@@ -1,8 +1,9 @@
 import React, { memo } from 'react';
-import { TimeBasedProperty, ITask } from 'src/types';
+import { ITask,TimeBasedProperty } from 'src/types';
+
+import { getScheduledGroupTasks } from '../lib/getScheduledTaskGroups';
 import { groupTasksByDate } from '../lib/groupTasksByDate';
 import TaskListGroup, { ITaskListGroup } from './TaskListGroup';
-import { getScheduledGroupTasks } from '../lib/getScheduledTaskGroups';
 
 interface ITimeLineTaskListGroupProps {
   tasks: ITask[];

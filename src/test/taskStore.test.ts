@@ -1,6 +1,6 @@
 import { TaskStore } from '../stores/taskStore';
-import { tasks } from './fixture/tasks';
 import { ITask } from '../types';
+import { tasks } from './fixture/tasks';
 
 const taskList: ITask[] = tasks;
 

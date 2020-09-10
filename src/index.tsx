@@ -1,24 +1,25 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-// https://reacttraining.com/react-router/web/api/Router
-import { Router, Switch, Route, Link, Redirect } from 'react-router-dom';
+import './index.css';
+
+import { createBrowserHistory } from 'history';
 import { Provider } from 'mobx-react';
 import { default as MobxDevTools } from 'mobx-react-devtools';
-import ProtectedRoute from './components/ProtectedRoute';
-import App from './App';
-import Login from './views/Login';
-import Register from './views/Register';
-import NotFound from './views/NotFound';
-import Profile from './views/Profile';
-import { setConfig } from 'react-hot-loader';
-import * as stores from './stores';
-import * as serviceWorker from './serviceWorker';
-import { createBrowserHistory } from 'history';
 import { syncHistoryWithStore } from 'mobx-react-router';
-import './index.css';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { setConfig } from 'react-hot-loader';
 import { ReactQueryConfigProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query-devtools';
-import { LOGIN, REGISTER, HOME, PROFILE } from './constants/pathname';
+import { Redirect,Route, Router, Switch } from 'react-router-dom';
+
+import App from './App';
+import ProtectedRoute from './components/ProtectedRoute';
+import { HOME, LOGIN, PROFILE,REGISTER } from './constants/pathname';
+import * as serviceWorker from './serviceWorker';
+import * as stores from './stores';
+import Login from './views/Login';
+import NotFound from './views/NotFound';
+import Profile from './views/Profile';
+import Register from './views/Register';
 
 const rootEl = document.getElementById('root');
 setConfig({ ignoreSFC: true });

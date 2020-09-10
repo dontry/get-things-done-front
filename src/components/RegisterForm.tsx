@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { Form, Input, Button, Select, InputNumber } from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { formItemLayout, footerFormItemLayout } from '../constants/layout';
+import { LockOutlined,UserOutlined } from '@ant-design/icons';
+import { Button, Form, Input, InputNumber,Select } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
+import React, { useState } from 'react';
+
+import { footerFormItemLayout,formItemLayout } from '../constants/layout';
 const { Option } = Select;
 
 interface IFormProps {

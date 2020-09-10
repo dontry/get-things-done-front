@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { observable, action } from 'mobx';
+import { action,observable } from 'mobx';
 import { observer } from 'mobx-react';
+import React, { Component } from 'react';
 
 export class FieldState {
   @observable

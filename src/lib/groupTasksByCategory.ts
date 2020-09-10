@@ -1,6 +1,7 @@
+import { flow, groupBy, map, sortBy, toPairs } from 'lodash/fp';
 import { ITask } from 'src/types';
+
 import { getTaskCategory } from './getTaskCategory';
-import { sortBy, map, toPairs, groupBy, flow } from 'lodash/fp';
 
 const groupOrder = [
   'inbox',

@@ -1,7 +1,8 @@
 import React from 'react';
-import { Route, Redirect } from 'react-router-dom';
-import { LOGIN } from '../constants/pathname';
+import { Redirect,Route } from 'react-router-dom';
+
 import { persistanceService } from '../classes/PersistanceService';
+import { LOGIN } from '../constants/pathname';
 
 const ProtectedRoute = ({ component: Component, ...rest }: any) => {
   const token = persistanceService.getItem('access_token');

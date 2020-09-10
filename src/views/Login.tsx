@@ -1,10 +1,11 @@
 import React from 'react';
+
+import { persistanceService } from '../classes/PersistanceService';
 import LoginForm, { ILoginFormValues } from '../components/LoginForm';
-import { login } from '../hooks/authHooks';
 import WithMessagePopup from '../components/WithMessagePopup';
+import { login } from '../hooks/authHooks';
 import { MessageType } from '../types';
 import { CenterContainer, CenterWrapper } from './style';
-import { persistanceService } from '../classes/PersistanceService';
 
 const Login = () => {
   const LoginFormWithMessage = WithMessagePopup(LoginForm, MessageType.NETWORK);

@@ -1,8 +1,9 @@
-import { observable, action, computed } from 'mobx';
-import hydrate from '../lib/hydrate';
-import { persist } from 'mobx-persist';
-import { IUser } from '../types';
 import _ from 'lodash';
+import { action, computed, observable } from 'mobx';
+import { persist } from 'mobx-persist';
+
+import hydrate from '../lib/hydrate';
+import { IUser } from '../types';
 
 class UserStore {
   @persist('object') @observable public user: IUser | undefined;
@@ -26,6 +27,7 @@ class UserStore {
 
   @action
   public clearUser(): void {
+    // eslint-disable-next-line id-blacklist
     this.user = undefined;
   }
 }

@@ -1,8 +1,9 @@
-import { ITask } from 'src/types';
-import { groupBy, flow, filter, forOwn, sortBy, reverse, map } from 'lodash/fp';
-import { isTomorrow, isToday, isThisMonth, isBeforeThisMonth } from './date';
-import { ITaskListGroup } from 'src/components/TaskListGroup';
 import { toPairs } from 'lodash';
+import { filter, flow, groupBy, map, sortBy } from 'lodash/fp';
+import { ITaskListGroup } from 'src/components/TaskListGroup';
+import { ITask } from 'src/types';
+
+import { isBeforeThisMonth, isThisMonth, isToday, isTomorrow } from './date';
 
 const groupNames = ['This month', 'Next month and later'];
 

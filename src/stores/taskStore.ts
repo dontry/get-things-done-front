@@ -1,9 +1,10 @@
-import { observable, action, computed } from 'mobx';
-import { ITask, Attribute } from '../types';
-import mapToObject from '../lib/mapToObject';
 import _ from 'lodash';
 import fp from 'lodash/fp';
+import { action, computed, observable } from 'mobx';
+
 import { isToday } from '../lib/date';
+import mapToObject from '../lib/mapToObject';
+import { Attribute, ITask } from '../types';
 
 export interface ITaskStore {
   tasks: Map<string, ITask>;
@@ -11,7 +12,7 @@ export interface ITaskStore {
   planTasks: ITask[];
   nextTasks: ITask[];
   todayTasks: ITask[];
-  json: object;
+  json: Record<string, unknown>;
   list: ITask[];
 }
 
@@ -23,19 +24,17 @@ export class TaskStore implements ITaskStore {
   }
 
   @computed
-  public get json(): object {
+  public get json(): Record<string, unknown> {
     return mapToObject<ITask>(this.tasks);
   }
 
   @computed
   public get list(): ITask[] {
     const list: ITask[] = [];
-    for (const [key, task] of this.tasks) {
+    for (const [, task] of this.tasks) {
       list.push(task);
     }
-    return list.sort((a, b) => {
-      return a.pos - b.pos;
-    });
+    return list.sort((a, b) => a.pos - b.pos);
   }
 
   @computed
@@ -88,8 +87,6 @@ export class TaskStore implements ITaskStore {
   public getTaskById(id: string | undefined): ITask | undefined {
     if (id) {
       return this.tasks.get(id);
-    } else {
-      return undefined;
     }
   }
 
@@ -104,7 +101,7 @@ export class TaskStore implements ITaskStore {
   /**
    * updateTaskById
    */
-  public updateTaskById(id: string, task: ITask) {
+  public updateTaskById(id: string, task: ITask): void {
     if (this.tasks.get(id)) {
       this.tasks.set(id, task);
     }
@@ -114,7 +111,7 @@ export class TaskStore implements ITaskStore {
   /**
    * updateTaskById
    */
-  public updateTask(task: ITask) {
+  public updateTask(task: ITask): void {
     if (!task.id) {
       return;
     }

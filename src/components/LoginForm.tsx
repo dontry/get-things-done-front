@@ -1,9 +1,8 @@
+import {LockOutlined,UserOutlined } from '@ant-design/icons';
+import { Button, Checkbox,Form, Input } from 'antd';
 import React from 'react';
 import { Link } from 'react-router-dom';
-
-import { Form, Input, Button, Checkbox } from 'antd';
-import {UserOutlined, LockOutlined } from '@ant-design/icons';
-
+/* 
 const footerFormItemLayout = {
   wrapperCol: {
     xs: {
@@ -12,7 +11,7 @@ const footerFormItemLayout = {
     }
   }
 };
-
+ */
 export interface ILoginFormValues {
   username: string;
   password: string;
@@ -58,7 +57,8 @@ const LoginForm = ({ onSubmit }: IFormProps) => {
       </Form.Item>
       <Form.Item name='checked' initialValue='true' >
         <Checkbox>Remember me</Checkbox>
-        <a className='login-form-forgot' href=''> Forgot password </a>
+        {/* TODO: forgot password */}
+        {/* <a className='login-form-forgot' href="javascript:void(0)" > Forgot password </a> */}
       </Form.Item>
       <Form.Item>
         <Button type='primary' htmlType='submit' className='login-form-button'>

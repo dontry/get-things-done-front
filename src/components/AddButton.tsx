@@ -1,10 +1,11 @@
-import React, { useCallback, useState, useEffect } from 'react';
-import { Button, Menu, Dropdown, Form, Modal, Input } from 'antd';
 import { PlusCircleOutlined } from '@ant-design/icons';
+import { Button, Dropdown, Form, Input,Menu, Modal } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
+import React, { useCallback, useEffect,useState } from 'react';
+
+import { Context,Project } from '../classes';
+import { useCreateContext } from '../hooks/contextHooks';
 import { useCreateProject } from '../hooks/projectHooks';
-import { Project, Context } from '../classes';
-import { useCreateContext } from '../hooks/contexHooks';
 
 const AddButton = () => {
   const [selectedOption, setSelectedOption] = useState('');
@@ -53,7 +54,7 @@ const ContextModal = ({ visible, onClose }: IModalProps) => {
       form.resetFields();
       onClose();
     }
-  }, [isSuccess]);
+  }, [isSuccess, form, onClose]);
 
   const onOk = useCallback(() => {
     form.validateFields().then(values => {
@@ -86,7 +87,7 @@ const ProjectModal = ({ visible, onClose }: IModalProps) => {
       form.resetFields();
       onClose();
     }
-  }, [isSuccess]);
+  }, [isSuccess, form, onClose]);
 
   const onOk = useCallback(() => {
     form.validateFields().then(values => {
