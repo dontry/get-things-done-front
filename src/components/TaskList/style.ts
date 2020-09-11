@@ -68,7 +68,6 @@ export const TaskListContainer = styled.div`
 `;
 
 export const TaskListBody = styled.div`
-  padding: 8px;
   transition: background-color 0.2s ease;
   min-height: 100px;
 `;

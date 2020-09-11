@@ -52,7 +52,7 @@ const TaskBoard = memo(({ type, isLoading, items, TaskInput }: ITaskBoardProps) 
             <Spin size='large' />
           </Mask>
         ) : (
-          renderTasksSection()
+          <div style={{ padding: '8px' }}>{renderTasksSection()}</div>
         )}
       </>
     </Container>
