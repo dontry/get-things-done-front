@@ -6,5 +6,8 @@ module.exports = {
     'react-app',
     '@babel/preset-typescript',
   ],
-  plugins: ['@babel/plugin-proposal-optional-chaining'],
+  plugins: [
+    '@babel/plugin-proposal-optional-chaining',
+    ['babel-plugin-styled-components', { pure: true, fileName: false }],
+  ],
 };
