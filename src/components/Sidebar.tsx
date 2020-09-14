@@ -12,11 +12,12 @@ import {
   CheckSquareOutlined,
   DeleteOutlined,
   RightSquareOutlined,
-  BookOutlined
+  BookOutlined,
 } from '@ant-design/icons';
 import { useFetchProjects } from '../hooks/projectHooks';
 import { IProject, IContext } from 'src/types';
 import { useFetchContext } from '../hooks/contextHooks';
+import { useTranslation } from 'react-i18next';
 const { Sider } = Layout;
 const { Item, SubMenu } = Menu;
 
@@ -26,8 +27,9 @@ const Sidebar = () => {
     (_collapsed: boolean): void => {
       setCollapsed(_collapsed);
     },
-    [setCollapsed]
+    [setCollapsed],
   );
+  const { t } = useTranslation();
 
   const { projects } = useFetchProjects();
   const { context } = useFetchContext();
@@ -43,43 +45,43 @@ const Sidebar = () => {
         <Item key='inbox'>
           <Link to='/home/inbox'>
             <InboxOutlined />
-            <span>Inbox</span>
+            <span>{t('inbox')}</span>
           </Link>
         </Item>
         <Item key='today'>
           <Link to='/home/today'>
             <StarOutlined />
-            <span>Today</span>
+            <span>{t('today')}</span>
           </Link>
         </Item>
         <Item key='tomorrow'>
           <Link to='/home/tomorrow'>
             <RightSquareOutlined />
-            <span>Tomorrow</span>
+            <span>{t('tomorrow')}</span>
           </Link>
         </Item>
         <Item key='next'>
           <Link to='/home/next'>
             <SelectOutlined />
-            <span>Next</span>
+            <span>{t('next')}</span>
           </Link>
         </Item>
         <Item key='scheduled'>
           <Link to='/home/scheduled'>
             <ScheduleOutlined />
-            <span>Scheduled</span>
+            <span>{t('scheduled')}</span>
           </Link>
         </Item>
         <Item key='someday'>
           <Link to='/home/someday'>
             <CalendarOutlined />
-            <span>Someday</span>
+            <span>{t('someday')}</span>
           </Link>
         </Item>
         <Item key='note'>
           <Link to='/home/note'>
             <BookOutlined />
-            <span> Notes</span>
+            <span>{t('notes')}</span>
           </Link>
         </Item>
         <SubMenu
@@ -87,7 +89,7 @@ const Sidebar = () => {
           title={
             <span>
               <FileDoneOutlined />
-              <span>Projects</span>
+              <span>{t('projects')}</span>
             </span>
           }
         >
@@ -103,7 +105,7 @@ const Sidebar = () => {
           title={
             <span>
               <EnvironmentOutlined />
-              <span>Context</span>
+              <span>{t('context')}</span>
             </span>
           }
         >
@@ -117,13 +119,13 @@ const Sidebar = () => {
         <Item key='completed'>
           <Link to='/home/completed'>
             <CheckSquareOutlined />
-            <span>Completed</span>
+            <span>{t('completed')}</span>
           </Link>
         </Item>
         <Item key='deleted'>
           <Link to='/home/deleted'>
             <DeleteOutlined />
-            <span>Trash</span>
+            <span>{t('trash')}</span>
           </Link>
         </Item>
       </Menu>

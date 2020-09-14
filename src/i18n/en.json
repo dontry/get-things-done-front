@@ -1,0 +1,80 @@
+{
+  "translation": {
+    "add": "Add",
+    "add_task": "Add a new task",
+    "add_tag": "Add tag",
+    "age": {
+      "label": "Age",
+      "required": "Please input age",
+      "invalid": "Your age should not be under 18 years old"
+    },
+    "back": "Back",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "confirm_password": {
+      "label": "Confirm password",
+      "required": "Please confirm password",
+      "invalid": "The password you entered is not the same"
+    },
+    "dismiss": "Dismiss",
+    "discard": "Discard",
+    "email": {
+      "label": "E-mail",
+      "required": "Please input E-mail",
+      "invalid": "This is a invalid E-mail."
+    },
+    "login": "Log in",
+    "home": "Home",
+    "logout": "Log out",
+    "profile": "Profile",
+    "settings": "Settings",
+    "ok": "OK",
+    "password": {
+      "label": "Password",
+      "required": "Please input password."
+    },
+    "register": "Register",
+    "register_now": "Register now",
+    "remember_me": "Remember me",
+    "sex": "Sex",
+    "male": "Male",
+    "female": "Female",
+    "other": "Other",
+    "inbox": "Inbox",
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+    "next": "Next",
+    "scheduled": "Scheduled",
+    "someday": "Someday",
+    "notes": "Notes",
+    "note": "Note",
+    "projects": "Projects",
+    "context": "Context",
+    "completed": "Completed",
+    "deleted": "Deleted",
+    "trash": "Trash",
+    "username": {
+      "label": "Username",
+      "required": "Please input username"
+    },
+    "category": "Category",
+    "priority": "Priority",
+    "project": "Project",
+    "tags": "Tags",
+    "save": "Save",
+    "first_name": {
+      "label": "First name",
+      "required": "Input first name"
+    },
+    "last_name": {
+      "label": "Last name",
+      "required": "Input last name"
+    },
+    "title": "Title",
+    "lowest": "Lowest",
+    "low": "Low",
+    "medium": "Medium",
+    "high": "High",
+    "highest": "Highest"
+  }
+}

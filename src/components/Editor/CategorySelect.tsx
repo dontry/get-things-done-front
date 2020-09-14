@@ -1,13 +1,14 @@
-import { Button,Calendar, Select } from 'antd';
+import { Button, Calendar, Select } from 'antd';
 import { capitalize } from 'lodash';
 import moment, { Moment } from 'moment';
-import React, { useCallback,useRef, useState } from 'react';
-import { Attribute,Category } from 'src/types';
+import React, { useCallback, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Attribute, Category } from 'src/types';
 
 import { CATEGORY_OPTIONS } from '../../constants/misc';
 import { categoryToAttribute } from '../../lib/categoryToAttribute';
 import { getToday, getTomorrow } from '../../lib/date';
-import { CalendarWrapper,SelectWrapper } from './style';
+import { CalendarWrapper, SelectWrapper } from './style';
 
 export interface IUpdateCategoryPayload {
   attribute: Attribute;
@@ -21,6 +22,7 @@ interface ICategorySelectProps {
 }
 
 const CategorySelect = ({ initCategory, startTime, onChange }: ICategorySelectProps) => {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [calendarOpen, setCalendarOpen] = useState(false);
   const [startAt, setStartAt] = useState(startTime);
@@ -57,7 +59,7 @@ const CategorySelect = ({ initCategory, startTime, onChange }: ICategorySelectPr
         setStartAt(_date.unix() * 1000);
       }
     },
-    [setStartAt]
+    [setStartAt],
   );
 
   const onConfirmDate = useCallback(() => {
@@ -89,7 +91,7 @@ const CategorySelect = ({ initCategory, startTime, onChange }: ICategorySelectPr
       >
         {CATEGORY_OPTIONS.map(option => (
           <Select.Option key={option} title={getCategoryText(option, startTime)} value={option}>
-            {capitalize(option)}
+            {t(option)}
           </Select.Option>
         ))}
       </Select>

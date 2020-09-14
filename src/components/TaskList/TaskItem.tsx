@@ -12,7 +12,7 @@ import {
   TagWrapper,
   TaskContentWrapper,
   TaskItemContainer,
-  TaskWrapper
+  TaskWrapper,
 } from './style';
 
 interface ITaskItemProps {
@@ -34,7 +34,9 @@ const TaskItem = React.memo(({ type, task, isDragging }: ITaskItemProps) => {
       if (_task.id) {
         updateTask({ task: _task });
       }
-    }, [updateTask])
+    },
+    [updateTask],
+  );
 
   const onDelete = useCallback(
     (_task: ITask) => {
@@ -42,24 +44,25 @@ const TaskItem = React.memo(({ type, task, isDragging }: ITaskItemProps) => {
       if (_task.id) {
         updateTask({ task: _task });
       }
-    }, [updateTask])
-
-  const renderTask = useCallback((_task: ITask, _type: string) => {
-    switch (_type) {
-      case 'deleted':
-        return <DeletedTask task={_task} />;
-      case 'completed':
-        return <CompletedTask task={_task} onCheck={onCheck} />;
-      default:
-        return <TodoTask task={_task} onCheck={onCheck} onDelete={onDelete} />;
-    }
-  }, [onCheck, onDelete])
-
-  return (
-    <TaskItemContainer isDragging={isDragging}>
-      {renderTask(task, type)}
-    </TaskItemContainer>
+    },
+    [updateTask],
   );
+
+  const renderTask = useCallback(
+    (_task: ITask, _type: string) => {
+      switch (_type) {
+        case 'deleted':
+          return <DeletedTask task={_task} />;
+        case 'completed':
+          return <CompletedTask task={_task} onCheck={onCheck} />;
+        default:
+          return <TodoTask task={_task} onCheck={onCheck} onDelete={onDelete} />;
+      }
+    },
+    [onCheck, onDelete],
+  );
+
+  return <TaskItemContainer isDragging={isDragging}>{renderTask(task, type)}</TaskItemContainer>;
 });
 
 interface ITaskProps {
@@ -70,7 +73,7 @@ interface ITaskProps {
 
 const TodoTask = ({ task, onCheck: handleCheck, onDelete: handleDelete }: ITaskProps) => (
   <>
-    <Checkbox onChange={() => handleCheck && handleCheck(task)} />
+    <Checkbox checked={task.completedAt > 0} onChange={() => handleCheck && handleCheck(task)} />
     <TaskWrapper>
       <TaskContent task={task} />
     </TaskWrapper>
@@ -102,23 +105,23 @@ const TaskContent = ({ task }: { task: ITask }) => {
   const contextTag = isNil(context) ? (
     ''
   ) : (
-      <TagWrapper>
-        <Link to={`/home/context/${context.id}`}>@{context.name}</Link>
-      </TagWrapper>
-    );
+    <TagWrapper>
+      <Link to={`/home/context/${context.id}`}>@{context.name}</Link>
+    </TagWrapper>
+  );
   const projectTag = isNil(project) ? (
     ''
   ) : (
-      <TagWrapper>
-        <Link to={`/home/project/${project.id}`}>#{project.title}</Link>
-      </TagWrapper>
-    );
+    <TagWrapper>
+      <Link to={`/home/project/${project.id}`}>#{project.title}</Link>
+    </TagWrapper>
+  );
   const dateTag =
     task.startAt === 0 ? (
       ''
     ) : (
-        <TagWrapper style={{ marginLeft: 'auto' }}>{moment(task.startAt).format('DD/MM')}</TagWrapper>
-      );
+      <TagWrapper style={{ marginLeft: 'auto' }}>{moment(task.startAt).format('DD/MM')}</TagWrapper>
+    );
 
   return (
     <TaskContentWrapper>

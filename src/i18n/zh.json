@@ -1,0 +1,80 @@
+{
+  "translation": {
+    "add": "添加",
+    "add_task": "添加新任务",
+    "add_tag": "添加标签",
+    "age": {
+      "label": "年龄",
+      "required": "请输入年龄",
+      "invalid": "你的年龄不能小于18岁"
+    },
+    "back": "返回",
+    "cancel": "取消",
+    "confirm": "确认",
+    "confirm_password": {
+      "label": "确认密码",
+      "required": "请确认密码",
+      "invalid": "输入密码不一致"
+    },
+    "dismiss": "忽略",
+    "discard": "舍弃",
+    "email": {
+      "label": "电子邮箱",
+      "required": "请输入电子邮箱",
+      "invalid": "无效电子邮箱"
+    },
+    "login": "登录",
+    "ok": "确认",
+    "password": {
+      "label": "密码",
+      "required": "请输入密码"
+    },
+    "home": "主页",
+    "logout": "退出",
+    "profile": "个人信息",
+    "settings": "设置",
+    "register": "注册",
+    "register_now": "现在注册",
+    "remember_me": "记住我",
+    "sex": "性别",
+    "inbox": "收集箱",
+    "today": "今日待办",
+    "tomorrow": "明日待办",
+    "next": "下一步",
+    "scheduled": "日程",
+    "someday": "将来",
+    "notes": "笔记",
+    "note": "笔记",
+    "projects": "项目",
+    "context": "情景",
+    "completed": "已完成",
+    "deleted": "已删除",
+    "trash": "垃圾箱",
+    "username": {
+      "label": "用户名",
+      "required": "请输入用户名"
+    },
+    "category": "分类",
+    "priority": "优先级",
+    "project": "项目",
+    "tags": "标签",
+    "save": "保存",
+    "first_name": {
+      "label": "姓",
+      "required": ""
+    },
+    "last_name": {
+      "label": "名",
+      "required": ""
+    },
+    "male": "男",
+    "female": "女",
+    "other": "其他",
+    "title": "标题",
+    "lowest": "最低",
+    "low": "低",
+    "medium": "中",
+    "high": "高",
+    "highest": "最高"
+  }
+}

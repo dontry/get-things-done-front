@@ -3,7 +3,7 @@ import {
   BarsOutlined,
   EnvironmentOutlined,
   ProjectOutlined,
-  TagOutlined
+  TagOutlined,
 } from '@ant-design/icons';
 import { Button, Form, Layout, Select, Space } from 'antd';
 import {
@@ -16,12 +16,13 @@ import {
   DraftInlineStyleType,
   Editor,
   EditorState,
-  RichUtils
+  RichUtils,
 } from 'draft-js';
 import { History } from 'history';
 import { get, truncate } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { queryCache } from 'react-query';
 
 import { TAGS } from '../../constants/misc';
@@ -35,7 +36,7 @@ import {
   EditorControlWrapper,
   EditorSider,
   EditorTitle,
-  EditorWrapper
+  EditorWrapper,
 } from './style';
 import { BlockStyleControls, InlineStyleControls } from './StyleControls';
 
@@ -47,6 +48,7 @@ interface ITaskEditorProps {
 }
 
 const TaskEditor = ({ task, history }: ITaskEditorProps) => {
+  const { t } = useTranslation();
   // memo
   const content = get(task, 'note.content');
   const contentState = useMemo(() => {
@@ -70,7 +72,7 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
   const [taskContext, onContextChange] = useValueChange(task.context);
   const [taskTags, onTagsChange] = useValueChange(task.tags);
   const [editorState, setEditorState] = useState(() =>
-    contentState ? EditorState.createWithContent(contentState) : EditorState.createEmpty()
+    contentState ? EditorState.createWithContent(contentState) : EditorState.createEmpty(),
   );
   const projects = queryCache.getQueryData<IProject[]>('projects');
   const contexts = queryCache.getQueryData<IContext[]>('context');
@@ -101,7 +103,7 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
     (_editorState: EditorState): void => {
       setEditorState(_editorState);
     },
-    [setEditorState]
+    [setEditorState],
   );
 
   const handleKeyCommand = useCallback(
@@ -114,21 +116,21 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
         return 'not-handled';
       }
     },
-    [onEditorStateChange]
+    [onEditorStateChange],
   );
 
   const toggleBlockType = useCallback(
     (blockType: DraftBlockType) => {
       onEditorStateChange(RichUtils.toggleBlockType(editorState, blockType));
     },
-    [editorState, onEditorStateChange]
+    [editorState, onEditorStateChange],
   );
 
   const toggleInlineStyle = useCallback(
     (inlineStyle: DraftInlineStyleType) => {
       onEditorStateChange(RichUtils.toggleInlineStyle(editorState, inlineStyle));
     },
-    [editorState, onEditorStateChange]
+    [editorState, onEditorStateChange],
   );
 
   const onCategoryChange = useCallback(
@@ -136,14 +138,14 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
       setAttribute(payload.attribute);
       setStartTime(payload.startTime);
     },
-    [setAttribute, setStartTime]
+    [setAttribute, setStartTime],
   );
 
   const handleTitleChange = useCallback(
     (value: string) => {
       setTitle(value);
     },
-    [setTitle]
+    [setTitle],
   );
 
   const onSave = () => {
@@ -159,8 +161,8 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
       tags: taskTags,
       deletedAt: task.deletedAt || 0,
       note: {
-        content: noteContent
-      }
+        content: noteContent,
+      },
     };
     updateTask({ task: updatedTask });
     history.goBack();
@@ -217,8 +219,8 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
               name='category'
               label={
                 <span>
-                  {' '}
-                  <BarsOutlined /> Category{' '}
+                  <BarsOutlined />
+                  {t('category')}
                 </span>
               }
             >
@@ -232,7 +234,8 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
               name='priority'
               label={
                 <span>
-                  <ArrowUpOutlined /> Priority
+                  <ArrowUpOutlined />
+                  {t('priority')}
                 </span>
               }
               initialValue={taskPriority}
@@ -242,7 +245,7 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
                   .filter(key => isNaN(Number(key)))
                   .map((priority, index) => (
                     <Select.Option key={priority} value={index + 1}>
-                      {priority}
+                      {t(priority.toLowerCase())}
                     </Select.Option>
                   ))}
               </Select>
@@ -252,8 +255,7 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
               name='project'
               label={
                 <span>
-                  {' '}
-                  <ProjectOutlined /> Project{' '}
+                  <ProjectOutlined /> {t('project')}
                 </span>
               }
               initialValue={taskProject}
@@ -271,8 +273,8 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
               name='context'
               label={
                 <span>
-                  {' '}
-                  <EnvironmentOutlined /> Context{' '}
+                  <EnvironmentOutlined />
+                  {t('context')}
                 </span>
               }
               initialValue={taskContext}
@@ -288,13 +290,13 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
               name='tags'
               label={
                 <span>
-                  {' '}
-                  <TagOutlined /> Tags{' '}
+                  <TagOutlined />
+                  {t('tags')}
                 </span>
               }
               initialValue={taskTags}
             >
-              <Select mode='multiple' placeholder='Add label' onChange={onTagsChange}>
+              <Select mode='multiple' placeholder={t('add_tag')} onChange={onTagsChange}>
                 {TAGS.map(tag => (
                   <Select.Option value={tag}>{tag}</Select.Option>
                 ))}
@@ -315,9 +317,9 @@ const TaskEditor = ({ task, history }: ITaskEditorProps) => {
       <Layout.Footer style={{ textAlign: 'right' }}>
         <Space>
           <Button type='primary' onClick={onSave}>
-            Save
+            {t('save')}
           </Button>
-          <Button onClick={handleCancel}>Cancel</Button>
+          <Button onClick={handleCancel}>{t('cancel')}</Button>
         </Space>
       </Layout.Footer>
     </Form>
@@ -329,5 +331,5 @@ export default inject('taskStore')(
     const taskId = match.params.id;
     const task = taskStore.getTaskById(taskId);
     return <TaskEditor task={task} history={history} />;
-  })
+  }),
 );

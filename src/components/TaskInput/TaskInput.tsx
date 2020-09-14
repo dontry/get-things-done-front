@@ -1,7 +1,8 @@
-import { Button,Form, Input, Layout } from 'antd';
+import { Button, Form, Input, Layout } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 import { inject, observer } from 'mobx-react';
 import React, { useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 const AddButton = styled(Button)`
@@ -24,6 +25,7 @@ interface ITaskInputProps {
 
 export const TaskInput = ({ onCreateTask }: ITaskInputProps) => {
   const [form] = useForm();
+  const { t } = useTranslation();
 
   const onFinish = useCallback(() => {
     form
@@ -41,7 +43,7 @@ export const TaskInput = ({ onCreateTask }: ITaskInputProps) => {
       <Layout style={{ backgroundColor: '#fff' }}>
         <Form.Item name='title' style={{ margin: '16px 8px' }}>
           <StyledInput
-            placeholder='Add a new task'
+            placeholder={t('add_task')}
             // onKeyPress={onKeyPress}
             addonAfter={<AddButton onClick={onFinish}>+</AddButton>}
           />
@@ -52,5 +54,5 @@ export const TaskInput = ({ onCreateTask }: ITaskInputProps) => {
 };
 
 export default inject('userStore')(
-  observer(({ userStore, ...rest }) => <TaskInput userId={userStore.userId} {...rest} />)
+  observer(({ userStore, ...rest }) => <TaskInput userId={userStore.userId} {...rest} />),
 );

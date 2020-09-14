@@ -1,19 +1,21 @@
 import { PlusCircleOutlined } from '@ant-design/icons';
-import { Button, Dropdown, Form, Input,Menu, Modal } from 'antd';
+import { Button, Dropdown, Form, Input, Menu, Modal } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
-import React, { useCallback, useEffect,useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
-import { Context,Project } from '../classes';
+import { Context, Project } from '../classes';
 import { useCreateContext } from '../hooks/contextHooks';
 import { useCreateProject } from '../hooks/projectHooks';
 
 const AddButton = () => {
+  const { t } = useTranslation();
   const [selectedOption, setSelectedOption] = useState('');
   const handleMenuClick = useCallback(
     e => {
       setSelectedOption(e.key);
     },
-    [setSelectedOption]
+    [setSelectedOption],
   );
 
   const onClose = useCallback(() => {
@@ -24,7 +26,7 @@ const AddButton = () => {
     <>
       <Dropdown overlay={<AddButtonMenu handleMenuClick={handleMenuClick} />}>
         <Button>
-          <PlusCircleOutlined /> Add
+          <PlusCircleOutlined /> {t('add')}
         </Button>
       </Dropdown>
       <ContextModal visible={selectedOption === 'context'} onClose={onClose} />

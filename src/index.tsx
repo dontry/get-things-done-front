@@ -9,11 +9,12 @@ import ReactDOM from 'react-dom';
 import { setConfig } from 'react-hot-loader';
 import { ReactQueryConfigProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query-devtools';
-import { Redirect,Route, Router, Switch } from 'react-router-dom';
+import { Redirect, Route, Router, Switch } from 'react-router-dom';
+import './i18n';
 
 import App from './App';
 import ProtectedRoute from './components/ProtectedRoute';
-import { HOME, LOGIN, PROFILE,REGISTER } from './constants/pathname';
+import { HOME, LOGIN, PROFILE, REGISTER } from './constants/pathname';
 import * as serviceWorker from './serviceWorker';
 import * as stores from './stores';
 import Login from './views/Login';
@@ -50,7 +51,7 @@ const queryConfig = { queries: { refetchOnWindowFocus: true } };
         )}
       </ReactQueryConfigProvider>
     </Provider>,
-    rootEl
+    rootEl,
   );
 })();
 
