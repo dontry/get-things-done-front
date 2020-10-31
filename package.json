@@ -24,12 +24,14 @@
     "case-sensitive-paths-webpack-plugin": "2.1.2",
     "chalk": "2.4.1",
     "class-transformer": "^0.3.1",
+    "core-js": "^2.6.11",
     "css-loader": "1.0.0",
     "dotenv": "^7.0.0",
     "dotenv-expand": "4.2.0",
     "draft-js": "^0.10.5",
     "eslint-loader": "2.1.1",
     "file-loader": "2.0.0",
+    "firebase": "^7.21.1",
     "fork-ts-checker-webpack-plugin-alt": "0.4.14",
     "formik": "^1.5.1",
     "fs-extra": "7.0.0",
@@ -63,6 +65,7 @@
     "react-query-devtools": "^2.4.2",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
+    "remove-files-webpack-plugin": "^1.4.4",
     "resolve": "1.8.1",
     "sass-loader": "7.1.0",
     "style-loader": "0.23.0",
@@ -88,7 +91,8 @@
     "prettier": "prettier  \"**/*.+(js|jsx|json|yml|yaml|css|less|scss|ts|tsx|md|mdx|graphql|vue)\"",
     "format": "npm run prettier -- --write",
     "validate-staged": "lint-staged",
-    "version": "conventional-changelog -p angular -i CHANGELOG.md -s && git add CHANGELOG.md"
+    "version": "conventional-changelog -p angular -i CHANGELOG.md -s && git add CHANGELOG.md",
+    "serve": "serve -d build"
   },
   "eslintConfig": {
     "extends": "react-app"

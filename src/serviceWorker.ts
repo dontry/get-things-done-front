@@ -1,5 +1,3 @@
-import { AnyARecord } from 'dns';
-
 // This optional code is used to register a service worker.
 // register() is not called by default.
 
@@ -32,7 +30,10 @@ export function register() {
     }
 
     window.addEventListener('load', () => {
-      const swUrl = `${process.env.PUBLIC_URL}/sw.js`;
+      const swUrl =
+        process.env.NODE_ENV === 'production'
+          ? `${process.env.PUBLIC_URL}/sw.js`
+          : `${process.env.PUBLIC_URL}/sw-dev.js`;
 
       if (isLocalhost) {
         // This is running on localhost. Let's check if a service worker still exists or not.

@@ -24,6 +24,7 @@ const getClientEnvironment = require("./env");
 const ModuleNotFoundPlugin = require("react-dev-utils/ModuleNotFoundPlugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin-alt");
 const typescriptFormatter = require("react-dev-utils/typescriptFormatter");
+const RemovePlugin = require('remove-files-webpack-plugin');
 
 // Source maps are resource heavy and can cause out of memory issue for large source files.
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== "false";
@@ -605,6 +606,13 @@ module.exports = function (webpackEnv) {
         watch: paths.appSrc,
         silent: true,
         formatter: typescriptFormatter
+      }),
+      isEnvProduction && new RemovePlugin({
+        after: {
+          include: [
+            'build/sw-dev.js',
+          ]
+        }
       })
     ].filter(Boolean),
     // Some libraries import Node modules but don't use them in the browser.

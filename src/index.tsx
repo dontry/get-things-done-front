@@ -21,6 +21,7 @@ import Login from './views/Login';
 import NotFound from './views/NotFound';
 import Profile from './views/Profile';
 import Register from './views/Register';
+import { initializeMessaging } from './lib/messaging';
 
 const rootEl = document.getElementById('root');
 setConfig({ ignoreSFC: true });
@@ -62,4 +63,5 @@ if (module.hot) {
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: http://bit.ly/CRA-PWA
+initializeMessaging();
 serviceWorker.register();
