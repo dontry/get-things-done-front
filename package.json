@@ -57,7 +57,7 @@
     "react": "^16.8.0-alpha.1",
     "react-app-polyfill": "^0.2.0",
     "react-beautiful-dnd": "^11.0.5",
-    "react-dev-utils": "^7.0.1",
+    "react-dev-utils": "^11.0.4",
     "react-dom": "^16.8.0-alpha.1",
     "react-hot-loader": "^4.5.3",
     "react-i18next": "^11.7.2",
